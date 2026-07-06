@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
+import '../controllers/experience_controller.dart';
 
-class ExperienceSection extends StatelessWidget {
+class ExperienceSection extends GetView<ExperienceController> {
   const ExperienceSection({super.key});
 
   @override
@@ -37,7 +39,7 @@ class ExperienceSection extends StatelessWidget {
   }
 
   Widget _buildTimeline(BuildContext context, bool isMobile) {
-    final list = PortfolioData.experiences;
+    final list = controller.experiences;
     final leftPadding = isMobile ? 12.0 : 28.0;
 
     return Stack(

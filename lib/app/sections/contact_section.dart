@@ -3,10 +3,12 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
+import '../controllers/contact_controller.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -16,93 +18,7 @@ class ContactSection extends StatefulWidget {
 }
 
 class _ContactSectionState extends State<ContactSection> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _subjectController = TextEditingController();
-  final _messageController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _subjectController.dispose();
-    _messageController.dispose();
-    super.dispose();
-  }
-
-  void _submitViaWhatsApp() {
-    if (_formKey.currentState!.validate()) {
-      final text = "Hello Ashish,\n\nName: ${_nameController.text}\nEmail: ${_emailController.text}\nSubject: ${_subjectController.text}\n\nMessage: ${_messageController.text}";
-      final url = "https://wa.me/919913629852?text=${Uri.encodeComponent(text)}";
-      
-      if (kIsWeb) {
-        html.window.open(url, '_blank');
-      } else {
-        launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-      }
-      
-      _showSuccessDialog("WhatsApp Redirect", "Redirecting you to chat on WhatsApp...", const Color(0xFF25D366));
-    }
-  }
-
-  void _submitViaEmail() {
-    if (_formKey.currentState!.validate()) {
-      final subject = "Portfolio Query: ${_subjectController.text}";
-      final body = "Name: ${_nameController.text}\nEmail: ${_emailController.text}\n\nMessage:\n${_messageController.text}";
-      final url = "mailto:${PortfolioData.email}?subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}";
-      
-      if (kIsWeb) {
-        html.window.open(url, '_blank');
-      } else {
-        launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
-      }
-      
-      _showSuccessDialog("Email Redirect", "Opening your default email app...", ThemeConfig.primary);
-    }
-  }
-
-  void _showSuccessDialog(String title, String message, Color accentColor) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: ThemeConfig.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: accentColor, width: 1.5),
-        ),
-        title: Row(
-          children: [
-            Icon(Icons.check_circle_outline_rounded, color: accentColor),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        content: Text(
-          message,
-          style: const TextStyle(color: ThemeConfig.textSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _nameController.clear();
-              _emailController.clear();
-              _subjectController.clear();
-              _messageController.clear();
-            },
-            child: Text(
-              "OK",
-              style: TextStyle(color: accentColor, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  ContactController get controller => Get.find<ContactController>();
 
   @override
   Widget build(BuildContext context) {
@@ -176,29 +92,29 @@ class _ContactSectionState extends State<ContactSection> {
         _buildInfoRow(
           Icons.mail_outlined,
           "EMAIL",
-          PortfolioData.email,
+          controller.email,
           onTap: () => _showContactConfirm(
             "Send Email",
-            "Do you want to send an email to ${PortfolioData.email}?",
-            PortfolioData.emailUrl,
+            "Do you want to send an email to ${controller.email}?",
+            controller.emailUrl,
           ),
         ),
         const SizedBox(height: 24),
         _buildInfoRow(
           Icons.phone_android_outlined,
           "PHONE",
-          PortfolioData.phone,
+          controller.phone,
           onTap: () => _showContactConfirm(
             "Call Number",
-            "Do you want to call ${PortfolioData.phone}?",
-            "tel:${PortfolioData.phone.replaceAll(' ', '')}",
+            "Do you want to call ${controller.phone}?",
+            "tel:${controller.phone.replaceAll(' ', '')}",
           ),
         ),
         const SizedBox(height: 24),
         _buildInfoRow(
           Icons.location_on_outlined,
           "LOCATION",
-          PortfolioData.location,
+          controller.location,
           onTap: () => _showContactConfirm(
             "Open Location",
             "Do you want to view Surat, Gujarat, India on Google Maps?",
@@ -294,7 +210,7 @@ class _ContactSectionState extends State<ContactSection> {
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Form(
-          key: _formKey,
+          key: controller.formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -304,26 +220,26 @@ class _ContactSectionState extends State<ContactSection> {
               ),
               const SizedBox(height: 24),
               _buildTextField(
-                controller: _nameController,
+                controller: controller.nameController,
                 label: "YOUR NAME",
                 validator: (val) => val == null || val.isEmpty ? "Please enter your name" : null,
               ),
               const SizedBox(height: 20),
               _buildTextField(
-                controller: _emailController,
+                controller: controller.emailController,
                 label: "EMAIL ADDRESS",
                 keyboardType: TextInputType.emailAddress,
                 validator: (val) => val == null || !val.contains("@") ? "Please enter a valid email" : null,
               ),
               const SizedBox(height: 20),
               _buildTextField(
-                controller: _subjectController,
+                controller: controller.subjectController,
                 label: "SUBJECT",
                 validator: (val) => val == null || val.isEmpty ? "Please enter a subject" : null,
               ),
               const SizedBox(height: 20),
               _buildTextField(
-                controller: _messageController,
+                controller: controller.messageController,
                 label: "MESSAGE",
                 maxLines: 4,
                 validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
@@ -334,7 +250,7 @@ class _ContactSectionState extends State<ContactSection> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         _buildSubmitButton(
-                          onTap: _submitViaWhatsApp,
+                          onTap: () => controller.submitViaWhatsApp(context),
                           color: const Color(0xFF25D366),
                           icon: FontAwesomeIcons.whatsapp,
                           iconColor: Colors.white,
@@ -344,7 +260,7 @@ class _ContactSectionState extends State<ContactSection> {
                         ),
                         const SizedBox(height: 16),
                         _buildSubmitButton(
-                          onTap: _submitViaEmail,
+                          onTap: () => controller.submitViaEmail(context),
                           color: ThemeConfig.primary,
                           icon: Icons.mail_outline_rounded,
                           iconColor: Colors.black,
@@ -359,7 +275,7 @@ class _ContactSectionState extends State<ContactSection> {
                       runSpacing: 16,
                       children: [
                         _buildSubmitButton(
-                          onTap: _submitViaWhatsApp,
+                          onTap: () => controller.submitViaWhatsApp(context),
                           color: const Color(0xFF25D366),
                           icon: FontAwesomeIcons.whatsapp,
                           iconColor: Colors.white,
@@ -368,7 +284,7 @@ class _ContactSectionState extends State<ContactSection> {
                           isFullWidth: false,
                         ),
                         _buildSubmitButton(
-                          onTap: _submitViaEmail,
+                          onTap: () => controller.submitViaEmail(context),
                           color: ThemeConfig.primary,
                           icon: Icons.mail_outline_rounded,
                           iconColor: Colors.black,
@@ -506,11 +422,7 @@ class _ContactSectionState extends State<ContactSection> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              if (kIsWeb) {
-                html.window.open(actionUrl, '_blank');
-              } else {
-                launchUrl(Uri.parse(actionUrl), mode: LaunchMode.externalApplication);
-              }
+              controller.launchURL(actionUrl);
             },
             child: const Text(
               "Yes",

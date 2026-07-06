@@ -1,121 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../widgets/section_header.dart';
+import '../controllers/skills_controller.dart';
 
-class IntegrationData {
-  final String title;
-  final IconData icon;
-
-  const IntegrationData({required this.title, required this.icon});
-}
-
-class SkillsSection extends StatefulWidget {
+class SkillsSection extends GetView<SkillsController> {
   const SkillsSection({super.key});
-
-  @override
-  State<SkillsSection> createState() => _SkillsSectionState();
-}
-
-class _SkillsSectionState extends State<SkillsSection> {
-  final List<IntegrationData> _allIntegrations = const [
-    IntegrationData(title: "Supabase", icon: Icons.storage),
-    IntegrationData(title: "Firebase", icon: Icons.local_fire_department),
-    IntegrationData(title: "AWS", icon: Icons.cloud),
-    IntegrationData(title: "Google Maps", icon: Icons.map),
-    IntegrationData(title: "Stripe", icon: Icons.payments),
-    IntegrationData(title: "Razorpay", icon: Icons.account_balance_wallet),
-    IntegrationData(title: "REST APIs", icon: Icons.api),
-    IntegrationData(title: "GoLang", icon: Icons.terminal),
-    IntegrationData(title: "Socket.IO", icon: Icons.sync),
-    IntegrationData(title: "Push Alerts", icon: Icons.notifications_active),
-    IntegrationData(title: "SQLite / Hive", icon: Icons.dns),
-    IntegrationData(title: "Sentry / Crash", icon: Icons.bug_report),
-    IntegrationData(title: "GraphQL", icon: Icons.hub),
-    IntegrationData(title: "BLE Bluetooth", icon: Icons.bluetooth),
-    IntegrationData(title: "CI/CD Pipelines", icon: Icons.build_circle),
-    IntegrationData(title: "RevenueCat", icon: Icons.monetization_on),
-    IntegrationData(title: "WebRTC", icon: Icons.videocam),
-    IntegrationData(title: "Mapbox SDK", icon: Icons.explore),
-    IntegrationData(title: "GetIt / Inject", icon: Icons.extension),
-    IntegrationData(title: "OAuth 2.0", icon: Icons.vpn_key),
-  ];
-
-  late List<IntegrationData> _currentDisplayList;
-  late List<IntegrationData> _poolList;
-  bool _showAll = false;
-  Timer? _cycleTimer;
-  int _lastWipedIndex = -1;
-  final Random _random = Random();
-  
-  // Track decryption triggers
-  final List<bool> _tileTriggers = List.filled(20, false);
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize current display with first 8 items
-    _currentDisplayList = List.from(_allIntegrations.take(8));
-    // Pool lists consists of items 8 to 20
-    _poolList = List.from(_allIntegrations.skip(8));
-    
-    _startAutoCycle();
-  }
-
-  @override
-  void dispose() {
-    _cycleTimer?.cancel();
-    super.dispose();
-  }
-
-  void _startAutoCycle() {
-    _cycleTimer?.cancel();
-    _cycleTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (_showAll || !mounted) return;
-      _wipeAndCycleRandomCard();
-    });
-  }
-
-  void _wipeAndCycleRandomCard() {
-    setState(() {
-      // Choose a random index out of the 8 visible tiles
-      int indexToWipe = _random.nextInt(8);
-      // Avoid wiping the exact same index consecutively if possible
-      if (indexToWipe == _lastWipedIndex) {
-        indexToWipe = (indexToWipe + 1) % 8;
-      }
-      _lastWipedIndex = indexToWipe;
-
-      // Extract a random item from the pool list
-      final int poolIndex = _random.nextInt(_poolList.length);
-      final IntegrationData oldItem = _currentDisplayList[indexToWipe];
-      final IntegrationData newItem = _poolList[poolIndex];
-
-      // Swap the items
-      _currentDisplayList[indexToWipe] = newItem;
-      _poolList[poolIndex] = oldItem;
-      
-      // Trigger decrypt effect for this specific tile
-      _tileTriggers[indexToWipe] = !_tileTriggers[indexToWipe];
-    });
-  }
-
-  void _toggleShowAll() {
-    setState(() {
-      _showAll = !_showAll;
-      if (_showAll) {
-        _currentDisplayList = List.from(_allIntegrations);
-        // Trigger decryption for all added cards
-        for (int i = 0; i < _tileTriggers.length; i++) {
-          _tileTriggers[i] = !_tileTriggers[i];
-        }
-      } else {
-        _currentDisplayList = List.from(_allIntegrations.take(8));
-        _poolList = List.from(_allIntegrations.skip(8));
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -342,208 +234,214 @@ class _SkillsSectionState extends State<SkillsSection> {
   }
 
   Widget _buildPowerhouseIntegrationsCard({required bool isMobile}) {
-    return Container(
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        color: ThemeConfig.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: ThemeConfig.outlineVariant.withOpacity(0.3),
-          width: 1,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          isMobile
-              ? Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  children: [
-                    const Text(
-                      "Powerhouse Integrations",
-                      style: TextStyle(
-                        color: ThemeConfig.textPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!_showAll) ...[
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: ThemeConfig.primary.withOpacity(0.08),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "AUTO CYCLING",
-                                  style: TextStyle(
-                                    color: ThemeConfig.primary.withOpacity(0.8),
-                                    fontSize: 8,
-                                    fontFamily: "JetBrains Mono",
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: _toggleShowAll,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: ThemeConfig.surfaceContainerHigh,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: ThemeConfig.primary.withOpacity(0.3),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    _showAll ? Icons.terminal : Icons.lock_open,
-                                    color: ThemeConfig.primary,
-                                    size: 10,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    _showAll ? "COMPACT" : "DECRYPT ALL",
-                                    style: const TextStyle(
-                                      color: ThemeConfig.primary,
-                                      fontSize: 9,
-                                      fontFamily: "JetBrains Mono",
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Powerhouse Integrations",
-                      style: TextStyle(
-                        color: ThemeConfig.textPrimary,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (!_showAll) ...[
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: ThemeConfig.primary.withOpacity(0.08),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "AUTO CYCLING",
-                                  style: TextStyle(
-                                    color: ThemeConfig.primary.withOpacity(0.8),
-                                    fontSize: 8,
-                                    fontFamily: "JetBrains Mono",
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                        ],
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          child: GestureDetector(
-                            onTap: _toggleShowAll,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                color: ThemeConfig.surfaceContainerHigh,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: ThemeConfig.primary.withOpacity(0.3),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    _showAll ? Icons.terminal : Icons.lock_open,
-                                    color: ThemeConfig.primary,
-                                    size: 10,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    _showAll ? "COMPACT" : "DECRYPT ALL",
-                                    style: const TextStyle(
-                                      color: ThemeConfig.primary,
-                                      fontSize: 9,
-                                      fontFamily: "JetBrains Mono",
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-          const SizedBox(height: 32),
-          
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: isMobile ? 2 : 4,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              childAspectRatio: 1.6,
-            ),
-            itemCount: _currentDisplayList.length,
-            itemBuilder: (context, index) {
-              final item = _currentDisplayList[index];
-              return _IntegrationTile(
-                key: ValueKey<int>(index),
-                icon: item.icon,
-                label: item.title,
-                triggerDecrypt: _tileTriggers[index],
-              );
-            },
+    return Obx(() {
+      final showAll = controller.showAll.value;
+      final currentDisplayList = controller.currentDisplayList;
+      final tileTriggers = controller.tileTriggers;
+
+      return Container(
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: ThemeConfig.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: ThemeConfig.outlineVariant.withOpacity(0.3),
+            width: 1,
           ),
-        ],
-      ),
-    );
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            isMobile
+                ? Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    alignment: WrapAlignment.start,
+                    crossAxisAlignment: WrapCrossAlignment.start,
+                    children: [
+                      const Text(
+                        "Powerhouse Integrations",
+                        style: TextStyle(
+                          color: ThemeConfig.textPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!showAll) ...[
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: ThemeConfig.primary.withOpacity(0.08),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "AUTO CYCLING",
+                                    style: TextStyle(
+                                      color: ThemeConfig.primary.withOpacity(0.8),
+                                      fontSize: 8,
+                                      fontFamily: "JetBrains Mono",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: controller.toggleShowAll,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: ThemeConfig.surfaceContainerHigh,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: ThemeConfig.primary.withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      showAll ? Icons.terminal : Icons.lock_open,
+                                      color: ThemeConfig.primary,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      showAll ? "COMPACT" : "DECRYPT ALL",
+                                      style: const TextStyle(
+                                        color: ThemeConfig.primary,
+                                        fontSize: 9,
+                                        fontFamily: "JetBrains Mono",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Powerhouse Integrations",
+                        style: TextStyle(
+                          color: ThemeConfig.textPrimary,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!showAll) ...[
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: ThemeConfig.primary.withOpacity(0.08),
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    "AUTO CYCLING",
+                                    style: TextStyle(
+                                      color: ThemeConfig.primary.withOpacity(0.8),
+                                      fontSize: 8,
+                                      fontFamily: "JetBrains Mono",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                              onTap: controller.toggleShowAll,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                decoration: BoxDecoration(
+                                  color: ThemeConfig.surfaceContainerHigh,
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: ThemeConfig.primary.withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      showAll ? Icons.terminal : Icons.lock_open,
+                                      color: ThemeConfig.primary,
+                                      size: 10,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      showAll ? "COMPACT" : "DECRYPT ALL",
+                                      style: const TextStyle(
+                                        color: ThemeConfig.primary,
+                                        fontSize: 9,
+                                        fontFamily: "JetBrains Mono",
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+            const SizedBox(height: 32),
+            
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: isMobile ? 2 : 4,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.6,
+              ),
+              itemCount: currentDisplayList.length,
+              itemBuilder: (context, index) {
+                final item = currentDisplayList[index];
+                return _IntegrationTile(
+                  key: ValueKey<int>(index),
+                  icon: item.icon,
+                  label: item.title,
+                  triggerDecrypt: tileTriggers[index],
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildWebAndEcommerceCard() {

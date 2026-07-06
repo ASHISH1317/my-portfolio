@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'app/data/theme_config.dart';
 import 'app/portfolio_home.dart';
+import 'app/bindings/portfolio_binding.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +13,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Ashish | Portfolio',
       debugShowCheckedModeBanner: false,
+      initialBinding: PortfolioBinding(),
       theme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: true,

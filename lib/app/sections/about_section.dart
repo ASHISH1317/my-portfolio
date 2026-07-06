@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
-import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
+import '../controllers/about_controller.dart';
 
-class AboutSection extends StatelessWidget {
+class AboutSection extends GetView<AboutController> {
   const AboutSection({super.key});
 
   @override
@@ -62,7 +63,7 @@ class AboutSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          PortfolioData.aboutText1,
+          controller.aboutText1,
           style: ThemeConfig.bodyLarge.copyWith(
             fontSize: 17,
             height: 1.7,
@@ -71,7 +72,7 @@ class AboutSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          PortfolioData.aboutText2,
+          controller.aboutText2,
           style: ThemeConfig.body.copyWith(
             fontSize: 15,
             height: 1.7,
@@ -79,7 +80,7 @@ class AboutSection extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          PortfolioData.aboutText3,
+          controller.aboutText3,
           style: ThemeConfig.body.copyWith(
             fontSize: 15,
             height: 1.7,
@@ -90,14 +91,7 @@ class AboutSection extends StatelessWidget {
         Wrap(
           spacing: 10,
           runSpacing: 10,
-          children: [
-            "Flutter",
-            "Dart",
-            "Firebase",
-            "REST APIs",
-            "GetX",
-            "Riverpod",
-          ].map((tag) => _buildTag(tag)).toList(),
+          children: controller.tags.map((tag) => _buildTag(tag)).toList(),
         ),
       ],
     );
@@ -126,28 +120,7 @@ class AboutSection extends StatelessWidget {
   }
 
   Widget _buildHighlightsGrid({required bool isMobile}) {
-    final highlights = [
-      {
-        "title": "Scalable Architecture",
-        "desc": "Architecting clean, modular, and testable codebases utilizing SOLID principles for future-proof scalability.",
-        "icon": Icons.architecture_rounded,
-      },
-      {
-        "title": "High Performance",
-        "desc": "Crafting fluid, responsive interfaces running at 60/120 FPS with highly optimized state management.",
-        "icon": Icons.speed_rounded,
-      },
-      {
-        "title": "Robust Integrations",
-        "desc": "Seamlessly connecting real-time WebSockets, enterprise IoT APIs, and secure payment systems.",
-        "icon": Icons.hub_rounded,
-      },
-      {
-        "title": "Engineering Leadership",
-        "desc": "Leading agile development teams, mentoring junior engineers, and driving successful App Store deliveries.",
-        "icon": Icons.psychology_rounded,
-      },
-    ];
+    final highlights = controller.highlights;
 
     Widget buildCard(Map<String, dynamic> hl) {
       return CustomCard(

@@ -1,10 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'dart:html' as html;
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide HeroController;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/glowing_button.dart';
+import '../controllers/hero_controller.dart';
 
 class HeroSection extends StatefulWidget {
   final VoidCallback onContactPressed;
@@ -21,6 +23,7 @@ class HeroSection extends StatefulWidget {
 }
 
 class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStateMixin {
+  HeroController get controller => Get.find<HeroController>();
   late AnimationController _animationController;
   late Animation<double> _fadeInAnimation;
   late Animation<Offset> _slideInAnimation;
@@ -128,7 +131,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
             children: [
               const TextSpan(text: "Hi, I'm "),
               TextSpan(
-                text: PortfolioData.name,
+                text: controller.name,
                 style: const TextStyle(color: ThemeConfig.primary),
               ),
               const TextSpan(text: "\nFlutter Developer"),
@@ -140,7 +143,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
         Container(
           constraints: const BoxConstraints(maxWidth: 720),
           child: Text(
-            PortfolioData.heroSubTagline,
+            controller.heroSubTagline,
             style: ThemeConfig.bodyLarge.copyWith(
               fontSize: 18,
               height: 1.6,
@@ -167,7 +170,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                     const Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
                     const SizedBox(width: 6),
                     Text(
-                      PortfolioData.location,
+                      controller.location,
                       style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
                     ),
                   ],
@@ -184,8 +187,8 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
               child: GestureDetector(
                 onTap: () => _showContactConfirm(
                   "Send Email",
-                  "Do you want to send an email to ${PortfolioData.email}?",
-                  PortfolioData.emailUrl,
+                  "Do you want to send an email to ${controller.email}?",
+                  controller.emailUrl,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -193,7 +196,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                     const Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
                     const SizedBox(width: 6),
                     Text(
-                      PortfolioData.email,
+                      controller.email,
                       style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
                     ),
                   ],
@@ -261,9 +264,9 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
           mainAxisSpacing: isMobile ? 16 : 24,
           childAspectRatio: isMobile ? (width < 360 ? 1.6 : 2.0) : 2.6,
         ),
-        itemCount: PortfolioData.stats.length,
+        itemCount: controller.stats.length,
         itemBuilder: (context, index) {
-          final stat = PortfolioData.stats[index];
+          final stat = controller.stats[index];
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -329,17 +332,6 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
     );
   }
 
-  Future<void> _launchURL(String urlString) async {
-    if (kIsWeb) {
-      html.window.open(urlString, '_blank');
-    } else {
-      final Uri url = Uri.parse(urlString);
-      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-        debugPrint("Could not launch $urlString");
-      }
-    }
-  }
-
   void _showContactConfirm(String title, String message, String actionUrl) {
     showDialog(
       context: context,
@@ -368,7 +360,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              _launchURL(actionUrl);
+              controller.launchURL(actionUrl);
             },
             child: const Text(
               "Yes",

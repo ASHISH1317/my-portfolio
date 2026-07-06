@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
 import 'project_details_page.dart';
+import '../controllers/projects_controller.dart';
 
-class ProjectsSection extends StatefulWidget {
+class ProjectsSection extends GetView<ProjectsController> {
   const ProjectsSection({super.key});
 
-  @override
-  State<ProjectsSection> createState() => _ProjectsSectionState();
-}
-
-class _ProjectsSectionState extends State<ProjectsSection> {
-  bool _showAll = false;
   static const int _initialLimit = 3;
 
   @override
@@ -22,75 +18,76 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     final bool isMobile = width < 700;
     final bool isTablet = width >= 700 && width < 1100;
 
-    final totalProjects = PortfolioData.projects.length;
-    final displayCount = _showAll ? totalProjects : (_initialLimit < totalProjects ? _initialLimit : totalProjects);
-    final hasMore = totalProjects > _initialLimit;
+    return Obx(() {
+      final showAll = controller.showAll.value;
+      final totalProjects = controller.projects.length;
+      final displayCount = showAll ? totalProjects : (_initialLimit < totalProjects ? _initialLimit : totalProjects);
+      final hasMore = totalProjects > _initialLimit;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 60,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildHeader(),
-          const SizedBox(height: 40),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final double maxWidth = constraints.maxWidth;
-              final int columns = maxWidth < 650 ? 1 : (maxWidth < 1000 ? 2 : 3);
-              const double spacing = 24.0;
-              final double cardWidth = (maxWidth - (columns - 1) * spacing) / columns;
+      return Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 60,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const SizedBox(height: 40),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final double maxWidth = constraints.maxWidth;
+                final int columns = maxWidth < 650 ? 1 : (maxWidth < 1000 ? 2 : 3);
+                const double spacing = 24.0;
+                final double cardWidth = (maxWidth - (columns - 1) * spacing) / columns;
 
-              return Wrap(
-                spacing: spacing,
-                runSpacing: spacing,
-                children: List.generate(displayCount, (index) {
-                  final project = PortfolioData.projects[index];
-                  return SizedBox(
-                    width: cardWidth,
-                    child: _buildProjectCard(context, project, index),
-                  );
-                }),
-              );
-            },
-          ),
-          if (hasMore && !_showAll) ...[
-            const SizedBox(height: 48),
-            Center(
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  setState(() {
-                    _showAll = true;
-                  });
-                },
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: ThemeConfig.outline),
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                return Wrap(
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: List.generate(displayCount, (index) {
+                    final project = controller.projects[index];
+                    return SizedBox(
+                      width: cardWidth,
+                      child: _buildProjectCard(context, project, index),
+                    );
+                  }),
+                );
+              },
+            ),
+            if (hasMore && !showAll) ...[
+              const SizedBox(height: 48),
+              Center(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    controller.toggleShowAll();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: ThemeConfig.outline),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                ),
-                icon: Text(
-                  "View ${totalProjects - _initialLimit} More Projects",
-                  style: const TextStyle(
+                  icon: Text(
+                    "View ${totalProjects - _initialLimit} More Projects",
+                    style: const TextStyle(
+                      color: ThemeConfig.textPrimary,
+                      fontFamily: "JetBrains Mono",
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  label: const Icon(
+                    Icons.expand_more_rounded,
                     color: ThemeConfig.textPrimary,
-                    fontFamily: "JetBrains Mono",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
                   ),
-                ),
-                label: const Icon(
-                  Icons.expand_more_rounded,
-                  color: ThemeConfig.textPrimary,
                 ),
               ),
-            ),
+            ],
           ],
-        ],
-      ),
-    );
+        ),
+      );
+    });
   }
 
   Widget _buildHeader() {

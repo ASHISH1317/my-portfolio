@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
+import '../controllers/education_controller.dart';
 
-class EducationSection extends StatelessWidget {
+class EducationSection extends GetView<EducationController> {
   const EducationSection({super.key});
 
   @override
@@ -20,7 +22,7 @@ class EducationSection extends StatelessWidget {
         children: [
           _buildHeader(),
           const SizedBox(height: 40),
-          ...PortfolioData.education.map((edu) => _buildEducationCard(edu)).toList(),
+          ...controller.education.map((edu) => _buildEducationCard(edu)).toList(),
         ],
       ),
     );
