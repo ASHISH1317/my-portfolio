@@ -50,7 +50,7 @@ class Footer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _buildBrandInfo(),
+                    _buildBrandInfo(isMobile: true),
                     const SizedBox(height: 24),
                     _buildLinks(),
                     const SizedBox(height: 24),
@@ -61,7 +61,7 @@ class Footer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _buildBrandInfo(),
+                    _buildBrandInfo(isMobile: false),
                     _buildLinks(),
                     _buildSocials(),
                   ],
@@ -71,9 +71,9 @@ class Footer extends StatelessWidget {
     );
   }
 
-  Widget _buildBrandInfo() {
+  Widget _buildBrandInfo({required bool isMobile}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         const Text(

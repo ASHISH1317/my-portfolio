@@ -124,7 +124,7 @@ class _ContactSectionState extends State<ContactSection> {
                   children: [
                     _buildContactInfo(isMobile: true),
                     const SizedBox(height: 48),
-                    _buildFormCard(),
+                    _buildFormCard(isMobile: true),
                   ],
                 )
               : Row(
@@ -137,7 +137,7 @@ class _ContactSectionState extends State<ContactSection> {
                     const SizedBox(width: 60),
                     Expanded(
                       flex: 6,
-                      child: _buildFormCard(),
+                      child: _buildFormCard(isMobile: false),
                     ),
                   ],
                 ),
@@ -156,7 +156,7 @@ class _ContactSectionState extends State<ContactSection> {
 
   Widget _buildContactInfo({required bool isMobile}) {
     return Column(
-      crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Let's build something great",
@@ -164,13 +164,13 @@ class _ContactSectionState extends State<ContactSection> {
             fontSize: 22,
             height: 1.4,
           ),
-          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+          textAlign: TextAlign.start,
         ),
         const SizedBox(height: 16),
         Text(
           "Have a project in mind or want to discuss an opportunity? I'd love to hear from you. Drop me a message and I'll get back to you as soon as possible.",
           style: ThemeConfig.body,
-          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+          textAlign: TextAlign.start,
         ),
         const SizedBox(height: 40),
         _buildInfoRow(
@@ -207,7 +207,7 @@ class _ContactSectionState extends State<ContactSection> {
         ),
         const SizedBox(height: 40),
         Row(
-          mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _buildSocialIcon(FontAwesomeIcons.github, PortfolioData.github1),
             const SizedBox(width: 16),
@@ -288,7 +288,7 @@ class _ContactSectionState extends State<ContactSection> {
     );
   }
 
-  Widget _buildFormCard() {
+  Widget _buildFormCard({required bool isMobile}) {
     return CustomCard(
       glowColor: const Color(0xFF25D366),
       child: Padding(
@@ -329,93 +329,104 @@ class _ContactSectionState extends State<ContactSection> {
                 validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
               ),
               const SizedBox(height: 32),
-              Wrap(
-                spacing: 16,
-                runSpacing: 16,
-                children: [
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: _submitViaWhatsApp,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                        decoration: BoxDecoration(
+              isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildSubmitButton(
+                          onTap: _submitViaWhatsApp,
                           color: const Color(0xFF25D366),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF25D366).withOpacity(0.2),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            )
-                          ],
+                          icon: FontAwesomeIcons.whatsapp,
+                          iconColor: Colors.white,
+                          textColor: Colors.white,
+                          text: "Send via WhatsApp",
+                          isFullWidth: true,
                         ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.whatsapp,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Send via WhatsApp",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: _submitViaEmail,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                        decoration: BoxDecoration(
+                        const SizedBox(height: 16),
+                        _buildSubmitButton(
+                          onTap: _submitViaEmail,
                           color: ThemeConfig.primary,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: ThemeConfig.primary.withOpacity(0.2),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            )
-                          ],
+                          icon: Icons.mail_outline_rounded,
+                          iconColor: Colors.black,
+                          textColor: Colors.black,
+                          text: "Send via Email",
+                          isFullWidth: true,
                         ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.mail_outline_rounded,
-                              color: Colors.black,
-                              size: 20,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Send via Email",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
+                      ],
+                    )
+                  : Wrap(
+                      spacing: 16,
+                      runSpacing: 16,
+                      children: [
+                        _buildSubmitButton(
+                          onTap: _submitViaWhatsApp,
+                          color: const Color(0xFF25D366),
+                          icon: FontAwesomeIcons.whatsapp,
+                          iconColor: Colors.white,
+                          textColor: Colors.white,
+                          text: "Send via WhatsApp",
+                          isFullWidth: false,
                         ),
-                      ),
+                        _buildSubmitButton(
+                          onTap: _submitViaEmail,
+                          color: ThemeConfig.primary,
+                          icon: Icons.mail_outline_rounded,
+                          iconColor: Colors.black,
+                          textColor: Colors.black,
+                          text: "Send via Email",
+                          isFullWidth: false,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubmitButton({
+    required VoidCallback onTap,
+    required Color color,
+    required dynamic icon,
+    required Color iconColor,
+    required Color textColor,
+    required String text,
+    required bool isFullWidth,
+  }) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: color.withOpacity(0.2),
+                blurRadius: 16,
+                offset: const Offset(0, 8),
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon is IconData
+                  ? Icon(icon, color: iconColor, size: 20)
+                  : FaIcon(icon, color: iconColor, size: 20),
+              const SizedBox(width: 10),
+              Text(
+                text,
+                style: TextStyle(
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
               ),
             ],
           ),

@@ -355,86 +355,170 @@ class _SkillsSectionState extends State<SkillsSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Powerhouse Integrations",
-                style: TextStyle(
-                  color: ThemeConfig.textPrimary,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (!_showAll) ...[
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: ThemeConfig.primary.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
-                          const SizedBox(width: 4),
-                          Text(
-                            "AUTO CYCLING",
-                            style: TextStyle(
-                              color: ThemeConfig.primary.withOpacity(0.8),
-                              fontSize: 8,
-                              fontFamily: "JetBrains Mono",
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+          isMobile
+              ? Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.start,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  children: [
+                    const Text(
+                      "Powerhouse Integrations",
+                      style: TextStyle(
+                        color: ThemeConfig.textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                  ],
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: _toggleShowAll,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: ThemeConfig.surfaceContainerHigh,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(
-                            color: ThemeConfig.primary.withOpacity(0.3),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              _showAll ? Icons.terminal : Icons.lock_open,
-                              color: ThemeConfig.primary,
-                              size: 10,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (!_showAll) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: ThemeConfig.primary.withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
                             ),
-                            const SizedBox(width: 6),
-                            Text(
-                              _showAll ? "COMPACT" : "DECRYPT ALL",
-                              style: const TextStyle(
-                                color: ThemeConfig.primary,
-                                fontSize: 9,
-                                fontFamily: "JetBrains Mono",
-                                fontWeight: FontWeight.bold,
+                            child: Row(
+                              children: [
+                                const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "AUTO CYCLING",
+                                  style: TextStyle(
+                                    color: ThemeConfig.primary.withOpacity(0.8),
+                                    fontSize: 8,
+                                    fontFamily: "JetBrains Mono",
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: _toggleShowAll,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: ThemeConfig.surfaceContainerHigh,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: ThemeConfig.primary.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    _showAll ? Icons.terminal : Icons.lock_open,
+                                    color: ThemeConfig.primary,
+                                    size: 10,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    _showAll ? "COMPACT" : "DECRYPT ALL",
+                                    style: const TextStyle(
+                                      color: ThemeConfig.primary,
+                                      fontSize: 9,
+                                      fontFamily: "JetBrains Mono",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
+                      ],
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Powerhouse Integrations",
+                      style: TextStyle(
+                        color: ThemeConfig.textPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (!_showAll) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: ThemeConfig.primary.withOpacity(0.08),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "AUTO CYCLING",
+                                  style: TextStyle(
+                                    color: ThemeConfig.primary.withOpacity(0.8),
+                                    fontSize: 8,
+                                    fontFamily: "JetBrains Mono",
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                        ],
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: _toggleShowAll,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                color: ThemeConfig.surfaceContainerHigh,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: ThemeConfig.primary.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    _showAll ? Icons.terminal : Icons.lock_open,
+                                    color: ThemeConfig.primary,
+                                    size: 10,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    _showAll ? "COMPACT" : "DECRYPT ALL",
+                                    style: const TextStyle(
+                                      color: ThemeConfig.primary,
+                                      fontSize: 9,
+                                      fontFamily: "JetBrains Mono",
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
           const SizedBox(height: 32),
           
           GridView.builder(
