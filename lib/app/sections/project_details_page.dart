@@ -3,6 +3,7 @@ import 'dart:ui';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/animated_section_divider.dart';
 
 class ProjectDetailsPage extends StatefulWidget {
   final ProjectData project;
@@ -80,25 +81,25 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                           children: [
                             const SizedBox(height: 40),
                             _buildHeroSection(isMobile),
-                            const SizedBox(height: 60),
-                            const DividerPulse(),
-                            const SizedBox(height: 60),
+                            const SizedBox(height: 40),
+                            const AnimatedSectionDivider(),
+                            const SizedBox(height: 40),
                             _buildBackgroundAndFeatures(isMobile),
-                            const SizedBox(height: 60),
-                            const DividerPulse(),
-                            const SizedBox(height: 60),
+                            const SizedBox(height: 40),
+                            const AnimatedSectionDivider(),
+                            const SizedBox(height: 40),
                             _buildTechStackSection(width),
-                            const SizedBox(height: 60),
-                            const DividerPulse(),
-                            const SizedBox(height: 60),
+                            const SizedBox(height: 40),
+                            const AnimatedSectionDivider(),
+                            const SizedBox(height: 40),
                             _buildCleanArchitectureSection(isMobile),
-                            const SizedBox(height: 60),
-                            const DividerPulse(),
-                            const SizedBox(height: 60),
+                            const SizedBox(height: 40),
+                            const AnimatedSectionDivider(),
+                            const SizedBox(height: 40),
                             _buildScreenshotsSection(isMobile),
-                            const SizedBox(height: 60),
-                            const DividerPulse(),
-                            const SizedBox(height: 60),
+                            const SizedBox(height: 40),
+                            const AnimatedSectionDivider(),
+                            const SizedBox(height: 40),
                             _buildIntegrationsSection(isMobile),
                             const SizedBox(height: 80),
                             _buildFooter(isMobile),
@@ -898,69 +899,6 @@ class ArchTag extends StatelessWidget {
           fontWeight: FontWeight.w500,
         ),
       ),
-    );
-  }
-}
-
-// Custom Pulsing Divider
-class DividerPulse extends StatefulWidget {
-  const DividerPulse({super.key});
-
-  @override
-  State<DividerPulse> createState() => _DividerPulseState();
-}
-
-class _DividerPulseState extends State<DividerPulse>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat();
-    _animation = Tween<double>(begin: -1.0, end: 1.0).animate(_controller);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (context, child) {
-        return Container(
-          height: 2,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.transparent,
-                ThemeConfig.primary.withOpacity(0.8),
-                Colors.white.withOpacity(0.5),
-                ThemeConfig.primary.withOpacity(0.8),
-                Colors.transparent,
-              ],
-              stops: [
-                0.0,
-                (_animation.value - 0.25).clamp(0.0, 1.0),
-                _animation.value.clamp(0.0, 1.0),
-                (_animation.value + 0.25).clamp(0.0, 1.0),
-                1.0,
-              ],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
-          ),
-        );
-      },
     );
   }
 }
