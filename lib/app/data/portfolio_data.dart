@@ -18,43 +18,46 @@ class PortfolioData {
 
   static const List<SkillCategory> skills = [
     SkillCategory(
-      name: "Languages",
+      name: "Core Focus",
       skills: [
+        SkillItem(name: "Flutter", level: 0.98),
         SkillItem(name: "Dart", level: 0.95),
-        SkillItem(name: "Java", level: 0.75),
+        SkillItem(name: "Clean Architecture", level: 0.90),
+        SkillItem(name: "Android SDK / Java", level: 0.80),
         SkillItem(name: "GoLang", level: 0.70),
       ],
     ),
     SkillCategory(
-      name: "Frameworks",
+      name: "State & Logic",
       skills: [
-        SkillItem(name: "Flutter", level: 0.95),
-        SkillItem(name: "Android SDK", level: 0.85),
+        SkillItem(name: "GetX State Management", level: 0.95),
+        SkillItem(name: "Riverpod / Provider", level: 0.90),
+        SkillItem(name: "BLoC Pattern", level: 0.85),
+        SkillItem(name: "Reactive Programming (Rx)", level: 0.88),
       ],
     ),
     SkillCategory(
-      name: "State Management",
+      name: "Integrations & Maps",
       skills: [
-        SkillItem(name: "GetX", level: 0.90),
-        SkillItem(name: "Riverpod", level: 0.85),
-        SkillItem(name: "Provider", level: 0.85),
+        SkillItem(name: "Google Maps SDK & Geolocation", level: 0.92),
+        SkillItem(name: "Stripe & Payment Gateways", level: 0.90),
+        SkillItem(name: "Socket.IO / WebSockets", level: 0.88),
+        SkillItem(name: "REST APIs & Retrofit", level: 0.95),
       ],
     ),
     SkillCategory(
-      name: "APIs & Networking",
+      name: "Backend & Cloud",
       skills: [
-        SkillItem(name: "REST APIs", level: 0.90),
-        SkillItem(name: "Socket.IO", level: 0.85),
-        SkillItem(name: "Retrofit", level: 0.80),
+        SkillItem(name: "Firebase (Auth, DB, Messaging)", level: 0.92),
+        SkillItem(name: "Supabase Realtime Services", level: 0.85),
+        SkillItem(name: "AWS Cloud Operations", level: 0.75),
       ],
     ),
     SkillCategory(
-      name: "Firebase",
+      name: "Web & No-Code",
       skills: [
-        SkillItem(name: "Authentication", level: 0.90),
-        SkillItem(name: "Firestore", level: 0.90),
-        SkillItem(name: "Cloud Messaging", level: 0.85),
-        SkillItem(name: "Analytics", level: 0.80),
+        SkillItem(name: "Shopify (Hydrogen Framework)", level: 0.80),
+        SkillItem(name: "Framer No-code Tool", level: 0.85),
       ],
     ),
   ];

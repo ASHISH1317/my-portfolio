@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data/theme_config.dart';
 import 'widgets/animated_background.dart';
+import 'widgets/animated_section_divider.dart';
 import 'sections/navbar.dart';
 import 'sections/hero_section.dart';
 import 'sections/about_section.dart';
@@ -142,12 +143,19 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                               onContactPressed: () => _scrollToSection(6),
                               onWorkPressed: () => _scrollToSection(4),
                             ),
+                            const AnimatedSectionDivider(),
                             AboutSection(key: _sectionKeys[1]),
+                            const AnimatedSectionDivider(),
                             SkillsSection(key: _sectionKeys[2]),
+                            const AnimatedSectionDivider(),
                             ExperienceSection(key: _sectionKeys[3]),
+                            const AnimatedSectionDivider(),
                             ProjectsSection(key: _sectionKeys[4]),
+                            const AnimatedSectionDivider(),
                             EducationSection(key: _sectionKeys[5]),
+                            const AnimatedSectionDivider(),
                             ContactSection(key: _sectionKeys[6]),
+                            const AnimatedSectionDivider(),
                             Footer(onNavItemTap: _scrollToSection),
                           ],
                         ),

@@ -225,7 +225,23 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
     );
   }
 
+  IconData _getStatIcon(int index) {
+    switch (index) {
+      case 0:
+        return Icons.work_history_outlined;
+      case 1:
+        return Icons.rocket_launch_outlined;
+      case 2:
+        return Icons.code_rounded;
+      case 3:
+        return Icons.phone_iphone_outlined;
+      default:
+        return Icons.star_outline_rounded;
+    }
+  }
+
   Widget _buildStatsGrid(bool isMobile) {
+    final double width = MediaQuery.of(context).size.width;
     return Container(
       padding: const EdgeInsets.only(top: 48),
       decoration: BoxDecoration(
@@ -241,43 +257,68 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: isMobile ? 2 : 4,
-          crossAxisSpacing: 24,
-          mainAxisSpacing: 24,
-          childAspectRatio: isMobile ? 1.4 : 1.7,
+          crossAxisSpacing: isMobile ? 16 : 24,
+          mainAxisSpacing: isMobile ? 16 : 24,
+          childAspectRatio: isMobile ? (width < 360 ? 1.6 : 2.0) : 2.6,
         ),
         itemCount: PortfolioData.stats.length,
         itemBuilder: (context, index) {
           final stat = PortfolioData.stats[index];
           return Container(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: ThemeConfig.surfaceContainerLow.withOpacity(0.5),
-              borderRadius: BorderRadius.circular(16),
+              color: ThemeConfig.surfaceContainerLow.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: ThemeConfig.outlineVariant.withOpacity(0.2),
+                color: ThemeConfig.outlineVariant.withOpacity(0.15),
                 width: 1,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Row(
               children: [
-                Text(
-                  stat["value"] ?? "",
-                  style: const TextStyle(
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: ThemeConfig.primary.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: ThemeConfig.primary.withOpacity(0.15),
+                      width: 1,
+                    ),
+                  ),
+                  child: Icon(
+                    _getStatIcon(index),
                     color: ThemeConfig.primary,
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
+                    size: 20,
                   ),
                 ),
-                const SizedBox(height: 8),
-                Text(
-                  stat["label"] ?? "",
-                  style: const TextStyle(
-                    color: ThemeConfig.textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        stat["value"] ?? "",
+                        style: const TextStyle(
+                          color: ThemeConfig.primary,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          height: 1.1,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        stat["label"] ?? "",
+                        style: const TextStyle(
+                          color: ThemeConfig.textSecondary,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                          letterSpacing: 0.5,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
