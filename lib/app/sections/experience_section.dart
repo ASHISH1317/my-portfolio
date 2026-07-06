@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/section_header.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
@@ -28,23 +29,10 @@ class ExperienceSection extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Experience",
-          style: ThemeConfig.h2,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 60,
-          height: 4,
-          decoration: BoxDecoration(
-            gradient: ThemeConfig.primaryGradient,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      ],
+    return const SectionHeader(
+      title: "Experience",
+      subtitle: "Work History",
+      index: "03",
     );
   }
 

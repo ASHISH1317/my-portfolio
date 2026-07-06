@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/section_header.dart';
 
 class EducationSection extends StatelessWidget {
   const EducationSection({super.key});
@@ -26,23 +27,10 @@ class EducationSection extends StatelessWidget {
   }
 
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Education",
-          style: ThemeConfig.h2,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 60,
-          height: 4,
-          decoration: BoxDecoration(
-            gradient: ThemeConfig.primaryGradient,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      ],
+    return const SectionHeader(
+      title: "Education",
+      subtitle: "Education",
+      index: "05",
     );
   }
 

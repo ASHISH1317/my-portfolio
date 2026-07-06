@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/section_header.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -146,23 +147,10 @@ class _ContactSectionState extends State<ContactSection> {
   }
 
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Let's build something great",
-          style: ThemeConfig.h2,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 60,
-          height: 4,
-          decoration: BoxDecoration(
-            gradient: ThemeConfig.primaryGradient,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      ],
+    return const SectionHeader(
+      title: "Let's build something great",
+      subtitle: "Get In Touch",
+      index: "06",
     );
   }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../data/theme_config.dart';
+import '../widgets/section_header.dart';
 
 class IntegrationData {
   final String title;
@@ -537,23 +538,10 @@ class _SkillsSectionState extends State<SkillsSection> {
   }
 
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Skills & Tech",
-          style: ThemeConfig.h2,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 60,
-          height: 4,
-          decoration: BoxDecoration(
-            gradient: ThemeConfig.primaryGradient,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      ],
+    return const SectionHeader(
+      title: "Skills & Tech",
+      subtitle: "My Toolbelt",
+      index: "02",
     );
   }
 }

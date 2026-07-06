@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/section_header.dart';
 import 'project_details_page.dart';
 
 class ProjectsSection extends StatefulWidget {
@@ -88,23 +89,10 @@ class _ProjectsSectionState extends State<ProjectsSection> {
   }
 
   Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Projects",
-          style: ThemeConfig.h2,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          width: 60,
-          height: 4,
-          decoration: BoxDecoration(
-            gradient: ThemeConfig.primaryGradient,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-      ],
+    return const SectionHeader(
+      title: "Projects",
+      subtitle: "Portfolio",
+      index: "04",
     );
   }
 
