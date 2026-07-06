@@ -164,73 +164,94 @@ class AboutSection extends StatelessWidget {
   Widget _buildHighlightsGrid({required bool isMobile}) {
     final highlights = [
       {
-        "title": "Cross-Platform",
-        "desc": "Building seamless apps for iOS & Android with a single Flutter codebase.",
-        "icon": Icons.tablet_android_rounded,
+        "title": "Scalable Architecture",
+        "desc": "Architecting clean, modular, and testable codebases utilizing SOLID principles for future-proof scalability.",
+        "icon": Icons.architecture_rounded,
       },
       {
-        "title": "Clean Architecture",
-        "desc": "Writing scalable, maintainable code with SOLID principles and best practices.",
-        "icon": Icons.code_rounded,
+        "title": "High Performance",
+        "desc": "Crafting fluid, responsive interfaces running at 60/120 FPS with highly optimized state management.",
+        "icon": Icons.speed_rounded,
       },
       {
-        "title": "Performance",
-        "desc": "Optimizing app performance with efficient state management and caching strategies.",
-        "icon": Icons.bolt_rounded,
+        "title": "Robust Integrations",
+        "desc": "Seamlessly connecting real-time WebSockets, enterprise IoT APIs, and secure payment systems.",
+        "icon": Icons.hub_rounded,
       },
       {
-        "title": "Team Leadership",
-        "desc": "Leading dev teams, mentoring juniors, and driving project delivery as Tech Lead.",
-        "icon": Icons.groups_rounded,
+        "title": "Engineering Leadership",
+        "desc": "Leading agile development teams, mentoring junior engineers, and driving successful App Store deliveries.",
+        "icon": Icons.psychology_rounded,
       },
     ];
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isMobile ? 1 : 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: isMobile ? 1.8 : 0.95,
-      ),
-      itemCount: highlights.length,
-      itemBuilder: (context, index) {
-        final hl = highlights[index];
-        return CustomCard(
-          glowColor: ThemeConfig.primary,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  hl["icon"] as IconData,
-                  color: ThemeConfig.primary,
-                  size: 28,
+    Widget buildCard(Map<String, dynamic> hl) {
+      return CustomCard(
+        glowColor: ThemeConfig.primary,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                hl["icon"] as IconData,
+                color: ThemeConfig.primary,
+                size: 28,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                hl["title"] as String,
+                style: ThemeConfig.h3.copyWith(
+                  fontSize: 16,
+                  color: Colors.white,
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  hl["title"] as String,
-                  style: ThemeConfig.h3.copyWith(
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                hl["desc"] as String,
+                style: ThemeConfig.body.copyWith(
+                  fontSize: 13,
+                  height: 1.5,
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  hl["desc"] as String,
-                  style: ThemeConfig.body.copyWith(
-                    fontSize: 13,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
-    );
+        ),
+      );
+    }
+
+    if (isMobile) {
+      return Column(
+        children: highlights.map((hl) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: buildCard(hl),
+          );
+        }).toList(),
+      );
+    } else {
+      return Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: buildCard(highlights[0])),
+              const SizedBox(width: 16),
+              Expanded(child: buildCard(highlights[1])),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: buildCard(highlights[2])),
+              const SizedBox(width: 16),
+              Expanded(child: buildCard(highlights[3])),
+            ],
+          ),
+        ],
+      );
+    }
   }
 }

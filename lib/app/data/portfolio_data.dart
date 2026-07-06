@@ -3,11 +3,11 @@ class PortfolioData {
   static const String fullName = "Ashish Vasava";
   static const String title = "Flutter Developer";
   static const String heroTagline = "Hi, I'm Ashish";
-  static const String heroSubTagline = "Flutter Developer with 3+ years of experience in building cross-platform apps. Skilled in clean architecture, API integration, and performance optimization, with a passion for intuitive user experiences.";
+  static const String heroSubTagline = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, and seamless system integrations that drive user engagement and business growth.";
   
-  static const String aboutText1 = "Flutter Developer with 3+ years of experience in building cross-platform apps. Skilled in clean architecture, API integration, and performance optimization, with a passion for intuitive user experiences.";
-  static const String aboutText2 = "Currently working as a Tech Lead at Dharma Tech in Surat, where I architect and develop production-grade Flutter applications. My journey began at IT Futurz where I honed my skills in Dart, state management, and real-time app development.";
-  static const String aboutText3 = "I'm passionate about building apps that users love — from food discovery platforms to construction management tools to social challenge apps. Every project is an opportunity to push the boundaries of what's possible with Flutter.";
+  static const String aboutText1 = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, and seamless system integrations that drive user engagement and business growth.";
+  static const String aboutText2 = "Currently leading engineering efforts as Tech Lead at Dharma Tech, I translate client visions into scalable, pixel-perfect cross-platform products. Previously, at IT Futurz, I engineered real-time apps and mastered reactive programming.";
+  static const String aboutText3 = "I focus on delivering real business value—combining clean, maintainable codebases with optimized performance to achieve stellar App Store ratings and high user retention. Let's build something exceptional together.";
 
   static const List<Map<String, String>> stats = [
     {"value": "4+", "label": "Years Experience"},
