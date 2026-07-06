@@ -91,30 +91,6 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              "04",
-              style: TextStyle(
-                fontFamily: "monospace",
-                color: ThemeConfig.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              "PROJECTS",
-              style: TextStyle(
-                color: ThemeConfig.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
         Text(
           "Projects",
           style: ThemeConfig.h2,

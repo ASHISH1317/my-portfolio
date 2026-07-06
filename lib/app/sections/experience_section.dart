@@ -12,9 +12,9 @@ class ExperienceSection extends StatelessWidget {
     final bool isMobile = width < 768;
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 24,
-        vertical: 60,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : 24,
+        vertical: 80,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,32 +31,8 @@ class ExperienceSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              "03",
-              style: TextStyle(
-                fontFamily: "monospace",
-                color: ThemeConfig.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              "EXPERIENCE",
-              style: TextStyle(
-                color: ThemeConfig.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
         Text(
-          "Professional History",
+          "Experience",
           style: ThemeConfig.h2,
         ),
         const SizedBox(height: 8),
@@ -74,151 +50,385 @@ class ExperienceSection extends StatelessWidget {
 
   Widget _buildTimeline(BuildContext context, bool isMobile) {
     final list = PortfolioData.experiences;
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        final exp = list[index];
-        final isLast = index == list.length - 1;
+    final leftPadding = isMobile ? 12.0 : 28.0;
 
-        return IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Left Column: Period on desktop
-              if (!isMobile)
-                SizedBox(
-                  width: 160,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      exp.period,
-                      style: const TextStyle(
-                        color: ThemeConfig.primary,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                ),
-              if (!isMobile) const SizedBox(width: 24),
-              // Center Column: Circle point & line connector
-              Column(
+    return Stack(
+      children: [
+        // Timeline connection line
+        Positioned(
+          left: leftPadding + 11.0, // align with center of 24px indicator circle (12px)
+          top: 24,
+          bottom: 24,
+          child: Container(
+            width: 2,
+            color: ThemeConfig.primary.withOpacity(0.15),
+          ),
+        ),
+        // Timeline Items
+        Column(
+          children: list.map((exp) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 48.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: ThemeConfig.background,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: index == 0 ? ThemeConfig.primary : ThemeConfig.textMuted,
-                        width: 4,
-                      ),
-                    ),
+                  // Timeline dot
+                  Padding(
+                    padding: EdgeInsets.only(left: leftPadding, top: 4),
+                    child: exp.isCurrent
+                        ? const PulsingDot()
+                        : Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: ThemeConfig.background,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white24,
+                                width: 2,
+                              ),
+                            ),
+                            child: Center(
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: Colors.white30,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
-                  if (!isLast)
-                    Expanded(
-                      child: Container(
-                        width: 2,
-                        color: Colors.white10,
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(width: 24),
-              // Right Column: Experience Card info
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 32.0),
-                  child: CustomCard(
-                    glowColor: index == 0 ? ThemeConfig.primary : ThemeConfig.textMuted,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (isMobile) ...[
-                            Text(
-                              exp.period,
-                              style: const TextStyle(
-                                color: ThemeConfig.primary,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 6),
-                          ],
-                          Text(
-                            exp.role,
-                            style: ThemeConfig.h3.copyWith(
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Text(
-                                exp.company,
-                                style: const TextStyle(
-                                  color: ThemeConfig.primary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                  SizedBox(width: isMobile ? 16 : 32),
+                  // Experience Card Info
+                  Expanded(
+                    child: CustomCard(
+                      glowColor: exp.isCurrent ? ThemeConfig.primary : Colors.transparent,
+                      child: Padding(
+                        padding: EdgeInsets.all(isMobile ? 16.0 : 24.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (isMobile)
+                              _buildMobileCardHeader(exp)
+                            else
+                              _buildDesktopCardHeader(exp),
+                            const SizedBox(height: 20),
+                            // Bullet Points
+                            ...exp.bullets.map((bullet) {
+                              final IconData icon = exp.bulletIcon == "terminal"
+                                  ? Icons.terminal_rounded
+                                  : Icons.check_circle_rounded;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12.0),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 2.0),
+                                      child: Icon(
+                                        icon,
+                                        color: ThemeConfig.primary,
+                                        size: 16,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        bullet,
+                                        style: ThemeConfig.body.copyWith(
+                                          fontSize: 14,
+                                          height: 1.5,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(width: 8),
-                              const Text("•", style: TextStyle(color: ThemeConfig.textMuted)),
-                              const SizedBox(width: 8),
-                              const Icon(Icons.location_on_outlined, color: ThemeConfig.textMuted, size: 14),
-                              const SizedBox(width: 4),
-                              Text(
-                                exp.location,
-                                style: const TextStyle(
-                                  color: ThemeConfig.textSecondary,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          ...exp.bullets.map((bullet) => Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "• ",
-                                  style: TextStyle(
-                                    color: ThemeConfig.primary,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    bullet,
-                                    style: ThemeConfig.body.copyWith(
-                                      fontSize: 14,
-                                      height: 1.5,
+                              );
+                            }).toList(),
+                            // Tags Footer
+                            if (exp.tags.isNotEmpty) ...[
+                              const SizedBox(height: 16),
+                              Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                      color: Colors.white10,
+                                      width: 1,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          )).toList(),
-                        ],
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "KEY CONTRIBUTIONS & TECH",
+                                      style: TextStyle(
+                                        color: Colors.white38,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 1.5,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Wrap(
+                                      spacing: 8,
+                                      runSpacing: 8,
+                                      children: exp.tags.map((tag) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 6,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.03),
+                                            border: Border.all(
+                                              color: Colors.white.withOpacity(0.08),
+                                            ),
+                                            borderRadius: BorderRadius.circular(20),
+                                          ),
+                                          child: Text(
+                                            tag,
+                                            style: const TextStyle(
+                                              color: Colors.white70,
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMobileCardHeader(ExperienceData exp) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          exp.role,
+          style: ThemeConfig.h3.copyWith(
+            fontSize: 18,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 6),
+        Row(
+          children: [
+            Text(
+              exp.company,
+              style: const TextStyle(
+                color: ThemeConfig.primary,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const Text(
+              "|",
+              style: TextStyle(color: Colors.white24),
+            ),
+            const SizedBox(width: 8),
+            const Icon(
+              Icons.location_on_outlined,
+              color: Colors.white54,
+              size: 13,
+            ),
+            const SizedBox(width: 2),
+            Text(
+              exp.location.split(',').first, // Shorten Surat, Gujarat, India to Surat
+              style: const TextStyle(
+                color: Colors.white54,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              exp.period,
+              style: const TextStyle(
+                color: Colors.white38,
+                fontSize: 12,
+              ),
+            ),
+            if (exp.isCurrent) _buildCurrentBadge(),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDesktopCardHeader(ExperienceData exp) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                exp.role,
+                style: ThemeConfig.h3.copyWith(
+                  fontSize: 22,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
+              ),
+              const SizedBox(height: 6),
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  Text(
+                    exp.company,
+                    style: const TextStyle(
+                      color: ThemeConfig.primary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const Text(
+                    "|",
+                    style: TextStyle(color: Colors.white24),
+                  ),
+                  const Icon(
+                    Icons.location_on_outlined,
+                    color: Colors.white54,
+                    size: 14,
+                  ),
+                  Text(
+                    exp.location,
+                    style: const TextStyle(
+                      color: Colors.white54,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        );
-      },
+        ),
+        const SizedBox(width: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            if (exp.isCurrent) ...[
+              _buildCurrentBadge(),
+              const SizedBox(height: 6),
+            ],
+            Text(
+              exp.period,
+              style: const TextStyle(
+                color: Colors.white38,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCurrentBadge() {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 4,
+      ),
+      decoration: BoxDecoration(
+        color: ThemeConfig.primary.withOpacity(0.1),
+        border: Border.all(
+          color: ThemeConfig.primary.withOpacity(0.2),
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Text(
+        "Current Role",
+        style: TextStyle(
+          color: ThemeConfig.primary,
+          fontSize: 10,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+class PulsingDot extends StatefulWidget {
+  const PulsingDot({super.key});
+
+  @override
+  State<PulsingDot> createState() => _PulsingDotState();
+}
+
+class _PulsingDotState extends State<PulsingDot> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      height: 24,
+      decoration: BoxDecoration(
+        color: ThemeConfig.background,
+        shape: BoxShape.circle,
+        border: Border.all(color: ThemeConfig.primary, width: 2),
+      ),
+      child: Center(
+        child: ScaleTransition(
+          scale: Tween<double>(begin: 0.75, end: 1.2).animate(
+            CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+          ),
+          child: Container(
+            width: 8,
+            height: 8,
+            decoration: const BoxDecoration(
+              color: ThemeConfig.primary,
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -9,6 +9,7 @@ class EducationSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
         vertical: 60,
@@ -28,32 +29,8 @@ class EducationSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              "05",
-              style: TextStyle(
-                fontFamily: "monospace",
-                color: ThemeConfig.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              "EDUCATION",
-              style: TextStyle(
-                color: ThemeConfig.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
         Text(
-          "Education Background",
+          "Education",
           style: ThemeConfig.h2,
         ),
         const SizedBox(height: 8),

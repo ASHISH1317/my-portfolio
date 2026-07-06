@@ -540,30 +540,6 @@ class _SkillsSectionState extends State<SkillsSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            const Text(
-              "02",
-              style: TextStyle(
-                fontFamily: "monospace",
-                color: ThemeConfig.primary,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              "SKILLS & TECH",
-              style: TextStyle(
-                color: ThemeConfig.primary,
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
         Text(
           "Skills & Tech",
           style: ThemeConfig.h2,

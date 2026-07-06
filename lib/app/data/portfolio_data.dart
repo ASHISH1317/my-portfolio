@@ -196,11 +196,18 @@ class PortfolioData {
       company: "Dharma Tech",
       period: "Jul, 2022 — Present",
       location: "Surat, Gujarat, India",
+      isCurrent: true,
+      bulletIcon: "check_circle",
+      tags: [
+        "Socket.IO",
+        "GetX",
+        "Riverpod",
+        "Clean Architecture",
+        "Team Mentorship",
+      ],
       bullets: [
-        "Leading Flutter development team, architecting scalable mobile applications with clean code principles.",
-        "Implementing complex features including real-time communication via Socket.IO, secure payment integrations, and cloud-based authentication.",
-        "Driving best practices in state management using GetX and Riverpod for maintainable codebases.",
-        "Mentoring junior developers and conducting code reviews to ensure code quality and consistency."
+        "Architecting scalable mobile applications using clean code principles and modular widget composition.",
+        "Implementing real-time communication via Socket.IO and secure cloud-based authentication systems.",
       ],
     ),
     ExperienceData(
@@ -208,10 +215,17 @@ class PortfolioData {
       company: "IT Futurz",
       period: "Apr, 2021 — Jun, 2022",
       location: "Surat, Gujarat, India",
+      isCurrent: false,
+      bulletIcon: "terminal",
+      tags: [
+        "Dart",
+        "GoLang",
+        "Java",
+        "UI/UX Implementation",
+      ],
       bullets: [
-        "Proficient in GetX state management for scalable and maintainable Flutter applications.",
-        "Experienced in programming languages including Dart, Java, and GoLang.",
-        "Strong debugging and problem-solving skills with a logical approach to development."
+        "Developed proficiency in GetX state management for maintainable cross-platform applications.",
+        "Gained hands-on experience with Dart, Java, and GoLang integration within the Flutter ecosystem.",
       ],
     ),
   ];
@@ -310,6 +324,9 @@ class ExperienceData {
   final String period;
   final String location;
   final List<String> bullets;
+  final bool isCurrent;
+  final List<String> tags;
+  final String bulletIcon;
 
   const ExperienceData({
     required this.role,
@@ -317,6 +334,9 @@ class ExperienceData {
     required this.period,
     required this.location,
     required this.bullets,
+    this.isCurrent = false,
+    this.tags = const [],
+    this.bulletIcon = "check_circle",
   });
 }
 
