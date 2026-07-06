@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
@@ -26,48 +30,77 @@ class _ContactSectionState extends State<ContactSection> {
     super.dispose();
   }
 
-  void _submitForm() {
+  void _submitViaWhatsApp() {
     if (_formKey.currentState!.validate()) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: ThemeConfig.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: Color(0xFF25D366), width: 1.5),
-          ),
-          title: const Row(
-            children: [
-              Icon(Icons.check_circle_outline_rounded, color: Color(0xFF25D366)),
-              SizedBox(width: 8),
-              Text(
-                "Opening WhatsApp...",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          content: Text(
-            "Redirecting you to chat with Ashish Vasava on WhatsApp regarding '${_subjectController.text}'.",
-            style: const TextStyle(color: ThemeConfig.textSecondary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _nameController.clear();
-                _emailController.clear();
-                _subjectController.clear();
-                _messageController.clear();
-              },
-              child: const Text(
-                "OK",
-                style: TextStyle(color: Color(0xFF25D366), fontWeight: FontWeight.bold),
-              ),
+      final text = "Hello Ashish,\n\nName: ${_nameController.text}\nEmail: ${_emailController.text}\nSubject: ${_subjectController.text}\n\nMessage: ${_messageController.text}";
+      final url = "https://wa.me/919913629852?text=${Uri.encodeComponent(text)}";
+      
+      if (kIsWeb) {
+        html.window.open(url, '_blank');
+      } else {
+        launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      }
+      
+      _showSuccessDialog("WhatsApp Redirect", "Redirecting you to chat on WhatsApp...", const Color(0xFF25D366));
+    }
+  }
+
+  void _submitViaEmail() {
+    if (_formKey.currentState!.validate()) {
+      final subject = "Portfolio Query: ${_subjectController.text}";
+      final body = "Name: ${_nameController.text}\nEmail: ${_emailController.text}\n\nMessage:\n${_messageController.text}";
+      final url = "mailto:${PortfolioData.email}?subject=${Uri.encodeComponent(subject)}&body=${Uri.encodeComponent(body)}";
+      
+      if (kIsWeb) {
+        html.window.open(url, '_blank');
+      } else {
+        launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      }
+      
+      _showSuccessDialog("Email Redirect", "Opening your default email app...", ThemeConfig.primary);
+    }
+  }
+
+  void _showSuccessDialog(String title, String message, Color accentColor) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: ThemeConfig.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: accentColor, width: 1.5),
+        ),
+        title: Row(
+          children: [
+            Icon(Icons.check_circle_outline_rounded, color: accentColor),
+            const SizedBox(width: 8),
+            Text(
+              title,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ],
         ),
-      );
-    }
+        content: Text(
+          message,
+          style: const TextStyle(color: ThemeConfig.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _nameController.clear();
+              _emailController.clear();
+              _subjectController.clear();
+              _messageController.clear();
+            },
+            child: Text(
+              "OK",
+              style: TextStyle(color: accentColor, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -176,28 +209,59 @@ class _ContactSectionState extends State<ContactSection> {
           textAlign: isMobile ? TextAlign.center : TextAlign.start,
         ),
         const SizedBox(height: 40),
-        _buildInfoRow(Icons.mail_outlined, "EMAIL", PortfolioData.email),
+        _buildInfoRow(
+          Icons.mail_outlined,
+          "EMAIL",
+          PortfolioData.email,
+          onTap: () => _showContactConfirm(
+            "Send Email",
+            "Do you want to send an email to ${PortfolioData.email}?",
+            PortfolioData.emailUrl,
+          ),
+        ),
         const SizedBox(height: 24),
-        _buildInfoRow(Icons.phone_android_outlined, "PHONE", PortfolioData.phone),
+        _buildInfoRow(
+          Icons.phone_android_outlined,
+          "PHONE",
+          PortfolioData.phone,
+          onTap: () => _showContactConfirm(
+            "Call Number",
+            "Do you want to call ${PortfolioData.phone}?",
+            "tel:${PortfolioData.phone.replaceAll(' ', '')}",
+          ),
+        ),
         const SizedBox(height: 24),
-        _buildInfoRow(Icons.location_on_outlined, "LOCATION", PortfolioData.location),
+        _buildInfoRow(
+          Icons.location_on_outlined,
+          "LOCATION",
+          PortfolioData.location,
+          onTap: () => _showContactConfirm(
+            "Open Location",
+            "Do you want to view Surat, Gujarat, India on Google Maps?",
+            "https://www.google.com/maps/search/?api=1&query=Surat,+Gujarat,+India",
+          ),
+        ),
         const SizedBox(height: 40),
         Row(
           mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
-            _buildSocialIcon(Icons.code_rounded, PortfolioData.github),
+            _buildSocialIcon(FontAwesomeIcons.github, PortfolioData.github1),
             const SizedBox(width: 16),
-            _buildSocialIcon(Icons.link_rounded, PortfolioData.linkedin),
+            _buildSocialIcon(FontAwesomeIcons.github, PortfolioData.github2),
             const SizedBox(width: 16),
-            _buildSocialIcon(Icons.tag_rounded, PortfolioData.twitter),
+            _buildSocialIcon(FontAwesomeIcons.linkedin, PortfolioData.linkedin),
+            const SizedBox(width: 16),
+            _buildSocialIcon(FontAwesomeIcons.instagram, PortfolioData.instagram),
+            const SizedBox(width: 16),
+            _buildSocialIcon(FontAwesomeIcons.whatsapp, PortfolioData.whatsapp),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
+  Widget _buildInfoRow(IconData icon, String label, String value, {VoidCallback? onTap}) {
+    final Widget widget = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
@@ -220,13 +284,33 @@ class _ContactSectionState extends State<ContactSection> {
         ),
       ],
     );
+
+    if (onTap != null) {
+      return MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: onTap,
+          child: widget,
+        ),
+      );
+    }
+    return widget;
   }
 
-  Widget _buildSocialIcon(IconData icon, String url) {
+  Widget _buildSocialIcon(dynamic icon, String url) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () async {
+          if (kIsWeb) {
+            html.window.open(url, '_blank');
+          } else {
+            final Uri uri = Uri.parse(url);
+            if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+              debugPrint("Could not launch $url");
+            }
+          }
+        },
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -234,7 +318,7 @@ class _ContactSectionState extends State<ContactSection> {
             shape: BoxShape.circle,
             border: Border.all(color: Colors.white.withOpacity(0.05)),
           ),
-          child: Icon(icon, color: Colors.white70, size: 20),
+          child: FaIcon(icon, color: Colors.white70, size: 20),
         ),
       ),
     );
@@ -281,46 +365,93 @@ class _ContactSectionState extends State<ContactSection> {
                 validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
               ),
               const SizedBox(height: 32),
-              MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: _submitForm,
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF25D366),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF25D366).withOpacity(0.2),
-                          blurRadius: 16,
-                          offset: const Offset(0, 8),
-                        )
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.chat_bubble_outline_rounded,
-                          color: Colors.white,
-                          size: 20,
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: [
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: _submitViaWhatsApp,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF25D366),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF25D366).withOpacity(0.2),
+                              blurRadius: 16,
+                              offset: const Offset(0, 8),
+                            )
+                          ],
                         ),
-                        SizedBox(width: 10),
-                        Text(
-                          "Send via WhatsApp",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.whatsapp,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Send via WhatsApp",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  MouseRegion(
+                    cursor: SystemMouseCursors.click,
+                    child: GestureDetector(
+                      onTap: _submitViaEmail,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                        decoration: BoxDecoration(
+                          color: ThemeConfig.primary,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: ThemeConfig.primary.withOpacity(0.2),
+                              blurRadius: 16,
+                              offset: const Offset(0, 8),
+                            )
+                          ],
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mail_outline_rounded,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Send via Email",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -368,6 +499,50 @@ class _ContactSectionState extends State<ContactSection> {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Colors.redAccent, width: 1.5),
         ),
+      ),
+    );
+  }
+
+  void _showContactConfirm(String title, String message, String actionUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: ThemeConfig.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: ThemeConfig.primary, width: 1.5),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          message,
+          style: const TextStyle(color: ThemeConfig.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: ThemeConfig.textMuted),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              if (kIsWeb) {
+                html.window.open(actionUrl, '_blank');
+              } else {
+                launchUrl(Uri.parse(actionUrl), mode: LaunchMode.externalApplication);
+              }
+            },
+            child: const Text(
+              "Yes",
+              style: TextStyle(color: ThemeConfig.primary, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
   }

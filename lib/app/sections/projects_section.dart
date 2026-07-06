@@ -2,15 +2,28 @@ import 'package:flutter/material.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import 'project_details_page.dart';
 
-class ProjectsSection extends StatelessWidget {
+class ProjectsSection extends StatefulWidget {
   const ProjectsSection({super.key});
+
+  @override
+  State<ProjectsSection> createState() => _ProjectsSectionState();
+}
+
+class _ProjectsSectionState extends State<ProjectsSection> {
+  bool _showAll = false;
+  static const int _initialLimit = 3;
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 700;
     final bool isTablet = width >= 700 && width < 1100;
+
+    final totalProjects = PortfolioData.projects.length;
+    final displayCount = _showAll ? totalProjects : (_initialLimit < totalProjects ? _initialLimit : totalProjects);
+    final hasMore = totalProjects > _initialLimit;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -31,38 +44,44 @@ class ProjectsSection extends StatelessWidget {
               mainAxisSpacing: 24,
               childAspectRatio: isMobile ? 0.95 : (isTablet ? 0.9 : 0.80),
             ),
-            itemCount: PortfolioData.projects.length,
+            itemCount: displayCount,
             itemBuilder: (context, index) {
               final project = PortfolioData.projects[index];
               return _buildProjectCard(context, project, index);
             },
           ),
-          const SizedBox(height: 48),
-          Center(
-            child: OutlinedButton.icon(
-              onPressed: () {},
-              style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: ThemeConfig.outline),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+          if (hasMore && !_showAll) ...[
+            const SizedBox(height: 48),
+            Center(
+              child: OutlinedButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _showAll = true;
+                  });
+                },
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: ThemeConfig.outline),
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
-              ),
-              icon: const Text(
-                "View 4 More Projects",
-                style: TextStyle(
+                icon: Text(
+                  "View ${totalProjects - _initialLimit} More Projects",
+                  style: const TextStyle(
+                    color: ThemeConfig.textPrimary,
+                    fontFamily: "JetBrains Mono",
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                label: const Icon(
+                  Icons.expand_more_rounded,
                   color: ThemeConfig.textPrimary,
-                  fontFamily: "JetBrains Mono",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
                 ),
-              ),
-              label: const Icon(
-                Icons.expand_more_rounded,
-                color: ThemeConfig.textPrimary,
               ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -116,7 +135,13 @@ class ProjectsSection extends StatelessWidget {
   Widget _buildProjectCard(BuildContext context, ProjectData project, int index) {
     return CustomCard(
       glowColor: ThemeConfig.primary,
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => ProjectDetailsPage(project: project),
+          ),
+        );
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

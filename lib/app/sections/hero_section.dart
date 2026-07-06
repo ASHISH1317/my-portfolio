@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/glowing_button.dart';
@@ -150,32 +153,52 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
           spacing: 24,
           runSpacing: 8,
           children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  PortfolioData.location,
-                  style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => _showContactConfirm(
+                  "Open Location",
+                  "Do you want to view Surat, Gujarat, India on Google Maps?",
+                  "https://www.google.com/maps/search/?api=1&query=Surat,+Gujarat,+India",
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
+                    const SizedBox(width: 6),
+                    Text(
+                      PortfolioData.location,
+                      style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
             ),
             if (!isMobile)
               const Text(
                 "|",
                 style: TextStyle(color: ThemeConfig.darkGray),
               ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
-                const SizedBox(width: 6),
-                Text(
-                  PortfolioData.email,
-                  style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => _showContactConfirm(
+                  "Send Email",
+                  "Do you want to send an email to ${PortfolioData.email}?",
+                  PortfolioData.emailUrl,
                 ),
-              ],
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
+                    const SizedBox(width: 6),
+                    Text(
+                      PortfolioData.email,
+                      style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -261,6 +284,57 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
             ),
           );
         },
+      ),
+    );
+  }
+
+  Future<void> _launchURL(String urlString) async {
+    if (kIsWeb) {
+      html.window.open(urlString, '_blank');
+    } else {
+      final Uri url = Uri.parse(urlString);
+      if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+        debugPrint("Could not launch $urlString");
+      }
+    }
+  }
+
+  void _showContactConfirm(String title, String message, String actionUrl) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: ThemeConfig.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: ThemeConfig.primary, width: 1.5),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          message,
+          style: const TextStyle(color: ThemeConfig.textSecondary),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: ThemeConfig.textMuted),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _launchURL(actionUrl);
+            },
+            child: const Text(
+              "Yes",
+              style: TextStyle(color: ThemeConfig.primary, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
   }

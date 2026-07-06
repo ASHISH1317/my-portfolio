@@ -148,7 +148,7 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                             ProjectsSection(key: _sectionKeys[4]),
                             EducationSection(key: _sectionKeys[5]),
                             ContactSection(key: _sectionKeys[6]),
-                            const Footer(),
+                            Footer(onNavItemTap: _scrollToSection),
                           ],
                         ),
                       ),
