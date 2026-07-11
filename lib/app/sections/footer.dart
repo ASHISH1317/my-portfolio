@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
+import '../widgets/theme_selector.dart';
 
 class Footer extends StatelessWidget {
   final Function(int)? onNavItemTap;
@@ -32,7 +33,7 @@ class Footer extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 48),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         color: ThemeConfig.background,
       ),
       child: Center(
@@ -48,6 +49,8 @@ class Footer extends StatelessWidget {
                     const SizedBox(height: 24),
                     _buildLinks(),
                     const SizedBox(height: 24),
+                    const ThemeSelector(),
+                    const SizedBox(height: 24),
                     _buildSocials(),
                   ],
                 )
@@ -57,7 +60,14 @@ class Footer extends StatelessWidget {
                   children: [
                     _buildBrandInfo(isMobile: false),
                     _buildLinks(),
-                    _buildSocials(),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const ThemeSelector(),
+                        const SizedBox(width: 24),
+                        _buildSocials(),
+                      ],
+                    ),
                   ],
                 ),
         ),
@@ -70,7 +80,7 @@ class Footer extends StatelessWidget {
       crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Text(
+        Text(
           "<ashish.dev />",
           style: TextStyle(
             color: ThemeConfig.textPrimary,
@@ -82,7 +92,7 @@ class Footer extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           "© 2024 ${PortfolioData.fullName}. Made with Flutter",
-          style: const TextStyle(
+          style: TextStyle(
             color: ThemeConfig.textMuted,
             fontSize: 12,
           ),

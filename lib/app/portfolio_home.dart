@@ -13,17 +13,20 @@ import 'sections/education_section.dart';
 import 'sections/contact_section.dart';
 import 'sections/footer.dart';
 import 'controllers/home_controller.dart';
+import 'controllers/theme_controller.dart';
 
 class PortfolioHome extends GetView<HomeController> {
   const PortfolioHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final themeController = Get.find<ThemeController>();
+    return Obx(() => Scaffold(
       key: controller.scaffoldKey,
       backgroundColor: ThemeConfig.background,
       endDrawer: _buildMobileDrawer(context),
       body: Stack(
+        key: ValueKey(themeController.rxThemeType.value),
         children: [
           // Slow dynamic ambient background
           const Positioned.fill(
@@ -55,19 +58,19 @@ class PortfolioHome extends GetView<HomeController> {
                               onContactPressed: () => controller.scrollToSection(6),
                               onWorkPressed: () => controller.scrollToSection(4),
                             ),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             AboutSection(key: controller.sectionKeys[1]),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             SkillsSection(key: controller.sectionKeys[2]),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             ExperienceSection(key: controller.sectionKeys[3]),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             ProjectsSection(key: controller.sectionKeys[4]),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             EducationSection(key: controller.sectionKeys[5]),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             ContactSection(key: controller.sectionKeys[6]),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             Footer(onNavItemTap: controller.scrollToSection),
                           ],
                         ),
@@ -80,7 +83,7 @@ class PortfolioHome extends GetView<HomeController> {
           ),
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildMobileDrawer(BuildContext context) {
@@ -95,7 +98,7 @@ class PortfolioHome extends GetView<HomeController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     "NAVIGATION",
                     style: TextStyle(
                       color: ThemeConfig.primary,
@@ -105,7 +108,7 @@ class PortfolioHome extends GetView<HomeController> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded, color: Colors.white),
+                    icon: Icon(Icons.close_rounded, color: ThemeConfig.textPrimary),
                     onPressed: () => Navigator.of(context).pop(),
                   )
                 ],
@@ -139,16 +142,16 @@ class PortfolioHome extends GetView<HomeController> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: isActive ? ThemeConfig.primary.withOpacity(0.08) : Colors.transparent,
+          color: isActive ? ThemeConfig.primary.withValues(alpha: 0.08) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isActive ? ThemeConfig.primary.withOpacity(0.15) : Colors.transparent,
+            color: isActive ? ThemeConfig.primary.withValues(alpha: 0.15) : Colors.transparent,
           ),
         ),
         child: Text(
           title,
           style: TextStyle(
-            color: isActive ? ThemeConfig.primary : Colors.white70,
+            color: isActive ? ThemeConfig.primary : ThemeConfig.textSecondary,
             fontSize: 16,
             fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
           ),

@@ -51,7 +51,7 @@ class AboutSection extends GetView<AboutController> {
   }
 
   Widget _buildHeader() {
-    return const SectionHeader(
+    return SectionHeader(
       title: "About Me",
       subtitle: "Profile",
       index: "01",
@@ -67,7 +67,7 @@ class AboutSection extends GetView<AboutController> {
           style: ThemeConfig.bodyLarge.copyWith(
             fontSize: 17,
             height: 1.7,
-            color: Colors.white.withOpacity(0.9),
+            color: ThemeConfig.textPrimary.withOpacity(0.9),
           ),
         ),
         const SizedBox(height: 16),
@@ -110,7 +110,7 @@ class AboutSection extends GetView<AboutController> {
       ),
       child: Text(
         tag,
-        style: const TextStyle(
+        style: TextStyle(
           color: ThemeConfig.textSecondary,
           fontSize: 13,
           fontWeight: FontWeight.w500,
@@ -141,7 +141,7 @@ class AboutSection extends GetView<AboutController> {
                 hl["title"] as String,
                 style: ThemeConfig.h3.copyWith(
                   fontSize: 16,
-                  color: Colors.white,
+                  color: ThemeConfig.textPrimary,
                 ),
               ),
               const SizedBox(height: 6),

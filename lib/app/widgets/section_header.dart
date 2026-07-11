@@ -6,7 +6,7 @@ class SectionHeader extends StatelessWidget {
   final String subtitle;
   final String index;
 
-  const SectionHeader({
+  SectionHeader({
     Key? key,
     required this.title,
     required this.subtitle,
@@ -35,7 +35,7 @@ class SectionHeader extends StatelessWidget {
               ),
               child: Text(
                 index,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: ThemeConfig.fontFamily,
                   fontSize: 11,
                   fontWeight: FontWeight.bold,

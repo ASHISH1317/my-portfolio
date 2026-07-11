@@ -1,37 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/theme_controller.dart';
 
 class ThemeConfig {
-  // Theme Colors from HTML Config
-  static const Color background = Color(0xFF131313); 
-  static const Color surface = Color(0xFF131313);
-  static const Color surfaceContainerLow = Color(0xFF1C1B1B);    // Card backgrounds
-  static const Color surfaceContainerHigh = Color(0xFF2A2A2A);   // Inner content boxes
-  static const Color surfaceContainerLowest = Color(0xFF0E0E0E); // Stats lower cards
+  static ThemeColors get colors {
+    // If not registered yet, register a fallback
+    if (!Get.isRegistered<ThemeController>()) {
+      Get.put(ThemeController());
+    }
+    return Get.find<ThemeController>().currentColors;
+  }
+
+  // Dynamic Theme Colors
+  static Color get background => colors.background;
+  static Color get surface => colors.surface;
+  static Color get surfaceContainerLow => colors.surfaceContainerLow;
+  static Color get surfaceContainerHigh => colors.surfaceContainerHigh;
+  static Color get surfaceContainerLowest => colors.surfaceContainerLowest;
   
-  static const Color primary = Color(0xFF57F1DB);   // Bright Aqua-Teal
-  static const Color onPrimary = Color(0xFF003731);
-  static const Color secondary = Color(0xFFC6C6C7); 
+  static Color get primary => colors.primary;
+  static Color get onPrimary => colors.onPrimary;
+  static Color get secondary => colors.secondary;
   
-  static const Color textPrimary = Color(0xFFE5E2E1);   // on-surface
-  static const Color textSecondary = Color(0xFFBACAC5); // on-surface-variant
-  static const Color textMuted = Color(0xFF737373);     // muted-gray
-  static const Color darkGray = Color(0xFF525252);
+  static Color get textPrimary => colors.textPrimary;
+  static Color get textSecondary => colors.textSecondary;
+  static Color get textMuted => colors.textMuted;
+  static Color get darkGray => colors.darkGray;
   
-  static const Color outline = Color(0xFF859490);
-  static const Color outlineVariant = Color(0xFF3C4A46);
+  static Color get outline => colors.outline;
+  static Color get outlineVariant => colors.outlineVariant;
 
   // Gradients
-  static const LinearGradient primaryGradient = LinearGradient(
-    colors: [primary, Color(0xFF2DD4BF)],
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-  );
+  static LinearGradient get primaryGradient => colors.primaryGradient;
 
   // Font Family Fallback
   static const String fontFamily = 'Be Vietnam Pro';
 
   // Text Styles matching HTML config font sizes and weights
-  static TextStyle get h1 => const TextStyle(
+  static TextStyle get h1 => TextStyle(
     fontSize: 48,
     fontWeight: FontWeight.w800,
     color: textPrimary,
@@ -39,7 +45,7 @@ class ThemeConfig {
     height: 1.1,
   );
 
-  static TextStyle get h2 => const TextStyle(
+  static TextStyle get h2 => TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.w700,
     color: textPrimary,
@@ -47,34 +53,34 @@ class ThemeConfig {
     height: 1.2,
   );
 
-  static TextStyle get h3 => const TextStyle(
+  static TextStyle get h3 => TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.w600,
     color: textPrimary,
     letterSpacing: -0.5,
   );
 
-  static TextStyle get body => const TextStyle(
+  static TextStyle get body => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: textSecondary,
     height: 1.6,
   );
 
-  static TextStyle get bodyLarge => const TextStyle(
+  static TextStyle get bodyLarge => TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
     color: textSecondary,
     height: 1.6,
   );
 
-  static TextStyle get bodyBold => const TextStyle(
+  static TextStyle get bodyBold => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w700,
     color: textPrimary,
   );
 
-  static TextStyle get caption => const TextStyle(
+  static TextStyle get caption => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     color: textMuted,

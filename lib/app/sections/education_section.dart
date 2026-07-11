@@ -29,7 +29,7 @@ class EducationSection extends GetView<EducationController> {
   }
 
   Widget _buildHeader() {
-    return const SectionHeader(
+    return SectionHeader(
       title: "Education",
       subtitle: "Education",
       index: "05",
@@ -54,7 +54,7 @@ class EducationSection extends GetView<EducationController> {
                   color: ThemeConfig.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.school_outlined,
                   color: ThemeConfig.primary,
                   size: 32,
@@ -70,13 +70,13 @@ class EducationSection extends GetView<EducationController> {
                       edu.degree,
                       style: ThemeConfig.h3.copyWith(
                         fontSize: 20,
-                        color: Colors.white,
+                        color: ThemeConfig.textPrimary,
                       ),
                     ),
                     const SizedBox(height: 6),
                     Text(
                       edu.institution,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: ThemeConfig.primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -90,17 +90,17 @@ class EducationSection extends GetView<EducationController> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.calendar_month_outlined, color: ThemeConfig.textSecondary, size: 16),
+                            Icon(Icons.calendar_month_outlined, color: ThemeConfig.textSecondary, size: 16),
                             const SizedBox(width: 8),
-                            Text(edu.period, style: const TextStyle(color: ThemeConfig.textSecondary, fontSize: 14)),
+                            Text(edu.period, style: TextStyle(color: ThemeConfig.textSecondary, fontSize: 14)),
                           ],
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.grade_outlined, color: ThemeConfig.textSecondary, size: 16),
+                            Icon(Icons.grade_outlined, color: ThemeConfig.textSecondary, size: 16),
                             const SizedBox(width: 8),
-                            Text(edu.grade, style: const TextStyle(color: ThemeConfig.textSecondary, fontSize: 14)),
+                            Text(edu.grade, style: TextStyle(color: ThemeConfig.textSecondary, fontSize: 14)),
                           ],
                         ),
                       ],

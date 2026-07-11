@@ -24,7 +24,7 @@ class SkillsSection extends GetView<SkillsController> {
         children: [
           _buildHeader(),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             "4+ years of building high-performance cross-platform applications, with Flutter at the core of my technical ecosystem.",
             style: TextStyle(
               fontSize: 16,
@@ -112,7 +112,7 @@ class SkillsSection extends GetView<SkillsController> {
                     width: 1,
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   "PRIMARY STACK",
                   style: TextStyle(
                     color: ThemeConfig.primary,
@@ -124,7 +124,7 @@ class SkillsSection extends GetView<SkillsController> {
                 ),
               ),
               const SizedBox(width: 12),
-              const Text(
+              Text(
                 "Flutter & Dart",
                 style: TextStyle(
                   color: ThemeConfig.textPrimary,
@@ -175,7 +175,7 @@ class SkillsSection extends GetView<SkillsController> {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             color: ThemeConfig.primary,
             fontSize: 14,
             fontWeight: FontWeight.w600,
@@ -185,7 +185,7 @@ class SkillsSection extends GetView<SkillsController> {
         const SizedBox(height: 8),
         Text(
           description,
-          style: const TextStyle(
+          style: TextStyle(
             color: ThemeConfig.textSecondary,
             fontSize: 13,
             height: 1.5,
@@ -209,7 +209,7 @@ class SkillsSection extends GetView<SkillsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "State Management",
             style: TextStyle(
               color: ThemeConfig.textPrimary,
@@ -259,7 +259,7 @@ class SkillsSection extends GetView<SkillsController> {
                     alignment: WrapAlignment.start,
                     crossAxisAlignment: WrapCrossAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Powerhouse Integrations",
                         style: TextStyle(
                           color: ThemeConfig.textPrimary,
@@ -280,7 +280,7 @@ class SkillsSection extends GetView<SkillsController> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
+                                  Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
                                   const SizedBox(width: 4),
                                   Text(
                                     "AUTO CYCLING",
@@ -320,7 +320,7 @@ class SkillsSection extends GetView<SkillsController> {
                                     const SizedBox(width: 6),
                                     Text(
                                       showAll ? "COMPACT" : "DECRYPT ALL",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: ThemeConfig.primary,
                                         fontSize: 9,
                                         fontFamily: "JetBrains Mono",
@@ -339,7 +339,7 @@ class SkillsSection extends GetView<SkillsController> {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         "Powerhouse Integrations",
                         style: TextStyle(
                           color: ThemeConfig.textPrimary,
@@ -360,7 +360,7 @@ class SkillsSection extends GetView<SkillsController> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
+                                  Icon(Icons.sync_alt, color: ThemeConfig.primary, size: 10),
                                   const SizedBox(width: 4),
                                   Text(
                                     "AUTO CYCLING",
@@ -400,7 +400,7 @@ class SkillsSection extends GetView<SkillsController> {
                                     const SizedBox(width: 6),
                                     Text(
                                       showAll ? "COMPACT" : "DECRYPT ALL",
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: ThemeConfig.primary,
                                         fontSize: 9,
                                         fontFamily: "JetBrains Mono",
@@ -458,7 +458,7 @@ class SkillsSection extends GetView<SkillsController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Web & E-commerce",
             style: TextStyle(
               color: ThemeConfig.textPrimary,
@@ -497,7 +497,7 @@ class SkillsSection extends GetView<SkillsController> {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ThemeConfig.textPrimary,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -506,7 +506,7 @@ class SkillsSection extends GetView<SkillsController> {
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ThemeConfig.textSecondary,
                     fontSize: 11,
                   ),
@@ -520,7 +520,7 @@ class SkillsSection extends GetView<SkillsController> {
   }
 
   Widget _buildHeader() {
-    return const SectionHeader(
+    return SectionHeader(
       title: "Skills & Tech",
       subtitle: "My Toolbelt",
       index: "02",
@@ -545,7 +545,7 @@ class _Badge extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           color: ThemeConfig.textPrimary,
           fontSize: 13,
           fontFamily: "JetBrains Mono",

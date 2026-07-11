@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import '../controllers/theme_controller.dart';
 import '../controllers/home_controller.dart';
 import '../controllers/hero_controller.dart';
 import '../controllers/about_controller.dart';
@@ -11,6 +12,7 @@ import '../controllers/contact_controller.dart';
 class PortfolioBinding extends Bindings {
   @override
   void dependencies() {
+    Get.put(ThemeController(), permanent: true);
     Get.lazyPut<HomeController>(() => HomeController());
     Get.lazyPut<HeroController>(() => HeroController());
     Get.lazyPut<AboutController>(() => AboutController());
@@ -21,3 +23,4 @@ class PortfolioBinding extends Bindings {
     Get.lazyPut<ContactController>(() => ContactController());
   }
 }
+

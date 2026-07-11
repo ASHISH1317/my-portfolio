@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/theme_config.dart';
+import '../widgets/theme_selector.dart';
 
 class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final Function(int) onNavItemTap;
@@ -39,7 +40,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
               // Brand Logo
               GestureDetector(
                 onTap: () => onNavItemTap(0),
-                child: const MouseRegion(
+                child: MouseRegion(
                   cursor: SystemMouseCursors.click,
                   child: Text(
                     "<ashish.dev />",
@@ -54,9 +55,16 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
               ),
               // Nav items
               if (isMobile)
-                IconButton(
-                  icon: const Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
-                  onPressed: onMenuOpen,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const ThemeSelector(),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
+                      onPressed: onMenuOpen,
+                    ),
+                  ],
                 )
               else
                 Row(
@@ -72,7 +80,9 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                     _buildNavItem("Education", 5),
                     const SizedBox(width: 24),
                     _buildNavItem("Contact", 6),
-                    const SizedBox(width: 32),
+                    const SizedBox(width: 24),
+                    const ThemeSelector(),
+                    const SizedBox(width: 24),
                     // "Let's Talk" button
                     MouseRegion(
                       cursor: SystemMouseCursors.click,
@@ -84,7 +94,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                             color: ThemeConfig.primary,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
+                          child: Text(
                             "Let's Talk",
                             style: TextStyle(
                               color: ThemeConfig.onPrimary,

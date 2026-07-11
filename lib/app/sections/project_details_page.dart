@@ -82,23 +82,23 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                             const SizedBox(height: 40),
                             _buildHeroSection(isMobile),
                             const SizedBox(height: 40),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             const SizedBox(height: 40),
                             _buildBackgroundAndFeatures(isMobile),
                             const SizedBox(height: 40),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             const SizedBox(height: 40),
                             _buildTechStackSection(width),
                             const SizedBox(height: 40),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             const SizedBox(height: 40),
                             _buildCleanArchitectureSection(isMobile),
                             const SizedBox(height: 40),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             const SizedBox(height: 40),
                             _buildScreenshotsSection(isMobile),
                             const SizedBox(height: 40),
-                            const AnimatedSectionDivider(),
+                            AnimatedSectionDivider(),
                             const SizedBox(height: 40),
                             _buildIntegrationsSection(isMobile),
                             const SizedBox(height: 80),
@@ -142,12 +142,12 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_rounded, color: ThemeConfig.primary),
+                      icon: Icon(Icons.arrow_back_rounded, color: ThemeConfig.primary),
                       onPressed: () => Navigator.of(context).pop(),
                       splashRadius: 20,
                     ),
                     const SizedBox(width: 8),
-                    const Text(
+                    Text(
                       "Portfolio",
                       style: TextStyle(
                         fontFamily: "JetBrains Mono",
@@ -174,12 +174,12 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.code_rounded, color: ThemeConfig.textSecondary, size: 20),
+                      icon: Icon(Icons.code_rounded, color: ThemeConfig.textSecondary, size: 20),
                       onPressed: () {},
                       tooltip: "View Code",
                     ),
                     IconButton(
-                      icon: const Icon(Icons.terminal_rounded, color: ThemeConfig.textSecondary, size: 20),
+                      icon: Icon(Icons.terminal_rounded, color: ThemeConfig.textSecondary, size: 20),
                       onPressed: () {},
                       tooltip: "Console",
                     ),
@@ -240,7 +240,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               ),
               child: Text(
                 tag.toUpperCase(),
-                style: const TextStyle(
+                style: TextStyle(
                   color: ThemeConfig.primary,
                   fontFamily: "JetBrains Mono",
                   fontSize: 12,
@@ -308,7 +308,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               onPressed: () {},
               style: OutlinedButton.styleFrom(
                 foregroundColor: ThemeConfig.primary,
-                side: const BorderSide(color: ThemeConfig.primary, width: 1),
+                side: BorderSide(color: ThemeConfig.primary, width: 1),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4),
@@ -379,7 +379,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   Widget _buildKeyFeaturesCard() {
     return CustomCard(
-      backgroundColor: Colors.white.withOpacity(0.03),
+      backgroundColor: ThemeConfig.surfaceContainerLow,
       child: Padding(
         padding: const EdgeInsets.all(32.0),
         child: Column(
@@ -397,7 +397,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.check_circle,
                         color: ThemeConfig.primary,
                         size: 24,
@@ -592,7 +592,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   child: Text(
                     widget.project.codeSnippetPath.toUpperCase(),
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: "JetBrains Mono",
                       fontSize: 11,
                       color: ThemeConfig.textSecondary,
@@ -620,7 +620,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                         padding: const EdgeInsets.only(bottom: 4.0),
                         child: Text(
                           "${idx + 1}",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontFamily: "JetBrains Mono",
                             fontSize: 13,
                             color: ThemeConfig.textMuted,
@@ -638,7 +638,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                         padding: const EdgeInsets.only(bottom: 4.0),
                         child: RichText(
                           text: TextSpan(
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: "JetBrains Mono",
                               fontSize: 13,
                               color: ThemeConfig.textPrimary,
@@ -665,25 +665,25 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     int i = 0;
     while (i < line.length) {
       if (line.startsWith('class', i)) {
-        spans.add(const TextSpan(text: 'class', style: TextStyle(color: ThemeConfig.primary)));
+        spans.add(TextSpan(text: 'class', style: TextStyle(color: ThemeConfig.primary)));
         i += 5;
       } else if (line.startsWith('extends', i)) {
-        spans.add(const TextSpan(text: 'extends', style: TextStyle(color: ThemeConfig.primary)));
+        spans.add(TextSpan(text: 'extends', style: TextStyle(color: ThemeConfig.primary)));
         i += 7;
       } else if (line.startsWith('void', i)) {
-        spans.add(const TextSpan(text: 'void', style: TextStyle(color: ThemeConfig.primary)));
+        spans.add(TextSpan(text: 'void', style: TextStyle(color: ThemeConfig.primary)));
         i += 4;
       } else if (line.startsWith('return', i)) {
-        spans.add(const TextSpan(text: 'return', style: TextStyle(color: ThemeConfig.primary)));
+        spans.add(TextSpan(text: 'return', style: TextStyle(color: ThemeConfig.primary)));
         i += 6;
       } else if (line.startsWith('override', i)) {
-        spans.add(const TextSpan(text: 'override', style: TextStyle(color: ThemeConfig.primary)));
+        spans.add(TextSpan(text: 'override', style: TextStyle(color: ThemeConfig.primary)));
         i += 8;
       } else if (line.startsWith('final', i)) {
-        spans.add(const TextSpan(text: 'final', style: TextStyle(color: ThemeConfig.primary)));
+        spans.add(TextSpan(text: 'final', style: TextStyle(color: ThemeConfig.primary)));
         i += 5;
       } else if (line.startsWith('@override', i)) {
-        spans.add(const TextSpan(text: '@override', style: TextStyle(color: ThemeConfig.textMuted)));
+        spans.add(TextSpan(text: '@override', style: TextStyle(color: ThemeConfig.textMuted)));
         i += 9;
       } else {
         spans.add(TextSpan(text: line[i]));
@@ -747,7 +747,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.03),
+                  color: ThemeConfig.outlineVariant.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     color: ThemeConfig.outlineVariant.withOpacity(0.3),
@@ -764,7 +764,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                     const SizedBox(width: 12),
                     Text(
                       integration.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: "JetBrains Mono",
                         color: ThemeConfig.textPrimary,
                         fontSize: 14,
@@ -790,7 +790,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         if (isMobile)
           Column(
             children: [
-              const Text(
+              Text(
                 "Flutter Architect",
                 style: TextStyle(
                   fontFamily: "JetBrains Mono",
@@ -800,7 +800,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 "© 2024 Flutter Architect. Built with precision.",
                 style: TextStyle(
                   color: ThemeConfig.textMuted,
@@ -817,7 +817,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     "Flutter Architect",
                     style: TextStyle(
@@ -827,7 +827,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                       color: ThemeConfig.textPrimary,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
                     "© 2024 Flutter Architect. Built with precision.",
                     style: TextStyle(
@@ -863,7 +863,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         onTap: () {},
         child: Text(
           label.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             color: ThemeConfig.textMuted,
             fontSize: 12,
             fontFamily: "JetBrains Mono",
@@ -892,7 +892,7 @@ class ArchTag extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           color: ThemeConfig.textSecondary,
           fontFamily: "JetBrains Mono",
           fontSize: 12,
@@ -936,8 +936,8 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
           color: _isHovered
-              ? ThemeConfig.primary.withOpacity(0.05)
-              : Colors.white.withOpacity(0.03),
+              ? ThemeConfig.primary.withValues(alpha: 0.05)
+              : ThemeConfig.outlineVariant.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: _isHovered
@@ -959,7 +959,7 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
             Text(
               widget.tech.name.toUpperCase(),
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: "JetBrains Mono",
                 fontSize: 12,
                 color: ThemeConfig.textPrimary,
@@ -1023,7 +1023,7 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => Container(
                 color: ThemeConfig.surfaceContainerHigh,
-                child: const Center(
+                child: Center(
                   child: Icon(
                     Icons.broken_image_outlined,
                     color: ThemeConfig.textMuted,

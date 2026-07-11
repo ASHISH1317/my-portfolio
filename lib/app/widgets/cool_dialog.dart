@@ -12,17 +12,18 @@ class CoolDialog extends StatelessWidget {
   final String? secondaryButtonText;
   final VoidCallback? onSecondaryPressed;
 
-  const CoolDialog({
+  CoolDialog({
     Key? key,
     required this.title,
     required this.message,
     this.icon = Icons.info_outline_rounded,
-    this.accentColor = ThemeConfig.primary,
+    Color? accentColor,
     required this.primaryButtonText,
     this.onPrimaryPressed,
     this.secondaryButtonText,
     this.onSecondaryPressed,
-  }) : super(key: key);
+  }) : accentColor = accentColor ?? ThemeConfig.primary,
+       super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +253,7 @@ void showCoolDialog({
   required String title,
   required String message,
   IconData icon = Icons.info_outline_rounded,
-  Color accentColor = ThemeConfig.primary,
+  Color? accentColor,
   required String primaryButtonText,
   VoidCallback? onPrimaryPressed,
   String? secondaryButtonText,
@@ -261,12 +262,12 @@ void showCoolDialog({
   showDialog(
     context: context,
     barrierDismissible: true,
-    barrierColor: Colors.black.withOpacity(0.7),
+    barrierColor: Colors.black.withValues(alpha: 0.7),
     builder: (context) => CoolDialog(
       title: title,
       message: message,
       icon: icon,
-      accentColor: accentColor,
+      accentColor: accentColor ?? ThemeConfig.primary,
       primaryButtonText: primaryButtonText,
       onPrimaryPressed: onPrimaryPressed,
       secondaryButtonText: secondaryButtonText,

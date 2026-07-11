@@ -62,7 +62,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                     controller.toggleShowAll();
                   },
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: ThemeConfig.outline),
+                    side: BorderSide(color: ThemeConfig.outline),
                     padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -70,14 +70,14 @@ class ProjectsSection extends GetView<ProjectsController> {
                   ),
                   icon: Text(
                     "View ${totalProjects - _initialLimit} More Projects",
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ThemeConfig.textPrimary,
                       fontFamily: "JetBrains Mono",
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  label: const Icon(
+                  label: Icon(
                     Icons.expand_more_rounded,
                     color: ThemeConfig.textPrimary,
                   ),
@@ -91,7 +91,7 @@ class ProjectsSection extends GetView<ProjectsController> {
   }
 
   Widget _buildHeader() {
-    return const SectionHeader(
+    return SectionHeader(
       title: "Projects",
       subtitle: "Portfolio",
       index: "04",
@@ -125,7 +125,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) => Container(
                         color: ThemeConfig.surfaceContainerHigh,
-                        child: const Icon(
+                        child: Icon(
                           Icons.image_not_supported_outlined,
                           color: ThemeConfig.textMuted,
                           size: 32,
@@ -146,7 +146,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                           color: ThemeConfig.background.withOpacity(0.8),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.open_in_new_rounded,
                           color: ThemeConfig.textPrimary,
                           size: 16,
@@ -185,7 +185,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                           color: ThemeConfig.primary.withOpacity(0.2),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "FEATURED",
                         style: TextStyle(
                           color: ThemeConfig.primary,
@@ -209,7 +209,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                 ),
                 const SizedBox(height: 16),
                 // Key Highlights
-                const Text(
+                Text(
                   "KEY HIGHLIGHTS",
                   style: TextStyle(
                     color: ThemeConfig.primary,
@@ -225,7 +225,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 2.0),
                           child: Icon(
                             Icons.check_circle_outline_rounded,
@@ -244,14 +244,14 @@ class ProjectsSection extends GetView<ProjectsController> {
                               children: [
                                 TextSpan(
                                   text: "${feature.title}: ",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     color: ThemeConfig.textPrimary,
                                   ),
                                 ),
                                 TextSpan(
                                   text: feature.description,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: ThemeConfig.textSecondary,
                                   ),
                                 ),
@@ -281,7 +281,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                       ),
                       child: Text(
                         tag,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: ThemeConfig.textSecondary,
                           fontSize: 10,
                           fontFamily: "JetBrains Mono",

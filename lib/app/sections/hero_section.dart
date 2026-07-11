@@ -102,13 +102,13 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
               Container(
                 width: 8,
                 height: 8,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: ThemeConfig.primary,
                   shape: BoxShape.circle,
                 ),
               ),
               const SizedBox(width: 8),
-              const Text(
+              Text(
                 "AVAILABLE FOR OPPORTUNITIES",
                 style: TextStyle(
                   color: ThemeConfig.primary,
@@ -133,7 +133,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
               const TextSpan(text: "Hi, I'm "),
               TextSpan(
                 text: controller.name,
-                style: const TextStyle(color: ThemeConfig.primary),
+                style: TextStyle(color: ThemeConfig.primary),
               ),
               const TextSpan(text: "\nFlutter Developer"),
             ],
@@ -168,18 +168,18 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
+                    Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
                     const SizedBox(width: 6),
                     Text(
                       controller.location,
-                      style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+                      style: TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
                     ),
                   ],
                 ),
               ),
             ),
             if (!isMobile)
-              const Text(
+              Text(
                 "|",
                 style: TextStyle(color: ThemeConfig.darkGray),
               ),
@@ -194,11 +194,11 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
+                    Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
                     const SizedBox(width: 6),
                     Text(
                       controller.email,
-                      style: const TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+                      style: TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
                     ),
                   ],
                 ),
@@ -304,7 +304,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                     children: [
                       Text(
                         stat["value"] ?? "",
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: ThemeConfig.primary,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -314,7 +314,7 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
                       const SizedBox(height: 2),
                       Text(
                         stat["label"] ?? "",
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: ThemeConfig.textSecondary,
                           fontSize: 10,
                           fontWeight: FontWeight.w500,

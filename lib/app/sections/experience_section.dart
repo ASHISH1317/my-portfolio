@@ -31,7 +31,7 @@ class ExperienceSection extends GetView<ExperienceController> {
   }
 
   Widget _buildHeader() {
-    return const SectionHeader(
+    return SectionHeader(
       title: "Experience",
       subtitle: "Work History",
       index: "03",
@@ -74,7 +74,7 @@ class ExperienceSection extends GetView<ExperienceController> {
                               color: ThemeConfig.background,
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.white24,
+                                color: ThemeConfig.outlineVariant,
                                 width: 2,
                               ),
                             ),
@@ -82,8 +82,8 @@ class ExperienceSection extends GetView<ExperienceController> {
                               child: Container(
                                 width: 8,
                                 height: 8,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white30,
+                                decoration: BoxDecoration(
+                                  color: ThemeConfig.textMuted,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -130,7 +130,7 @@ class ExperienceSection extends GetView<ExperienceController> {
                                         style: ThemeConfig.body.copyWith(
                                           fontSize: 14,
                                           height: 1.5,
-                                          color: Colors.white70,
+                                          color: ThemeConfig.textSecondary,
                                         ),
                                       ),
                                     ),
@@ -142,10 +142,10 @@ class ExperienceSection extends GetView<ExperienceController> {
                             if (exp.tags.isNotEmpty) ...[
                               const SizedBox(height: 16),
                               Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   border: Border(
                                     top: BorderSide(
-                                      color: Colors.white10,
+                                      color: ThemeConfig.outlineVariant,
                                       width: 1,
                                     ),
                                   ),
@@ -154,10 +154,10 @@ class ExperienceSection extends GetView<ExperienceController> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       "KEY CONTRIBUTIONS & TECH",
                                       style: TextStyle(
-                                        color: Colors.white38,
+                                        color: ThemeConfig.textMuted,
                                         fontSize: 10,
                                         fontWeight: FontWeight.bold,
                                         letterSpacing: 1.5,
@@ -174,16 +174,16 @@ class ExperienceSection extends GetView<ExperienceController> {
                                             vertical: 6,
                                           ),
                                           decoration: BoxDecoration(
-                                            color: Colors.white.withOpacity(0.03),
+                                            color: ThemeConfig.outlineVariant.withValues(alpha: 0.1),
                                             border: Border.all(
-                                              color: Colors.white.withOpacity(0.08),
+                                              color: ThemeConfig.outlineVariant,
                                             ),
                                             borderRadius: BorderRadius.circular(20),
                                           ),
                                           child: Text(
                                             tag,
-                                            style: const TextStyle(
-                                              color: Colors.white70,
+                                            style: TextStyle(
+                                              color: ThemeConfig.textSecondary,
                                               fontSize: 11,
                                               fontWeight: FontWeight.w500,
                                             ),
@@ -217,7 +217,7 @@ class ExperienceSection extends GetView<ExperienceController> {
           exp.role,
           style: ThemeConfig.h3.copyWith(
             fontSize: 18,
-            color: Colors.white,
+            color: ThemeConfig.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -226,28 +226,28 @@ class ExperienceSection extends GetView<ExperienceController> {
           children: [
             Text(
               exp.company,
-              style: const TextStyle(
+              style: TextStyle(
                 color: ThemeConfig.primary,
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(width: 8),
-            const Text(
+            Text(
               "|",
-              style: TextStyle(color: Colors.white24),
+              style: TextStyle(color: ThemeConfig.textMuted),
             ),
             const SizedBox(width: 8),
-            const Icon(
+            Icon(
               Icons.location_on_outlined,
-              color: Colors.white54,
+              color: ThemeConfig.textSecondary,
               size: 13,
             ),
             const SizedBox(width: 2),
             Text(
               exp.location.split(',').first, // Shorten Surat, Gujarat, India to Surat
-              style: const TextStyle(
-                color: Colors.white54,
+              style: TextStyle(
+                color: ThemeConfig.textSecondary,
                 fontSize: 12,
               ),
             ),
@@ -259,8 +259,8 @@ class ExperienceSection extends GetView<ExperienceController> {
           children: [
             Text(
               exp.period,
-              style: const TextStyle(
-                color: Colors.white38,
+              style: TextStyle(
+                color: ThemeConfig.textMuted,
                 fontSize: 12,
               ),
             ),
@@ -283,7 +283,7 @@ class ExperienceSection extends GetView<ExperienceController> {
                 exp.role,
                 style: ThemeConfig.h3.copyWith(
                   fontSize: 22,
-                  color: Colors.white,
+                  color: ThemeConfig.textPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -295,26 +295,26 @@ class ExperienceSection extends GetView<ExperienceController> {
                 children: [
                   Text(
                     exp.company,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: ThemeConfig.primary,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const Text(
+                  Text(
                     "|",
-                    style: TextStyle(color: Colors.white24),
+                    style: TextStyle(color: ThemeConfig.textMuted),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.location_on_outlined,
-                    color: Colors.white54,
+                    color: ThemeConfig.textSecondary,
                     size: 14,
                   ),
                   Text(
                     exp.location,
-                    style: const TextStyle(
-                      color: Colors.white54,
+                    style: TextStyle(
+                      color: ThemeConfig.textSecondary,
                       fontSize: 13,
                     ),
                   ),
@@ -333,8 +333,8 @@ class ExperienceSection extends GetView<ExperienceController> {
             ],
             Text(
               exp.period,
-              style: const TextStyle(
-                color: Colors.white38,
+              style: TextStyle(
+                color: ThemeConfig.textMuted,
                 fontSize: 13,
               ),
             ),
@@ -357,7 +357,7 @@ class ExperienceSection extends GetView<ExperienceController> {
         ),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: const Text(
+      child: Text(
         "Current Role",
         style: TextStyle(
           color: ThemeConfig.primary,
@@ -412,7 +412,7 @@ class _PulsingDotState extends State<PulsingDot> with SingleTickerProviderStateM
           child: Container(
             width: 8,
             height: 8,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: ThemeConfig.primary,
               shape: BoxShape.circle,
             ),

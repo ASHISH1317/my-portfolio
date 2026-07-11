@@ -64,7 +64,7 @@ class _ContactSectionState extends State<ContactSection> {
   }
 
   Widget _buildHeader() {
-    return const SectionHeader(
+    return SectionHeader(
       title: "Let's build something great",
       subtitle: "Get In Touch",
       index: "06",
@@ -195,11 +195,11 @@ class _ContactSectionState extends State<ContactSection> {
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.02),
+            color: ThemeConfig.outlineVariant.withValues(alpha: 0.1),
             shape: BoxShape.circle,
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: ThemeConfig.outlineVariant),
           ),
-          child: FaIcon(icon, color: Colors.white70, size: 20),
+          child: FaIcon(icon, color: ThemeConfig.textSecondary, size: 20),
         ),
       ),
     );
@@ -364,24 +364,24 @@ class _ContactSectionState extends State<ContactSection> {
       maxLines: maxLines,
       keyboardType: keyboardType,
       validator: validator,
-      style: const TextStyle(color: Colors.white),
+      style: TextStyle(color: ThemeConfig.textPrimary),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: ThemeConfig.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
-        floatingLabelStyle: const TextStyle(color: ThemeConfig.primary),
-        fillColor: Colors.black26,
+        labelStyle: TextStyle(color: ThemeConfig.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
+        floatingLabelStyle: TextStyle(color: ThemeConfig.primary),
+        fillColor: ThemeConfig.outlineVariant.withValues(alpha: 0.15),
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+          borderSide: BorderSide(color: ThemeConfig.outlineVariant),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.08)),
+          borderSide: BorderSide(color: ThemeConfig.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: ThemeConfig.primary, width: 1.5),
+          borderSide: BorderSide(color: ThemeConfig.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
