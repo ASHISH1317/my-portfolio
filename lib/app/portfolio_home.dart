@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'data/theme_config.dart';
 import 'widgets/animated_background.dart';
 import 'widgets/animated_section_divider.dart';
+import 'widgets/smooth_scroll_wrapper.dart';
 import 'sections/navbar.dart';
 import 'sections/hero_section.dart';
 import 'sections/about_section.dart';
@@ -46,33 +47,36 @@ class PortfolioHome extends GetView<HomeController> {
 
                 // Main Section list
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: SmoothScrollWrapper(
                     controller: controller.scrollController,
-                    child: Center(
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 1280),
-                        child: Column(
-                          children: [
-                            HeroSection(
-                              key: controller.sectionKeys[0],
-                              onContactPressed: () => controller.scrollToSection(6),
-                              onWorkPressed: () => controller.scrollToSection(4),
-                            ),
-                            AnimatedSectionDivider(),
-                            AboutSection(key: controller.sectionKeys[1]),
-                            AnimatedSectionDivider(),
-                            SkillsSection(key: controller.sectionKeys[2]),
-                            AnimatedSectionDivider(),
-                            ExperienceSection(key: controller.sectionKeys[3]),
-                            AnimatedSectionDivider(),
-                            ProjectsSection(key: controller.sectionKeys[4]),
-                            AnimatedSectionDivider(),
-                            EducationSection(key: controller.sectionKeys[5]),
-                            AnimatedSectionDivider(),
-                            ContactSection(key: controller.sectionKeys[6]),
-                            AnimatedSectionDivider(),
-                            Footer(onNavItemTap: controller.scrollToSection),
-                          ],
+                    child: SingleChildScrollView(
+                      controller: controller.scrollController,
+                      child: Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 1280),
+                          child: Column(
+                            children: [
+                              HeroSection(
+                                key: controller.sectionKeys[0],
+                                onContactPressed: () => controller.scrollToSection(6),
+                                onWorkPressed: () => controller.scrollToSection(4),
+                              ),
+                              AnimatedSectionDivider(),
+                              AboutSection(key: controller.sectionKeys[1]),
+                              AnimatedSectionDivider(),
+                              SkillsSection(key: controller.sectionKeys[2]),
+                              AnimatedSectionDivider(),
+                              ExperienceSection(key: controller.sectionKeys[3]),
+                              AnimatedSectionDivider(),
+                              ProjectsSection(key: controller.sectionKeys[4]),
+                              AnimatedSectionDivider(),
+                              EducationSection(key: controller.sectionKeys[5]),
+                              AnimatedSectionDivider(),
+                              ContactSection(key: controller.sectionKeys[6]),
+                              AnimatedSectionDivider(),
+                              Footer(onNavItemTap: controller.scrollToSection),
+                            ],
+                          ),
                         ),
                       ),
                     ),

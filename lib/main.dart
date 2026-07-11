@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'app/data/theme_config.dart';
 import 'app/portfolio_home.dart';
 import 'app/bindings/portfolio_binding.dart';
+import 'app/widgets/smooth_scroll_behavior.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Ashish | Portfolio',
       debugShowCheckedModeBanner: false,
+      scrollBehavior: const SmoothScrollBehavior(),
       initialBinding: PortfolioBinding(),
       theme: ThemeData(
         brightness: Brightness.dark,

@@ -4,6 +4,7 @@ import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/animated_section_divider.dart';
+import '../widgets/smooth_scroll_wrapper.dart';
 
 class ProjectDetailsPage extends StatefulWidget {
   final ProjectData project;
@@ -67,43 +68,46 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               children: [
                 _buildHeader(context, isMobile),
                 Expanded(
-                  child: SingleChildScrollView(
+                  child: SmoothScrollWrapper(
                     controller: _scrollController,
-                    child: Center(
-                      child: Container(
-                        constraints: const BoxConstraints(maxWidth: 1280),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isMobile ? 16.0 : 24.0,
-                          vertical: 40.0,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const SizedBox(height: 40),
-                            _buildHeroSection(isMobile),
-                            const SizedBox(height: 40),
-                            AnimatedSectionDivider(),
-                            const SizedBox(height: 40),
-                            _buildBackgroundAndFeatures(isMobile),
-                            const SizedBox(height: 40),
-                            AnimatedSectionDivider(),
-                            const SizedBox(height: 40),
-                            _buildTechStackSection(width),
-                            const SizedBox(height: 40),
-                            AnimatedSectionDivider(),
-                            const SizedBox(height: 40),
-                            _buildCleanArchitectureSection(isMobile),
-                            const SizedBox(height: 40),
-                            AnimatedSectionDivider(),
-                            const SizedBox(height: 40),
-                            _buildScreenshotsSection(isMobile),
-                            const SizedBox(height: 40),
-                            AnimatedSectionDivider(),
-                            const SizedBox(height: 40),
-                            _buildIntegrationsSection(isMobile),
-                            const SizedBox(height: 80),
-                            _buildFooter(isMobile),
-                          ],
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Center(
+                        child: Container(
+                          constraints: const BoxConstraints(maxWidth: 1280),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isMobile ? 16.0 : 24.0,
+                            vertical: 40.0,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 40),
+                              _buildHeroSection(isMobile),
+                              const SizedBox(height: 40),
+                              AnimatedSectionDivider(),
+                              const SizedBox(height: 40),
+                              _buildBackgroundAndFeatures(isMobile),
+                              const SizedBox(height: 40),
+                              AnimatedSectionDivider(),
+                              const SizedBox(height: 40),
+                              _buildTechStackSection(width),
+                              const SizedBox(height: 40),
+                              AnimatedSectionDivider(),
+                              const SizedBox(height: 40),
+                              _buildCleanArchitectureSection(isMobile),
+                              const SizedBox(height: 40),
+                              AnimatedSectionDivider(),
+                              const SizedBox(height: 40),
+                              _buildScreenshotsSection(isMobile),
+                              const SizedBox(height: 40),
+                              AnimatedSectionDivider(),
+                              const SizedBox(height: 40),
+                              _buildIntegrationsSection(isMobile),
+                              const SizedBox(height: 80),
+                              _buildFooter(isMobile),
+                            ],
+                          ),
                         ),
                       ),
                     ),
