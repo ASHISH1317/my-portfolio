@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
+import '../widgets/cool_dialog.dart';
 import '../data/portfolio_data.dart';
 import '../data/theme_config.dart';
 
@@ -62,44 +63,20 @@ class ContactController extends GetxController {
   }
 
   void showSuccessDialog(BuildContext context, String title, String message, Color accentColor) {
-    showDialog(
+    showCoolDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: ThemeConfig.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: accentColor, width: 1.5),
-        ),
-        title: Row(
-          children: [
-            Icon(Icons.check_circle_outline_rounded, color: accentColor),
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        content: Text(
-          message,
-          style: const TextStyle(color: ThemeConfig.textSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              nameController.clear();
-              emailController.clear();
-              subjectController.clear();
-              messageController.clear();
-            },
-            child: Text(
-              "OK",
-              style: TextStyle(color: accentColor, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
+      title: title,
+      message: message,
+      icon: Icons.check_circle_outline_rounded,
+      accentColor: accentColor,
+      primaryButtonText: "OK",
+      onPrimaryPressed: () {
+        Navigator.of(context).pop();
+        nameController.clear();
+        emailController.clear();
+        subjectController.clear();
+        messageController.clear();
+      },
     );
   }
 }

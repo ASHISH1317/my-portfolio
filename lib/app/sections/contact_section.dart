@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
+import '../widgets/cool_dialog.dart';
 import '../widgets/section_header.dart';
 import '../controllers/contact_controller.dart';
 
@@ -395,42 +396,19 @@ class _ContactSectionState extends State<ContactSection> {
   }
 
   void _showContactConfirm(String title, String message, String actionUrl) {
-    showDialog(
+    showCoolDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: ThemeConfig.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: ThemeConfig.primary, width: 1.5),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        content: Text(
-          message,
-          style: const TextStyle(color: ThemeConfig.textSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(color: ThemeConfig.textMuted),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              controller.launchURL(actionUrl);
-            },
-            child: const Text(
-              "Yes",
-              style: TextStyle(color: ThemeConfig.primary, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ],
-      ),
+      title: title,
+      message: message,
+      icon: Icons.open_in_new_rounded,
+      accentColor: ThemeConfig.primary,
+      primaryButtonText: "Yes",
+      onPrimaryPressed: () {
+        Navigator.of(context).pop();
+        controller.launchURL(actionUrl);
+      },
+      secondaryButtonText: "Cancel",
+      onSecondaryPressed: () => Navigator.of(context).pop(),
     );
   }
 }
