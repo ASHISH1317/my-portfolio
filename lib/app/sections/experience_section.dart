@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
@@ -56,8 +58,13 @@ class ExperienceSection extends GetView<ExperienceController> {
         ),
         // Timeline Items
         Column(
-          children: list.map((exp) {
-            return Padding(
+          children: list.asMap().entries.map((entry) {
+            final index = entry.key;
+            final exp = entry.value;
+            return ScrollReveal(
+              direction: RevealDirection.up,
+              delay: Duration(milliseconds: 150 + index * 80),
+              child: Padding(
               padding: const EdgeInsets.only(bottom: 48.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,8 +209,9 @@ class ExperienceSection extends GetView<ExperienceController> {
                   ),
                 ],
               ),
-            );
-          }).toList(),
+            ),
+          );
+        }).toList(),
         ),
       ],
     );

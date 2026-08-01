@@ -35,20 +35,35 @@ class _CustomCardState extends State<CustomCard> {
       cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _isHovered
-                  ? activeColor.withOpacity(0.5)
-                  : (widget.highlightBorder ? ThemeConfig.primary.withOpacity(0.3) : ThemeConfig.outlineVariant.withOpacity(0.3)),
-              width: 1.5,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+            transform: _isHovered
+                ? (Matrix4.identity()..translate(0, -6, 0)..scale(1.02))
+                : Matrix4.identity(),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: _isHovered
+                    ? activeColor.withOpacity(0.6)
+                    : (widget.highlightBorder ? ThemeConfig.primary.withOpacity(0.3) : ThemeConfig.outlineVariant.withOpacity(0.3)),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: _isHovered
+                      ? activeColor.withOpacity(0.15)
+                      : Colors.transparent,
+                  blurRadius: 24,
+                  offset: const Offset(0, 10),
+                )
+              ],
             ),
+            child: widget.child,
           ),
-          child: widget.child,
         ),
       ),
     );

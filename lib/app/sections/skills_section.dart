@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../widgets/section_header.dart';
@@ -38,13 +40,29 @@ class SkillsSection extends GetView<SkillsController> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildCoreExpertiseCard(isMobile: true),
+                ScrollReveal(
+                  direction: RevealDirection.up,
+                  delay: Duration.zero,
+                  child: _buildCoreExpertiseCard(isMobile: true),
+                ),
                 const SizedBox(height: 24),
-                _buildStateManagementCard(),
+                ScrollReveal(
+                  direction: RevealDirection.up,
+                  delay: const Duration(milliseconds: 100),
+                  child: _buildStateManagementCard(),
+                ),
                 const SizedBox(height: 24),
-                _buildPowerhouseIntegrationsCard(isMobile: true),
+                ScrollReveal(
+                  direction: RevealDirection.up,
+                  delay: const Duration(milliseconds: 200),
+                  child: _buildPowerhouseIntegrationsCard(isMobile: true),
+                ),
                 const SizedBox(height: 24),
-                _buildWebAndEcommerceCard(),
+                ScrollReveal(
+                  direction: RevealDirection.up,
+                  delay: const Duration(milliseconds: 300),
+                  child: _buildWebAndEcommerceCard(),
+                ),
               ],
             )
           else
@@ -55,12 +73,20 @@ class SkillsSection extends GetView<SkillsController> {
                   children: [
                     Expanded(
                       flex: 2,
-                      child: _buildCoreExpertiseCard(isMobile: false),
+                      child: ScrollReveal(
+                        direction: RevealDirection.left,
+                        delay: Duration.zero,
+                        child: _buildCoreExpertiseCard(isMobile: false),
+                      ),
                     ),
                     const SizedBox(width: 24),
                     Expanded(
                       flex: 1,
-                      child: _buildStateManagementCard(),
+                      child: ScrollReveal(
+                        direction: RevealDirection.right,
+                        delay: Duration.zero,
+                        child: _buildStateManagementCard(),
+                      ),
                     ),
                   ],
                 ),
@@ -70,12 +96,20 @@ class SkillsSection extends GetView<SkillsController> {
                   children: [
                     Expanded(
                       flex: 2,
-                      child: _buildPowerhouseIntegrationsCard(isMobile: false),
+                      child: ScrollReveal(
+                        direction: RevealDirection.left,
+                        delay: const Duration(milliseconds: 100),
+                        child: _buildPowerhouseIntegrationsCard(isMobile: false),
+                      ),
                     ),
                     const SizedBox(width: 24),
                     Expanded(
                       flex: 1,
-                      child: _buildWebAndEcommerceCard(),
+                      child: ScrollReveal(
+                        direction: RevealDirection.right,
+                        delay: const Duration(milliseconds: 100),
+                        child: _buildWebAndEcommerceCard(),
+                      ),
                     ),
                   ],
                 ),

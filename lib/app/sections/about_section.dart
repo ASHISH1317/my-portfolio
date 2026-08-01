@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../widgets/custom_card.dart';
@@ -62,28 +64,40 @@ class AboutSection extends GetView<AboutController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          controller.aboutText1,
-          style: ThemeConfig.bodyLarge.copyWith(
-            fontSize: 17,
-            height: 1.7,
-            color: ThemeConfig.textPrimary.withOpacity(0.9),
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: Duration.zero,
+          child: Text(
+            controller.aboutText1,
+            style: ThemeConfig.bodyLarge.copyWith(
+              fontSize: 17,
+              height: 1.7,
+              color: ThemeConfig.textPrimary.withOpacity(0.9),
+            ),
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          controller.aboutText2,
-          style: ThemeConfig.body.copyWith(
-            fontSize: 15,
-            height: 1.7,
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: const Duration(milliseconds: 100),
+          child: Text(
+            controller.aboutText2,
+            style: ThemeConfig.body.copyWith(
+              fontSize: 15,
+              height: 1.7,
+            ),
           ),
         ),
         const SizedBox(height: 16),
-        Text(
-          controller.aboutText3,
-          style: ThemeConfig.body.copyWith(
-            fontSize: 15,
-            height: 1.7,
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: const Duration(milliseconds: 200),
+          child: Text(
+            controller.aboutText3,
+            style: ThemeConfig.body.copyWith(
+              fontSize: 15,
+              height: 1.7,
+            ),
           ),
         ),
         const SizedBox(height: 32),
@@ -91,7 +105,17 @@ class AboutSection extends GetView<AboutController> {
         Wrap(
           spacing: 10,
           runSpacing: 10,
-          children: controller.tags.map((tag) => _buildTag(tag)).toList(),
+          children: controller.tags.asMap().entries.map((entry) {
+            final idx = entry.key;
+            final tag = entry.value;
+            return ScrollReveal(
+              direction: RevealDirection.none,
+              scale: 0.8,
+              delay: Duration(milliseconds: 300 + idx * 25),
+              curve: Curves.easeOutBack,
+              child: _buildTag(tag),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -122,37 +146,41 @@ class AboutSection extends GetView<AboutController> {
   Widget _buildHighlightsGrid({required bool isMobile}) {
     final highlights = controller.highlights;
 
-    Widget buildCard(Map<String, dynamic> hl) {
-      return CustomCard(
-        glowColor: ThemeConfig.primary,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                hl["icon"] as IconData,
-                color: ThemeConfig.primary,
-                size: 28,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                hl["title"] as String,
-                style: ThemeConfig.h3.copyWith(
-                  fontSize: 16,
-                  color: ThemeConfig.textPrimary,
+    Widget buildCard(Map<String, dynamic> hl, int index) {
+      return ScrollReveal(
+        direction: RevealDirection.up,
+        delay: Duration(milliseconds: 150 + index * 80),
+        child: CustomCard(
+          glowColor: ThemeConfig.primary,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  hl["icon"] as IconData,
+                  color: ThemeConfig.primary,
+                  size: 28,
                 ),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                hl["desc"] as String,
-                style: ThemeConfig.body.copyWith(
-                  fontSize: 13,
-                  height: 1.5,
+                const SizedBox(height: 12),
+                Text(
+                  hl["title"] as String,
+                  style: ThemeConfig.h3.copyWith(
+                    fontSize: 16,
+                    color: ThemeConfig.textPrimary,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 6),
+                Text(
+                  hl["desc"] as String,
+                  style: ThemeConfig.body.copyWith(
+                    fontSize: 13,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -160,10 +188,12 @@ class AboutSection extends GetView<AboutController> {
 
     if (isMobile) {
       return Column(
-        children: highlights.map((hl) {
+        children: highlights.asMap().entries.map((entry) {
+          final idx = entry.key;
+          final hl = entry.value;
           return Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
-            child: buildCard(hl),
+            child: buildCard(hl, idx),
           );
         }).toList(),
       );
@@ -173,18 +203,18 @@ class AboutSection extends GetView<AboutController> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: buildCard(highlights[0])),
+              Expanded(child: buildCard(highlights[0], 0)),
               const SizedBox(width: 16),
-              Expanded(child: buildCard(highlights[1])),
+              Expanded(child: buildCard(highlights[1], 1)),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: buildCard(highlights[2])),
+              Expanded(child: buildCard(highlights[2], 2)),
               const SizedBox(width: 16),
-              Expanded(child: buildCard(highlights[3])),
+              Expanded(child: buildCard(highlights[3], 3)),
             ],
           ),
         ],

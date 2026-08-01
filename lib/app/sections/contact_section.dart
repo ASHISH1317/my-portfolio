@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/scroll_reveal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
@@ -39,9 +41,17 @@ class _ContactSectionState extends State<ContactSection> {
           isMobile
               ? Column(
                   children: [
-                    _buildContactInfo(isMobile: true),
+                    ScrollReveal(
+                      direction: RevealDirection.up,
+                      delay: Duration.zero,
+                      child: _buildContactInfo(isMobile: true),
+                    ),
                     const SizedBox(height: 48),
-                    _buildFormCard(isMobile: true),
+                    ScrollReveal(
+                      direction: RevealDirection.up,
+                      delay: const Duration(milliseconds: 150),
+                      child: _buildFormCard(isMobile: true),
+                    ),
                   ],
                 )
               : Row(
@@ -49,12 +59,20 @@ class _ContactSectionState extends State<ContactSection> {
                   children: [
                     Expanded(
                       flex: 4,
-                      child: _buildContactInfo(isMobile: false),
+                      child: ScrollReveal(
+                        direction: RevealDirection.left,
+                        delay: Duration.zero,
+                        child: _buildContactInfo(isMobile: false),
+                      ),
                     ),
                     const SizedBox(width: 60),
                     Expanded(
                       flex: 6,
-                      child: _buildFormCard(isMobile: false),
+                      child: ScrollReveal(
+                        direction: RevealDirection.right,
+                        delay: const Duration(milliseconds: 100),
+                        child: _buildFormCard(isMobile: false),
+                      ),
                     ),
                   ],
                 ),

@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'dart:html' as html;
 import 'package:flutter/material.dart' hide HeroController;
+import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/scroll_reveal.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
@@ -23,36 +25,8 @@ class HeroSection extends StatefulWidget {
   State<HeroSection> createState() => _HeroSectionState();
 }
 
-class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStateMixin {
+class _HeroSectionState extends State<HeroSection> {
   HeroController get controller => Get.find<HeroController>();
-  late AnimationController _animationController;
-  late Animation<double> _fadeInAnimation;
-  late Animation<Offset> _slideInAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-
-    _fadeInAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-
-    _slideInAnimation = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
-      CurvedAnimation(parent: _animationController, curve: const Interval(0.2, 1.0, curve: Curves.easeOutBack)),
-    );
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,19 +38,13 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
         horizontal: 24,
         vertical: 80,
       ),
-      child: FadeTransition(
-        opacity: _fadeInAnimation,
-        child: SlideTransition(
-          position: _slideInAnimation,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildContent(isMobile: isMobile),
-              const SizedBox(height: 80),
-              _buildStatsGrid(isMobile),
-            ],
-          ),
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildContent(isMobile: isMobile),
+          const SizedBox(height: 80),
+          _buildStatsGrid(isMobile),
+        ],
       ),
     );
   }
@@ -86,144 +54,164 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Available badge
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: ThemeConfig.primary.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: ThemeConfig.primary.withOpacity(0.2),
-              width: 1,
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: Duration.zero,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: ThemeConfig.primary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: ThemeConfig.primary.withOpacity(0.2),
+                width: 1,
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: BoxDecoration(
-                  color: ThemeConfig.primary,
-                  shape: BoxShape.circle,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: BoxDecoration(
+                    color: ThemeConfig.primary,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                "AVAILABLE FOR OPPORTUNITIES",
-                style: TextStyle(
-                  color: ThemeConfig.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 11,
-                  fontFamily: "JetBrains Mono",
-                  letterSpacing: 0.5,
+                const SizedBox(width: 8),
+                Text(
+                  "AVAILABLE FOR OPPORTUNITIES",
+                  style: TextStyle(
+                    color: ThemeConfig.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
+                    fontFamily: "JetBrains Mono",
+                    letterSpacing: 0.5,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 24),
         // Title
-        RichText(
-          text: TextSpan(
-            style: ThemeConfig.h1.copyWith(
-              fontSize: isMobile ? 40 : 64,
-              fontFamily: ThemeConfig.fontFamily,
-            ),
-            children: [
-              const TextSpan(text: "Hi, I'm "),
-              TextSpan(
-                text: controller.name,
-                style: TextStyle(color: ThemeConfig.primary),
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: const Duration(milliseconds: 100),
+          child: RichText(
+            text: TextSpan(
+              style: ThemeConfig.h1.copyWith(
+                fontSize: isMobile ? 40 : 64,
+                fontFamily: ThemeConfig.fontFamily,
               ),
-              const TextSpan(text: "\nFlutter Developer"),
-            ],
+              children: [
+                const TextSpan(text: "Hi, I'm "),
+                TextSpan(
+                  text: controller.name,
+                  style: TextStyle(color: ThemeConfig.primary),
+                ),
+                const TextSpan(text: "\nFlutter Developer"),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 24),
         // Subtitle
-        Container(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: Text(
-            controller.heroSubTagline,
-            style: ThemeConfig.bodyLarge.copyWith(
-              fontSize: 18,
-              height: 1.6,
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: const Duration(milliseconds: 200),
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Text(
+              controller.heroSubTagline,
+              style: ThemeConfig.bodyLarge.copyWith(
+                fontSize: 18,
+                height: 1.6,
+              ),
             ),
           ),
         ),
         const SizedBox(height: 24),
         // Location & Mail Info Row
-        Wrap(
-          spacing: 24,
-          runSpacing: 8,
-          children: [
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () => _showContactConfirm(
-                  "Open Location",
-                  "Do you want to view Surat, Gujarat, India on Google Maps?",
-                  "https://www.google.com/maps/search/?api=1&query=Surat,+Gujarat,+India",
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
-                    const SizedBox(width: 6),
-                    Text(
-                      controller.location,
-                      style: TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (!isMobile)
-              Text(
-                "|",
-                style: TextStyle(color: ThemeConfig.darkGray),
-              ),
-            MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () => _showContactConfirm(
-                  "Send Email",
-                  "Do you want to send an email to ${controller.email}?",
-                  controller.emailUrl,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
-                    const SizedBox(width: 6),
-                    Text(
-                      controller.email,
-                      style: TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
-                    ),
-                  ],
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: const Duration(milliseconds: 300),
+          child: Wrap(
+            spacing: 24,
+            runSpacing: 8,
+            children: [
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => _showContactConfirm(
+                    "Open Location",
+                    "Do you want to view Surat, Gujarat, India on Google Maps?",
+                    "https://www.google.com/maps/search/?api=1&query=Surat,+Gujarat,+India",
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.location_on_outlined, color: ThemeConfig.textSecondary, size: 18),
+                      const SizedBox(width: 6),
+                      Text(
+                        controller.location,
+                        style: TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              if (!isMobile)
+                Text(
+                  "|",
+                  style: TextStyle(color: ThemeConfig.darkGray),
+                ),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => _showContactConfirm(
+                    "Send Email",
+                    "Do you want to send an email to ${controller.email}?",
+                    controller.emailUrl,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.mail_outlined, color: ThemeConfig.textSecondary, size: 18),
+                      const SizedBox(width: 6),
+                      Text(
+                        controller.email,
+                        style: TextStyle(color: ThemeConfig.textSecondary, fontFamily: "JetBrains Mono", fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 48),
         // Buttons
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: [
-            GlowingButton(
-              text: "View My Work",
-              icon: Icons.rocket_launch_rounded,
-              onPressed: widget.onWorkPressed,
-            ),
-            GlowingButton(
-              text: "Get In Touch",
-              isSecondary: true,
-              icon: Icons.mail_outline_rounded,
-              onPressed: widget.onContactPressed,
-            ),
-          ],
+        ScrollReveal(
+          direction: RevealDirection.up,
+          delay: const Duration(milliseconds: 400),
+          child: Wrap(
+            spacing: 16,
+            runSpacing: 16,
+            children: [
+              GlowingButton(
+                text: "View My Work",
+                icon: Icons.rocket_launch_rounded,
+                onPressed: widget.onWorkPressed,
+              ),
+              GlowingButton(
+                text: "Get In Touch",
+                isSecondary: true,
+                icon: Icons.mail_outline_rounded,
+                onPressed: widget.onContactPressed,
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -268,64 +256,68 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
         itemCount: controller.stats.length,
         itemBuilder: (context, index) {
           final stat = controller.stats[index];
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: ThemeConfig.surfaceContainerLow.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: ThemeConfig.outlineVariant.withOpacity(0.15),
-                width: 1,
+          return ScrollReveal(
+            direction: RevealDirection.up,
+            delay: Duration(milliseconds: 500 + index * 80),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: ThemeConfig.surfaceContainerLow.withOpacity(0.4),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: ThemeConfig.outlineVariant.withOpacity(0.15),
+                  width: 1,
+                ),
               ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: ThemeConfig.primary.withOpacity(0.08),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: ThemeConfig.primary.withOpacity(0.15),
-                      width: 1,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: ThemeConfig.primary.withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: ThemeConfig.primary.withOpacity(0.15),
+                        width: 1,
+                      ),
+                    ),
+                    child: Icon(
+                      _getStatIcon(index),
+                      color: ThemeConfig.primary,
+                      size: 20,
                     ),
                   ),
-                  child: Icon(
-                    _getStatIcon(index),
-                    color: ThemeConfig.primary,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        stat["value"] ?? "",
-                        style: TextStyle(
-                          color: ThemeConfig.primary,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          height: 1.1,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          stat["value"] ?? "",
+                          style: TextStyle(
+                            color: ThemeConfig.primary,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            height: 1.1,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        stat["label"] ?? "",
-                        style: TextStyle(
-                          color: ThemeConfig.textSecondary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.5,
-                          height: 1.2,
+                        const SizedBox(height: 2),
+                        Text(
+                          stat["label"] ?? "",
+                          style: TextStyle(
+                            color: ThemeConfig.textSecondary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.5,
+                            height: 1.2,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
@@ -22,7 +24,18 @@ class EducationSection extends GetView<EducationController> {
         children: [
           _buildHeader(),
           const SizedBox(height: 40),
-          ...controller.education.map((edu) => _buildEducationCard(edu)).toList(),
+          ...controller.education.asMap().entries.map((entry) {
+            final index = entry.key;
+            final edu = entry.value;
+            return ScrollReveal(
+              direction: RevealDirection.up,
+              delay: Duration(milliseconds: 150 + index * 100),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 24.0),
+                child: _buildEducationCard(edu),
+              ),
+            );
+          }).toList(),
         ],
       ),
     );

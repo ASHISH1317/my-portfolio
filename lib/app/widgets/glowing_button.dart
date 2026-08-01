@@ -21,6 +21,7 @@ class GlowingButton extends StatefulWidget {
 
 class _GlowingButtonState extends State<GlowingButton> {
   bool _isHovered = false;
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,9 @@ class _GlowingButtonState extends State<GlowingButton> {
       onExit: (_) => setState(() => _isHovered = false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapUp: (_) => setState(() => _isPressed = false),
+        onTapCancel: () => setState(() => _isPressed = false),
         onTap: widget.onPressed,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 150),
@@ -55,9 +59,11 @@ class _GlowingButtonState extends State<GlowingButton> {
                     )
                   ],
           ),
-          transform: _isHovered
-              ? (Matrix4.identity()..scale(1.02))
-              : Matrix4.identity(),
+          transform: _isPressed
+              ? (Matrix4.identity()..scale(0.96))
+              : (_isHovered
+                  ? (Matrix4.identity()..scale(1.04))
+                  : Matrix4.identity()),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

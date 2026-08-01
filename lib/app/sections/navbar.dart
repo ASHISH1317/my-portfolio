@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../data/theme_config.dart';
 import '../widgets/theme_selector.dart';
 
@@ -52,7 +53,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                 ),
-              ),
+              ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2, end: 0),
               // Nav items
               if (isMobile)
                 Row(
@@ -84,35 +85,14 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                     const ThemeSelector(),
                     const SizedBox(width: 24),
                     // "Let's Talk" button
-                    MouseRegion(
-                      cursor: SystemMouseCursors.click,
-                      child: GestureDetector(
-                        onTap: () => onNavItemTap(6),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: ThemeConfig.primary,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            "Let's Talk",
-                            style: TextStyle(
-                              color: ThemeConfig.onPrimary,
-                              fontSize: 14,
-                              fontFamily: "JetBrains Mono",
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    _LetsTalkButton(onTap: () => onNavItemTap(6)),
                   ],
-                ),
+                ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.2, end: 0),
             ],
           ),
         ),
       ),
-    );
+    ).animate().slideY(begin: -1, end: 0, duration: 600.ms, curve: Curves.easeOutQuad).fadeIn(duration: 500.ms);
   }
 
   Widget _buildNavItem(String title, int index) {
@@ -127,6 +107,60 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(64);
+}
+
+class _LetsTalkButton extends StatefulWidget {
+  final VoidCallback onTap;
+  const _LetsTalkButton({required this.onTap});
+
+  @override
+  State<_LetsTalkButton> createState() => _LetsTalkButtonState();
+}
+
+class _LetsTalkButtonState extends State<_LetsTalkButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOutCubic,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: _isHovered ? ThemeConfig.primary : ThemeConfig.primary.withOpacity(0.85),
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: ThemeConfig.primary.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    )
+                  ]
+                : [],
+          ),
+          transform: _isHovered
+              ? (Matrix4.identity()..translate(0, -2, 0))
+              : Matrix4.identity(),
+          child: Text(
+            "Let's Talk",
+            style: TextStyle(
+              color: ThemeConfig.onPrimary,
+              fontSize: 14,
+              fontFamily: "JetBrains Mono",
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class NavItemWidget extends StatefulWidget {
@@ -150,22 +184,39 @@ class _NavItemWidgetState extends State<NavItemWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isHighlighted = widget.isActive || _isHovered;
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onTap,
-        child: Text(
-          widget.title,
-          style: TextStyle(
-            color: widget.isActive
-                ? ThemeConfig.primary
-                : (_isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary),
-            fontFamily: "JetBrains Mono",
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              widget.title,
+              style: TextStyle(
+                color: widget.isActive
+                    ? ThemeConfig.primary
+                    : (_isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary),
+                fontFamily: "JetBrains Mono",
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 4),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              curve: Curves.easeOutCubic,
+              height: 2,
+              width: isHighlighted ? 16 : 0,
+              decoration: BoxDecoration(
+                color: ThemeConfig.primary,
+                borderRadius: BorderRadius.circular(1),
+              ),
+            ),
+          ],
         ),
       ),
     );
