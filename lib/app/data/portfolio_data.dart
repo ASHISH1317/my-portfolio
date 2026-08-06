@@ -1,7 +1,7 @@
 class PortfolioData {
   static const String name = "Ashish";
   static const String fullName = "Ashish Vasava";
-  static const String title = "Flutter Developer";
+  static const String title = "Senior Flutter Developer";
   static const String heroTagline = "Hi, I'm Ashish";
   static const String heroSubTagline = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, and seamless system integrations that drive user engagement and business growth.";
   

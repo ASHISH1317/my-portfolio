@@ -105,7 +105,7 @@ class _HeroSectionState extends State<HeroSection> {
                   text: controller.name,
                   style: TextStyle(color: ThemeConfig.primary),
                 ),
-                const TextSpan(text: "\nFlutter Developer"),
+                const TextSpan(text: "\nSenior Flutter Developer"),
               ],
             ),
           ),
