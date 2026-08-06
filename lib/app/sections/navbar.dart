@@ -23,10 +23,10 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     return Container(
       height: 64,
       decoration: BoxDecoration(
-        color: ThemeConfig.background.withOpacity(0.85),
+        color: ThemeConfig.background.withValues(alpha: 0.85),
         border: Border(
           bottom: BorderSide(
-            color: ThemeConfig.outlineVariant.withOpacity(0.3),
+            color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -133,12 +133,12 @@ class _LetsTalkButtonState extends State<_LetsTalkButton> {
           curve: Curves.easeOutCubic,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            color: _isHovered ? ThemeConfig.primary : ThemeConfig.primary.withOpacity(0.85),
+            color: _isHovered ? ThemeConfig.primary : ThemeConfig.primary.withValues(alpha: 0.85),
             borderRadius: BorderRadius.circular(8),
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
-                      color: ThemeConfig.primary.withOpacity(0.3),
+                      color: ThemeConfig.primary.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     )

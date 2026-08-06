@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:animations/animations.dart';
 import 'package:get/get.dart';
@@ -17,21 +16,16 @@ class ProjectsSection extends GetView<ProjectsController> {
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width;
-    final bool isMobile = width < 700;
-    final bool isTablet = width >= 700 && width < 1100;
-
     return Obx(() {
       final showAll = controller.showAll.value;
       final totalProjects = controller.projects.length;
-      final displayCount = showAll ? totalProjects : (_initialLimit < totalProjects ? _initialLimit : totalProjects);
+      final displayCount = showAll
+          ? totalProjects
+          : (_initialLimit < totalProjects ? _initialLimit : totalProjects);
       final hasMore = totalProjects > _initialLimit;
 
       return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 24,
-          vertical: 60,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -40,9 +34,12 @@ class ProjectsSection extends GetView<ProjectsController> {
             LayoutBuilder(
               builder: (context, constraints) {
                 final double maxWidth = constraints.maxWidth;
-                final int columns = maxWidth < 650 ? 1 : (maxWidth < 1000 ? 2 : 3);
+                final int columns = maxWidth < 650
+                    ? 1
+                    : (maxWidth < 1000 ? 2 : 3);
                 const double spacing = 24.0;
-                final double cardWidth = (maxWidth - (columns - 1) * spacing) / columns;
+                final double cardWidth =
+                    (maxWidth - (columns - 1) * spacing) / columns;
 
                 return Wrap(
                   spacing: spacing,
@@ -66,7 +63,10 @@ class ProjectsSection extends GetView<ProjectsController> {
                   },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: ThemeConfig.outline),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 16,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -94,14 +94,14 @@ class ProjectsSection extends GetView<ProjectsController> {
   }
 
   Widget _buildHeader() {
-    return SectionHeader(
-      title: "Projects",
-      subtitle: "Portfolio",
-      index: "04",
-    );
+    return SectionHeader(title: "Projects", subtitle: "Portfolio", index: "04");
   }
 
-  Widget _buildProjectCard(BuildContext context, ProjectData project, int index) {
+  Widget _buildProjectCard(
+    BuildContext context,
+    ProjectData project,
+    int index,
+  ) {
     return ScrollReveal(
       direction: RevealDirection.up,
       delay: Duration(milliseconds: index * 100),
@@ -109,7 +109,9 @@ class ProjectsSection extends GetView<ProjectsController> {
         transitionType: ContainerTransitionType.fade,
         openBuilder: (context, _) => ProjectDetailsPage(project: project),
         closedElevation: 0,
-        closedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
         closedColor: Colors.transparent,
         openColor: ThemeConfig.background,
         middleColor: ThemeConfig.background,
@@ -123,7 +125,9 @@ class ProjectsSection extends GetView<ProjectsController> {
               children: [
                 // Aspect Ratio Video Image Frame (Clipped top rounded corners)
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
                   child: AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Stack(
@@ -132,14 +136,15 @@ class ProjectsSection extends GetView<ProjectsController> {
                           child: Image.network(
                             project.imageUrl,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              color: ThemeConfig.surfaceContainerHigh,
-                              child: Icon(
-                                Icons.image_not_supported_outlined,
-                                color: ThemeConfig.textMuted,
-                                size: 32,
-                              ),
-                            ),
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  color: ThemeConfig.surfaceContainerHigh,
+                                  child: Icon(
+                                    Icons.image_not_supported_outlined,
+                                    color: ThemeConfig.textMuted,
+                                    size: 32,
+                                  ),
+                                ),
                           ),
                         ),
                         // Overlay URL link icon
@@ -152,7 +157,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: ThemeConfig.background.withOpacity(0.8),
+                                color: ThemeConfig.background.withValues(alpha: 0.8),
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(
@@ -186,12 +191,15 @@ class ProjectsSection extends GetView<ProjectsController> {
                           ),
                           const SizedBox(width: 8),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
-                              color: ThemeConfig.primary.withOpacity(0.1),
+                              color: ThemeConfig.primary.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: ThemeConfig.primary.withOpacity(0.2),
+                                color: ThemeConfig.primary.withValues(alpha: 0.2),
                               ),
                             ),
                             child: Text(
@@ -271,7 +279,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                             ],
                           ),
                         );
-                      }).toList(),
+                      }),
                       const SizedBox(height: 16),
                       // Tags
                       Wrap(
@@ -279,12 +287,17 @@ class ProjectsSection extends GetView<ProjectsController> {
                         runSpacing: 8,
                         children: project.tags.map((tag) {
                           return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(4),
                               border: Border.all(
-                                color: ThemeConfig.outlineVariant.withOpacity(0.5),
+                                color: ThemeConfig.outlineVariant.withValues(alpha:
+                                  0.5,
+                                ),
                                 width: 1,
                               ),
                             ),

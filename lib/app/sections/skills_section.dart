@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
@@ -127,7 +126,7 @@ class SkillsSection extends GetView<SkillsController> {
         color: ThemeConfig.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: ThemeConfig.primary.withOpacity(0.3),
+          color: ThemeConfig.primary.withValues(alpha: 0.3),
           width: 2,
         ),
       ),
@@ -139,10 +138,10 @@ class SkillsSection extends GetView<SkillsController> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: ThemeConfig.primary.withOpacity(0.1),
+                  color: ThemeConfig.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: ThemeConfig.primary.withOpacity(0.2),
+                    color: ThemeConfig.primary.withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),
@@ -236,7 +235,7 @@ class SkillsSection extends GetView<SkillsController> {
         color: ThemeConfig.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: ThemeConfig.outlineVariant.withOpacity(0.3),
+          color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -279,7 +278,7 @@ class SkillsSection extends GetView<SkillsController> {
           color: ThemeConfig.surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: ThemeConfig.outlineVariant.withOpacity(0.3),
+            color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -308,9 +307,9 @@ class SkillsSection extends GetView<SkillsController> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: ThemeConfig.primary.withOpacity(0.08),
+                                color: ThemeConfig.primary.withValues(alpha: 0.08),
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
+                                border: Border.all(color: ThemeConfig.primary.withValues(alpha: 0.2)),
                               ),
                               child: Row(
                                 children: [
@@ -319,7 +318,7 @@ class SkillsSection extends GetView<SkillsController> {
                                   Text(
                                     "AUTO CYCLING",
                                     style: TextStyle(
-                                      color: ThemeConfig.primary.withOpacity(0.8),
+                                      color: ThemeConfig.primary.withValues(alpha: 0.8),
                                       fontSize: 8,
                                       fontFamily: "JetBrains Mono",
                                       fontWeight: FontWeight.bold,
@@ -340,7 +339,7 @@ class SkillsSection extends GetView<SkillsController> {
                                   color: ThemeConfig.surfaceContainerHigh,
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
-                                    color: ThemeConfig.primary.withOpacity(0.3),
+                                    color: ThemeConfig.primary.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Row(
@@ -388,9 +387,9 @@ class SkillsSection extends GetView<SkillsController> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
-                                color: ThemeConfig.primary.withOpacity(0.08),
+                                color: ThemeConfig.primary.withValues(alpha: 0.08),
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: ThemeConfig.primary.withOpacity(0.2)),
+                                border: Border.all(color: ThemeConfig.primary.withValues(alpha: 0.2)),
                               ),
                               child: Row(
                                 children: [
@@ -399,7 +398,7 @@ class SkillsSection extends GetView<SkillsController> {
                                   Text(
                                     "AUTO CYCLING",
                                     style: TextStyle(
-                                      color: ThemeConfig.primary.withOpacity(0.8),
+                                      color: ThemeConfig.primary.withValues(alpha: 0.8),
                                       fontSize: 8,
                                       fontFamily: "JetBrains Mono",
                                       fontWeight: FontWeight.bold,
@@ -420,7 +419,7 @@ class SkillsSection extends GetView<SkillsController> {
                                   color: ThemeConfig.surfaceContainerHigh,
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
-                                    color: ThemeConfig.primary.withOpacity(0.3),
+                                    color: ThemeConfig.primary.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Row(
@@ -485,7 +484,7 @@ class SkillsSection extends GetView<SkillsController> {
         color: ThemeConfig.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: ThemeConfig.outlineVariant.withOpacity(0.3),
+          color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
@@ -574,7 +573,7 @@ class _Badge extends StatelessWidget {
         color: ThemeConfig.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: ThemeConfig.outlineVariant.withOpacity(0.5),
+          color: ThemeConfig.outlineVariant.withValues(alpha: 0.5),
         ),
       ),
       child: Text(
@@ -672,7 +671,7 @@ class _IntegrationTileState extends State<_IntegrationTile> {
         border: Border.all(
           color: _isDecrypting
               ? ThemeConfig.primary
-              : ThemeConfig.outlineVariant.withOpacity(0.2),
+              : ThemeConfig.outlineVariant.withValues(alpha: 0.2),
           width: _isDecrypting ? 1.5 : 1.0,
         ),
       ),
@@ -681,7 +680,7 @@ class _IntegrationTileState extends State<_IntegrationTile> {
         children: [
           Icon(
             _displayedIcon,
-            color: _isDecrypting ? ThemeConfig.primary : ThemeConfig.primary.withOpacity(0.9),
+            color: _isDecrypting ? ThemeConfig.primary : ThemeConfig.primary.withValues(alpha: 0.9),
             size: 20,
           ),
           const SizedBox(height: 8),

@@ -184,10 +184,10 @@ class _FooterSocialButtonState extends State<FooterSocialButton> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: _isHovered ? ThemeConfig.primary.withOpacity(0.1) : Colors.transparent,
+            color: _isHovered ? ThemeConfig.primary.withValues(alpha: 0.1) : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: _isHovered ? ThemeConfig.primary : ThemeConfig.outlineVariant.withOpacity(0.3),
+              color: _isHovered ? ThemeConfig.primary : ThemeConfig.outlineVariant.withValues(alpha: 0.3),
             ),
           ),
           child: Center(

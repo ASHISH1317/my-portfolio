@@ -113,33 +113,11 @@ class AboutSection extends GetView<AboutController> {
               scale: 0.8,
               delay: Duration(milliseconds: 300 + idx * 25),
               curve: Curves.easeOutBack,
-              child: _buildTag(tag),
+              child: _HoverTag(tag: tag),
             );
           }).toList(),
         ),
       ],
-    );
-  }
-
-  Widget _buildTag(String tag) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.02),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: ThemeConfig.textMuted.withOpacity(0.2),
-          width: 1,
-        ),
-      ),
-      child: Text(
-        tag,
-        style: TextStyle(
-          color: ThemeConfig.textSecondary,
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
     );
   }
 
@@ -220,5 +198,58 @@ class AboutSection extends GetView<AboutController> {
         ],
       );
     }
+  }
+}
+
+class _HoverTag extends StatefulWidget {
+  final String tag;
+  const _HoverTag({required this.tag});
+
+  @override
+  State<_HoverTag> createState() => _HoverTagState();
+}
+
+class _HoverTagState extends State<_HoverTag> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: _isHovered
+              ? ThemeConfig.primary.withOpacity(0.08)
+              : Colors.white.withOpacity(0.02),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: _isHovered
+                ? ThemeConfig.primary.withOpacity(0.6)
+                : ThemeConfig.textMuted.withOpacity(0.2),
+            width: 1,
+          ),
+          boxShadow: _isHovered
+              ? [
+                  BoxShadow(
+                    color: ThemeConfig.primary.withOpacity(0.1),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  )
+                ]
+              : null,
+        ),
+        child: Text(
+          widget.tag,
+          style: TextStyle(
+            color: _isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
   }
 }

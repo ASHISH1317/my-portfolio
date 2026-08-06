@@ -1,12 +1,7 @@
-import 'package:flutter/foundation.dart';
-import 'dart:html' as html;
 import 'package:flutter/material.dart' hide HeroController;
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
-import '../data/portfolio_data.dart';
 import '../widgets/glowing_button.dart';
 import '../widgets/cool_dialog.dart';
 import '../controllers/hero_controller.dart';
@@ -60,10 +55,10 @@ class _HeroSectionState extends State<HeroSection> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: ThemeConfig.primary.withOpacity(0.1),
+              color: ThemeConfig.primary.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: ThemeConfig.primary.withOpacity(0.2),
+                color: ThemeConfig.primary.withValues(alpha: 0.2),
                 width: 1,
               ),
             ),
@@ -239,7 +234,7 @@ class _HeroSectionState extends State<HeroSection> {
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: ThemeConfig.outlineVariant.withOpacity(0.2),
+            color: ThemeConfig.outlineVariant.withValues(alpha: 0.2),
             width: 2,
           ),
         ),
@@ -262,10 +257,10 @@ class _HeroSectionState extends State<HeroSection> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: ThemeConfig.surfaceContainerLow.withOpacity(0.4),
+                color: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: ThemeConfig.outlineVariant.withOpacity(0.15),
+                  color: ThemeConfig.outlineVariant.withValues(alpha: 0.15),
                   width: 1,
                 ),
               ),
@@ -274,10 +269,10 @@ class _HeroSectionState extends State<HeroSection> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: ThemeConfig.primary.withOpacity(0.08),
+                      color: ThemeConfig.primary.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: ThemeConfig.primary.withOpacity(0.15),
+                        color: ThemeConfig.primary.withValues(alpha: 0.15),
                         width: 1,
                       ),
                     ),

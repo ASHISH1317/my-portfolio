@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -168,7 +167,7 @@ class _ContactSectionState extends State<ContactSection> {
           decoration: BoxDecoration(
             color: ThemeConfig.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: Icon(icon, color: ThemeConfig.primary, size: 24),
         ),
@@ -341,7 +340,7 @@ class _ContactSectionState extends State<ContactSection> {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: color.withOpacity(0.2),
+                color: color.withValues(alpha: 0.2),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
               )

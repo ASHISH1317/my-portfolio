@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
@@ -64,7 +63,7 @@ class EducationSection extends GetView<EducationController> {
                 width: 64,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: ThemeConfig.primary.withOpacity(0.1),
+                  color: ThemeConfig.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Icon(

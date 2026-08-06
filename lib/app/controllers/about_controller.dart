@@ -14,6 +14,12 @@ class AboutController extends GetxController {
     "REST APIs",
     "GetX",
     "Riverpod",
+    "BLoC",
+    "Provider",
+    "Hive & SQLite",
+    "Flutter Web",
+    "Shopify",
+    "Framer AI",
   ];
 
   final List<Map<String, dynamic>> highlights = const [

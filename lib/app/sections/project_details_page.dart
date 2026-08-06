@@ -45,7 +45,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               height: 600,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: ThemeConfig.primary.withOpacity(0.04),
+                color: ThemeConfig.primary.withValues(alpha: 0.04),
               ),
             ),
           ),
@@ -57,7 +57,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               height: 500,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: ThemeConfig.primary.withOpacity(0.02),
+                color: ThemeConfig.primary.withValues(alpha: 0.02),
               ),
             ),
           ),
@@ -127,7 +127,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
       height: 64,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: ThemeConfig.background.withOpacity(0.8),
+        color: ThemeConfig.background.withValues(alpha: 0.8),
         border: const Border(
           bottom: BorderSide(
             color: Color(0x1a859490),
@@ -240,7 +240,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                border: Border.all(color: ThemeConfig.primary.withOpacity(0.8), width: 1),
+                border: Border.all(color: ThemeConfig.primary.withValues(alpha: 0.8), width: 1),
               ),
               child: Text(
                 tag.toUpperCase(),
@@ -754,7 +754,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   color: ThemeConfig.outlineVariant.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: ThemeConfig.outlineVariant.withOpacity(0.3),
+                    color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
@@ -946,7 +946,7 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
           border: Border.all(
             color: _isHovered
                 ? ThemeConfig.primary
-                : ThemeConfig.outlineVariant.withOpacity(0.3),
+                : ThemeConfig.outlineVariant.withValues(alpha: 0.3),
             width: 1.5,
           ),
         ),
@@ -1006,14 +1006,14 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: _isHovered
-                  ? ThemeConfig.primary.withOpacity(0.6)
-                  : ThemeConfig.outlineVariant.withOpacity(0.3),
+                  ? ThemeConfig.primary.withValues(alpha: 0.6)
+                  : ThemeConfig.outlineVariant.withValues(alpha: 0.3),
               width: 1.5,
             ),
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
-                      color: ThemeConfig.primary.withOpacity(0.15),
+                      color: ThemeConfig.primary.withValues(alpha: 0.15),
                       blurRadius: 20,
                       spreadRadius: 2,
                     )

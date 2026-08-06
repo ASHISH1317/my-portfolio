@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
-import '../widgets/cool_dialog.dart';
 import '../data/portfolio_data.dart';
-import '../data/theme_config.dart';
 
 class ContactController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -34,8 +32,7 @@ class ContactController extends GetxController {
       final url = "https://wa.me/919913629852?text=${Uri.encodeComponent(text)}";
       
       launchURL(url);
-      
-      showSuccessDialog(context, "WhatsApp Redirect", "Redirecting you to chat on WhatsApp...", const Color(0xFF25D366));
+      _clearForm();
     }
   }
 
@@ -46,8 +43,7 @@ class ContactController extends GetxController {
       final url = "mailto:$email?subject=${Uri.encodeComponent(subjectText)}&body=${Uri.encodeComponent(body)}";
       
       launchURL(url);
-      
-      showSuccessDialog(context, "Email Redirect", "Opening your default email app...", ThemeConfig.primary);
+      _clearForm();
     }
   }
 
@@ -62,21 +58,10 @@ class ContactController extends GetxController {
     }
   }
 
-  void showSuccessDialog(BuildContext context, String title, String message, Color accentColor) {
-    showCoolDialog(
-      context: context,
-      title: title,
-      message: message,
-      icon: Icons.check_circle_outline_rounded,
-      accentColor: accentColor,
-      primaryButtonText: "OK",
-      onPrimaryPressed: () {
-        Navigator.of(context).pop();
-        nameController.clear();
-        emailController.clear();
-        subjectController.clear();
-        messageController.clear();
-      },
-    );
+  void _clearForm() {
+    nameController.clear();
+    emailController.clear();
+    subjectController.clear();
+    messageController.clear();
   }
 }

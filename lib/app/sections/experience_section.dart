@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
@@ -53,7 +52,7 @@ class ExperienceSection extends GetView<ExperienceController> {
           bottom: 24,
           child: Container(
             width: 2,
-            color: ThemeConfig.primary.withOpacity(0.15),
+            color: ThemeConfig.primary.withValues(alpha: 0.15),
           ),
         ),
         // Timeline Items
@@ -144,7 +143,7 @@ class ExperienceSection extends GetView<ExperienceController> {
                                   ],
                                 ),
                               );
-                            }).toList(),
+                            }),
                             // Tags Footer
                             if (exp.tags.isNotEmpty) ...[
                               const SizedBox(height: 16),
@@ -359,9 +358,9 @@ class ExperienceSection extends GetView<ExperienceController> {
         vertical: 4,
       ),
       decoration: BoxDecoration(
-        color: ThemeConfig.primary.withOpacity(0.1),
+        color: ThemeConfig.primary.withValues(alpha: 0.1),
         border: Border.all(
-          color: ThemeConfig.primary.withOpacity(0.2),
+          color: ThemeConfig.primary.withValues(alpha: 0.2),
         ),
         borderRadius: BorderRadius.circular(12),
       ),
