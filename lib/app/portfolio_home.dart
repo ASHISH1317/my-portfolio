@@ -28,7 +28,6 @@ class PortfolioHome extends GetView<HomeController> {
       backgroundColor: ThemeConfig.background,
       endDrawer: _buildMobileDrawer(context),
       body: Stack(
-        key: ValueKey(themeController.rxThemeType.value),
         children: [
           // Slow dynamic ambient background
           const Positioned.fill(
