@@ -8,6 +8,7 @@ import 'sections/navbar.dart';
 import 'sections/hero_section.dart';
 import 'sections/about_section.dart';
 import 'sections/skills_section.dart';
+import 'sections/packages_section.dart';
 import 'sections/projects_section.dart';
 import 'sections/experience_section.dart';
 import 'sections/education_section.dart';
@@ -58,8 +59,8 @@ class PortfolioHome extends GetView<HomeController> {
                             children: [
                               HeroSection(
                                 key: controller.sectionKeys[0],
-                                onContactPressed: () => controller.scrollToSection(6),
-                                onWorkPressed: () => controller.scrollToSection(4),
+                                onContactPressed: () => controller.scrollToSection(7),
+                                onWorkPressed: () => controller.scrollToSection(5),
                               ),
                               AnimatedSectionDivider(),
                               AboutSection(key: controller.sectionKeys[1]),
@@ -68,11 +69,13 @@ class PortfolioHome extends GetView<HomeController> {
                               AnimatedSectionDivider(),
                               ExperienceSection(key: controller.sectionKeys[3]),
                               AnimatedSectionDivider(),
-                              ProjectsSection(key: controller.sectionKeys[4]),
+                              PackagesSection(key: controller.sectionKeys[4]),
                               AnimatedSectionDivider(),
-                              EducationSection(key: controller.sectionKeys[5]),
+                              ProjectsSection(key: controller.sectionKeys[5]),
                               AnimatedSectionDivider(),
-                              ContactSection(key: controller.sectionKeys[6]),
+                              EducationSection(key: controller.sectionKeys[6]),
+                              AnimatedSectionDivider(),
+                              ContactSection(key: controller.sectionKeys[7]),
                               AnimatedSectionDivider(),
                               Footer(onNavItemTap: controller.scrollToSection),
                             ],
@@ -124,9 +127,10 @@ class PortfolioHome extends GetView<HomeController> {
                   _buildDrawerItem("About", 1),
                   _buildDrawerItem("Skills", 2),
                   _buildDrawerItem("Experience", 3),
-                  _buildDrawerItem("Projects", 4),
-                  _buildDrawerItem("Education", 5),
-                  _buildDrawerItem("Contact", 6),
+                  _buildDrawerItem("Packages", 4),
+                  _buildDrawerItem("Projects", 5),
+                  _buildDrawerItem("Education", 6),
+                  _buildDrawerItem("Contact", 7),
                 ],
               )),
             ],

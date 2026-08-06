@@ -5,8 +5,8 @@ class HomeController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   
-  // Global keys to track 7 section positions (Hero, About, Skills, Experience, Projects, Education, Contact)
-  final List<GlobalKey> sectionKeys = List.generate(7, (index) => GlobalKey());
+  // Global keys to track 8 section positions (Hero, About, Skills, Experience, Packages, Projects, Education, Contact)
+  final List<GlobalKey> sectionKeys = List.generate(8, (index) => GlobalKey());
   
   final RxInt activeIndex = 0.obs;
   final RxBool isScrollingAutomatically = false.obs;

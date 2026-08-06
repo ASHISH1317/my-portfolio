@@ -251,6 +251,65 @@ class PortfolioData {
   static const String whatsapp = "https://wa.me/919913629852";
   static const String twitter = "https://twitter.com";
   static const String emailUrl = "mailto:ashishvasava0346@gmail.com";
+
+  static const List<PackageData> packages = [
+    PackageData(
+      title: "auto_dispose_mixin",
+      description: "A lightweight, flexible Flutter mixin to automatically dispose of controllers, subscriptions, and other resources to prevent memory leaks.",
+      tags: ["Dart", "Flutter", "Memory Management", "Clean Code"],
+      pubUrl: "https://pub.dev/packages/auto_dispose_mixin",
+      installCommand: "flutter pub add auto_dispose_mixin",
+      keyHighlights: [
+        "Automatic Resource Cleanup",
+        "Prevents Memory Leaks",
+        "Supports AnimationControllers & Streams",
+        "Clean Lifecycle Hooks"
+      ],
+      mockupType: "auto_dispose",
+    ),
+    PackageData(
+      title: "dio_api_kit",
+      description: "A lightweight, backend-agnostic API layer built on top of Dio with configurable success handling, centralized error management, and clean architecture support.",
+      tags: ["Dio Wrapper", "Clean Architecture", "API Client", "Networking"],
+      pubUrl: "https://pub.dev/packages/dio_api_kit",
+      installCommand: "flutter pub add dio_api_kit",
+      keyHighlights: [
+        "Centralized API Init",
+        "Configurable Success Resolvers",
+        "Typed API Response Models",
+        "Unified Error Interception"
+      ],
+      mockupType: "dio_api_kit",
+    ),
+    PackageData(
+      title: "flying_characters",
+      description: "A Flutter package to animate flying characters or particles on the screen to create playful, engaging, and interactive user interface experiences.",
+      tags: ["Animations", "Particles", "Playful UI", "Visual Effects"],
+      pubUrl: "https://pub.dev/packages/flying_characters",
+      installCommand: "flutter pub add flying_characters",
+      keyHighlights: [
+        "Custom Character Particles",
+        "Smooth 60FPS Animations",
+        "Highly Configurable Physics",
+        "Simple Declarative API"
+      ],
+      mockupType: "flying_characters",
+    ),
+    PackageData(
+      title: "state_illustrator",
+      description: "A Flutter package for handling and visualizing various screen states (loading, empty, error, success) with custom animations and layouts.",
+      tags: ["State UI", "Illustrations", "Custom Themes", "UX Transitions"],
+      pubUrl: "https://pub.dev/packages/state_illustrator",
+      installCommand: "flutter pub add state_illustrator",
+      keyHighlights: [
+        "Clean Screen Transitions",
+        "Pre-configured State Templates",
+        "Highly Customizable Themes",
+        "Lottie/SVG support built-in"
+      ],
+      mockupType: "state_illustrator",
+    ),
+  ];
 }
 
 class SkillCategory {
@@ -353,5 +412,25 @@ class EducationData {
     required this.period,
     required this.grade,
     this.role = "",
+  });
+}
+
+class PackageData {
+  final String title;
+  final String description;
+  final List<String> tags;
+  final String pubUrl;
+  final String installCommand;
+  final List<String> keyHighlights;
+  final String mockupType;
+
+  const PackageData({
+    required this.title,
+    required this.description,
+    required this.tags,
+    required this.pubUrl,
+    required this.installCommand,
+    required this.keyHighlights,
+    required this.mockupType,
   });
 }

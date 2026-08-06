@@ -102,7 +102,7 @@ class Footer extends StatelessWidget {
   }
 
   Widget _buildLinks() {
-    final links = ["About", "Skills", "Experience", "Projects", "Education", "Contact"];
+    final links = ["About", "Skills", "Experience", "Packages", "Projects", "Education", "Contact"];
     return Wrap(
       spacing: 24,
       runSpacing: 12,

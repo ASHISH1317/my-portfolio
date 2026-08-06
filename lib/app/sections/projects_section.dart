@@ -94,7 +94,7 @@ class ProjectsSection extends GetView<ProjectsController> {
   }
 
   Widget _buildHeader() {
-    return SectionHeader(title: "Projects", subtitle: "Portfolio", index: "04");
+    return SectionHeader(title: "Projects", subtitle: "Portfolio", index: "05");
   }
 
   Widget _buildProjectCard(

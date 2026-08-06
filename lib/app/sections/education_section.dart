@@ -44,7 +44,7 @@ class EducationSection extends GetView<EducationController> {
     return SectionHeader(
       title: "Education",
       subtitle: "Education",
-      index: "05",
+      index: "06",
     );
   }
 

@@ -84,7 +84,7 @@ class _ContactSectionState extends State<ContactSection> {
     return SectionHeader(
       title: "Let's build something great",
       subtitle: "Get In Touch",
-      index: "06",
+      index: "07",
     );
   }
 
