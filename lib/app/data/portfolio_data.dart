@@ -65,127 +65,68 @@ class PortfolioData {
   static const List<ProjectData> projects = [
     ProjectData(
       title: "HOGR — The Food App",
-      description: "A modern food discovery and social dining platform enabling users to explore trending dishes, share experiences, and connect with food lovers.",
-      tags: ["Flutter", "Supabase", "Firebase"],
+      description: "A premier social dining and food discovery ecosystem. Hogr merges social networking with dining, featuring AI-powered dish discovery, real-time shared group carts, gamified loyalty coins, and interactive map exploration.",
+      tags: ["Flutter", "Supabase", "Firebase", "AI Search", "Google Maps", "REST APIs"],
       projectUrl: "https://hogr.app",
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuAeLH5eKP2lmezCLljsHMfrkirqkdwDyTVGuWywhSnIUyaB4hmDPx6BqNEys5XblhnBJzuZM5I7I6Gcd2RPNCMiQ1hEeO5ekgvubEqHBvAA6SfsMZtlQgikLJ-4j3zpBzENku0r5K9qL-7eKoLXlDjaBE16ti66QFu1iS7SE-8acbmHF04Gs1_2u4XYoPtc4lwSK5LjFDwfiyuN77fUV36I1xjYBYcg1vcNvH0Uf911yT8m08whpW84feKEstY8l5lqzDRyDTK_2DQR",
-      backgroundStory: "HOGR emerged from a simple observation: dining is inherently social, yet digital food apps remain isolated transactions. We set out to build an architecture that handles high-frequency social interactions with real-time updates while maintaining a slick, minimal interface.\n\nThe challenge was orchestrating a complex backend ecosystem—combining Supabase's real-time capabilities for social feeds with Firebase's robust authentication and notification infrastructure. The result is a seamless, lag-free experience that feels as intuitive as a conversation over dinner.",
+      githubUrl: "",
+      playStoreUrl: "https://play.google.com/store/apps/details?id=com.hogr.hogr&hl=enIN",
+      appStoreUrl: "https://apps.apple.com/in/app/hogr-the-food-app/id6451259467",
+      imageUrl: "assets/images/projects/hogr/HOGR 1.jpg",
+      backgroundStory: "HOGR revolutionized digital dining by addressing a core gap: eating is inherently social, yet existing apps treated it as a cold transaction. We designed an ecosystem that couples a real-time social feed with group ordering workflows, mapping services, and intelligent recommendation systems.\n\nOur engineering challenge was syncing collaborative, multi-user shared carts with millisecond latencies, alongside processing short-form video streaming feeds smoothly on consumer devices. Leveraging Flutter's high-performance rendering and a scalable Supabase backend, HOGR delivers an engaging experience that is both visually stunning and operationally robust.",
       keyFeatures: [
         FeatureItem(
-          title: "Real-time Social Dining",
-          description: "Connect with friends, share reviews, and see what's trending in your circle instantly.",
+          title: "AI-Powered Dish Search",
+          description: "Smart semantic search engine allowing users to find specific dishes and restaurants using AI natural language matching.",
         ),
         FeatureItem(
-          title: "Smart Restaurant Discovery",
-          description: "AI-driven recommendations based on your taste profile and social graph.",
+          title: "Real-time Shared Carts",
+          description: "Collaborative ordering system allowing multiple users to add items to a single active cart in real-time.",
         ),
         FeatureItem(
-          title: "Seamless Payment Integration",
-          description: "One-tap bill splitting and secure transactions through Stripe.",
+          title: "Food Reels & Shorts",
+          description: "Immersive short video engine showcasing local street food, reviews, and trending dining recommendations.",
+        ),
+        FeatureItem(
+          title: "Gamified Coin System",
+          description: "Social rewards loyalty engine where diners earn coins for reviews, referrals, and dining challenges.",
+        ),
+        FeatureItem(
+          title: "Interactive Dine-In & Maps",
+          description: "Geolocated restaurant discovery, interactive table bookings, and routing using Google Maps SDK.",
+        ),
+        FeatureItem(
+          title: "Social Network & Connections",
+          description: "Follow friends, build customized foodie circles, and share public dining recommendations.",
         ),
       ],
       techStack: [
         TechItem(name: "Flutter", icon: "flutter"),
         TechItem(name: "Dart", icon: "terminal"),
-        TechItem(name: "Supabase", icon: "database"),
-        TechItem(name: "Firebase", icon: "local_fire_department"),
-        TechItem(name: "REST APIs", icon: "api"),
-        TechItem(name: "GetX Logic", icon: "rebase_edit"),
+        TechItem(name: "Supabase Realtime", icon: "database"),
+        TechItem(name: "Firebase Suite", icon: "local_fire_department"),
+        TechItem(name: "Google Maps SDK", icon: "map"),
+        TechItem(name: "AI Search APIs", icon: "api"),
+        TechItem(name: "GetX Architecture", icon: "rebase_edit"),
       ],
       codeSnippetPath: "lib/app/modules/home/bindings/home_binding.dart",
       codeSnippet: "class HomeBinding extends Bindings {\n  @override\n  void dependencies() {\n    Get.lazyPut<HomeController>(() => HomeController());\n    Get.lazyPut<HomeProvider>(() => HomeProvider());\n    Get.lazyPut<HomeRepository>(() => HomeRepository(\n      provider: Get.find()\n    ));\n  }\n}",
       screenshots: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBnaNT0vYNhNQoHBOaDphsrf_dLR-KdOmBRsll5lmSoii9PjSshUd_icAGCMNC_mmX-cg7C3qgFINCZ4aEOcUzul4LnBBfDhMz8OCvTOLgnnz9Vq91yJGghREI5GWJZjEUZD0Ukia_fQBTQf5ui8sDRLM-OjnuG5efbTQdk_nnPWKBYlZGuJDt2CUj0FLzae6MPFfrADkXnq-E3HespGMDgQPyQkgC2onuUQmmO1uupFd71hlor3RZUXlaMXPhBPp8t0F8JyoX2YpKB",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBPzFbG_fjFr9xb5aVPA8mqoMZqLVg0OzCIB2q42LvBfdPGF93PU7XHey_eacWlCCpWsIHtg4tguoqjWH6imoDslkNLYPCKAqGExAdx7s-oYmOiMSCfSkPvClHlSEsShsiOfNBLbb2j42cm5pAvsMB8yGbmyTxwRS4mk88tLpmB7MtXv6DzUbrA1XZE5DSEFDq222ern6SnM7AHzT3XfEU7PlfQpJr8tdjKoIPoVEj5xhRS-5IK8iiLSq8KzEPNUEM--EI64Di_iO5N",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAEkEeWwwD6ldZzt5640bcBKZQkOrLruuuxHliGDqyMBS0gFDhxfXf1oIMRs-WK5Gzq32bkWEdPB_u7xb-qGpZLzJwgfmQlaHnjXwZKgUL3pQ3GN6CJcDEFvR90ApBjos31sIFD2zGDBpVQR61C79HKdPIsuC-0zmQXAKUjLbgC4ikQhkvWBC6Zo9NU2E4oLmPfSHlaPA382lErTrb0q518VtQT8yToSNGBcXE4OLw-_0fXazShCH_9jziMH9XFcJ6UzZxG8LcRjl0e",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDf23w4Up9YGD-ehp-B7dY25dIHl1sPDaZrTY0_hNepbuKeUn7SrbI7SDbt5PYFfxyQMhgU0-amUpFHsQb_mGgpZFB9eJVjK8GCuXVW3aoUh_07z8Wz2BhwK6EkfqsdtPBflSA4vkpEU3kzyeqedvD82c0MrRn-l4DE0g4ezPSO8ji8qQ0u6k4g1KSU1xeXVWxq5YgqCxve8YpNCzK9dnfdbqwpExVQIszTANNmmvkhckXD2QmZfIIbZVrrXQHY4AuP2FTBY_dGo1qg",
+        "assets/images/projects/hogr/HOGR 1.jpg",
+        "assets/images/projects/hogr/HOGR 2.jpg",
+        "assets/images/projects/hogr/HOGR 3.jpg",
+        "assets/images/projects/hogr/HOGR 4.jpg",
+        "assets/images/projects/hogr/HOGR 5.jpg",
+        "assets/images/projects/hogr/HOGR 6.jpg",
+        "assets/images/projects/hogr/HOGR 7.jpg",
+        "assets/images/projects/hogr/HOGR 8.jpg",
       ],
       integrations: [
-        IntegrationItem(title: "Google Maps SDK", icon: "map"),
-        IntegrationItem(title: "Stripe Payments", icon: "payments"),
-        IntegrationItem(title: "Push Notifications", icon: "notifications_active"),
-      ],
-    ),
-    ProjectData(
-      title: "NexRev Freedom",
-      description: "A facility and energy management app providing real-time control of building systems, including HVAC units, energy consumption, and alarms.",
-      tags: ["Flutter", "Firebase", "REST APIs"],
-      projectUrl: "https://nexrev.com",
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuAQrH0Hf3dwEVpsSvt6TWIJT8Yxq8qe3tKjdUIqeXwa8wTtUEDVBqoQaCpfLmx8cNEipzGpZcKQi_47zcRywv3gIntfRqwHCYrInK5hTKT69ScHqA95WAZbNEmwEtdnrVFBwd6FsoIZcwE_eYF31TmgqSOhhB-xw-J5Ig9gR1CYYYjPw2yPcHyWZjwmF7Fmd2JqYnSrL0LRHgszsCBl6HrIAwP-XgxG1kadXZTaheeUdZvcNrDXMavgh7C7HVVvQ2LO2MpCbVxarNL3",
-      backgroundStory: "NexRev Freedom was built to solve energy waste in commercial building portfolios. We developed an enterprise-grade IoT companion app that communicates with building controllers to monitor and adjust HVAC units, lighting grids, and electrical loads in real-time.\n\nThe challenge was ensuring dynamic updates were broadcast quickly to a multi-platform frontend, resolving connection drops and providing rapid alarms when safety parameters were violated.",
-      keyFeatures: [
-        FeatureItem(
-          title: "Real-time IoT Monitoring",
-          description: "Real-time telemetry visualization of HVAC and electric load systems.",
-        ),
-        FeatureItem(
-          title: "Facility Control & Schedules",
-          description: "Schedule heating/cooling setpoints and control building states remotely.",
-        ),
-        FeatureItem(
-          title: "Alarm & Alert Management",
-          description: "Instant push notifications and live logs when telemetry values exceed thresholds.",
-        ),
-      ],
-      techStack: [
-        TechItem(name: "Flutter", icon: "flutter"),
-        TechItem(name: "Dart", icon: "terminal"),
-        TechItem(name: "Firebase", icon: "local_fire_department"),
-        TechItem(name: "REST APIs", icon: "api"),
-        TechItem(name: "Socket.IO", icon: "sync"),
-        TechItem(name: "GetX Logic", icon: "rebase_edit"),
-      ],
-      codeSnippetPath: "lib/app/modules/facility/controllers/facility_controller.dart",
-      codeSnippet: "class FacilityController extends GetxController {\n  final FacilityRepository repository;\n  var isCooling = false.obs;\n\n  void toggleCooling(String facilityId) async {\n    final status = await repository.setCooling(facilityId, !isCooling.value);\n    isCooling.value = status;\n  }\n}",
-      screenshots: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuBPzFbG_fjFr9xb5aVPA8mqoMZqLVg0OzCIB2q42LvBfdPGF93PU7XHey_eacWlCCpWsIHtg4tguoqjWH6imoDslkNLYPCKAqGExAdx7s-oYmOiMSCfSkPvClHlSEsShsiOfNBLbb2j42cm5pAvsMB8yGbmyTxwRS4mk88tLpmB7MtXv6DzUbrA1XZE5DSEFDq222ern6SnM7AHzT3XfEU7PlfQpJr8tdjKoIPoVEj5xhRS-5IK8iiLSq8KzEPNUEM--EI64Di_iO5N",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAEkEeWwwD6ldZzt5640bcBKZQkOrLruuuxHliGDqyMBS0gFDhxfXf1oIMRs-WK5Gzq32bkWEdPB_u7xb-qGpZLzJwgfmQlaHnjXwZKgUL3pQ3GN6CJcDEFvR90ApBjos31sIFD2zGDBpVQR61C79HKdPIsuC-0zmQXAKUjLbgC4ikQhkvWBC6Zo9NU2E4oLmPfSHlaPA382lErTrb0q518VtQT8yToSNGBcXE4OLw-_0fXazShCH_9jziMH9XFcJ6UzZxG8LcRjl0e",
-      ],
-      integrations: [
-        IntegrationItem(title: "BMS Controller API", icon: "dns"),
-        IntegrationItem(title: "Socket.IO", icon: "sync"),
-        IntegrationItem(title: "Firebase Cloud Messaging", icon: "notifications_active"),
-      ],
-    ),
-    ProjectData(
-      title: "StagePay",
-      description: "A construction management and payment platform streamlining collaboration between clients and contractors with secure wallet funding.",
-      tags: ["Flutter", "Firebase", "Stripe"],
-      projectUrl: "https://stagepay.com",
-      imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDR5-8gwe1GGxHAikXXFAAOaiyB32YmMGbMa2mOP1mKRRkzwMFDyZVbkQtt7hPn4U_z9JGXJ2u26ohQ13qtM_p_JM2nhJWi4p1P52dPoM0-lmhZwpn9dxI3YD02emmZnQJVkM990XiKVVFJTZH65ABwM2uX2B4Dpp6pl8iMlToLOOLFMgNutdN47V64XlT0W-8Dsb_19eHikqQ_MIEuZ6jjxCYQIuncDdY4YHxmDqGH2NEmp_UQJB8KEPKhz5CquRMkTT32g6SU6eWX",
-      backgroundStory: "StagePay was created to streamline construction payments and milestone tracking. By introducing a secure escrow-like payment workflow, it ensures that contractors get paid on time for completed milestones, and clients only release funds upon verification.",
-      keyFeatures: [
-        FeatureItem(
-          title: "Milestone Tracking",
-          description: "Break down projects into structured stages with distinct verification requirements.",
-        ),
-        FeatureItem(
-          title: "Escrow Funding & Stripe",
-          description: "Secure payment processing and funding with instant payouts.",
-        ),
-        FeatureItem(
-          title: "Multi-user Collaboration",
-          description: "Live chat, photo uploads, and contract signing for clients and contractors.",
-        ),
-      ],
-      techStack: [
-        TechItem(name: "Flutter", icon: "flutter"),
-        TechItem(name: "Dart", icon: "terminal"),
-        TechItem(name: "Firebase", icon: "local_fire_department"),
-        TechItem(name: "Stripe", icon: "payments"),
-        TechItem(name: "REST APIs", icon: "api"),
-        TechItem(name: "Riverpod State", icon: "rebase_edit"),
-      ],
-      codeSnippetPath: "lib/app/modules/milestone/repositories/milestone_repository.dart",
-      codeSnippet: "class MilestoneRepository {\n  final StripeService _stripeService;\n  \n  Future<bool> releaseMilestoneFunds(String milestoneId) async {\n    final success = await _stripeService.capturePayment(milestoneId);\n    return success;\n  }\n}",
-      screenshots: [
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuDf23w4Up9YGD-ehp-B7dY25dIHl1sPDaZrTY0_hNepbuKeUn7SrbI7SDbt5PYFfxyQMhgU0-amUpFHsQb_mGgpZFB9eJVjK8GCuXVW3aoUh_07z8Wz2BhwK6EkfqsdtPBflSA4vkpEU3kzyeqedvD82c0MrRn-l4DE0g4ezPSO8ji8qQ0u6k4g1KSU1xeXVWxq5YgqCxve8YpNCzK9dnfdbqwpExVQIszTANNmmvkhckXD2QmZfIIbZVrrXQHY4AuP2FTBY_dGo1qg",
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAEkEeWwwD6ldZzt5640bcBKZQkOrLruuuxHliGDqyMBS0gFDhxfXf1oIMRs-WK5Gzq32bkWEdPB_u7xb-qGpZLzJwgfmQlaHnjXwZKgUL3pQ3GN6CJcDEFvR90ApBjos31sIFD2zGDBpVQR61C79HKdPIsuC-0zmQXAKUjLbgC4ikQhkvWBC6Zo9NU2E4oLmPfSHlaPA382lErTrb0q518VtQT8yToSNGBcXE4OLw-_0fXazShCH_9jziMH9XFcJ6UzZxG8LcRjl0e",
-      ],
-      integrations: [
-        IntegrationItem(title: "Stripe Connect", icon: "payments"),
-        IntegrationItem(title: "Firebase Storage", icon: "folder_shared"),
-        IntegrationItem(title: "Push Notifications", icon: "notifications_active"),
+        IntegrationItem(title: "Google Maps SDK Integration", icon: "map"),
+        IntegrationItem(title: "AI Search Matcher API", icon: "api"),
+        IntegrationItem(title: "Shared Collaborative Cart", icon: "shopping_cart"),
+        IntegrationItem(title: "Food Reels Video Engine", icon: "movie"),
+        IntegrationItem(title: "Gamified Coins & Rewards", icon: "monetization_on"),
+        IntegrationItem(title: "Push Notifications Engine", icon: "notifications_active"),
       ],
     ),
   ];
@@ -331,6 +272,20 @@ class FeatureItem {
   final String description;
 
   const FeatureItem({required this.title, required this.description});
+
+  factory FeatureItem.fromJson(Map<String, dynamic> json) {
+    return FeatureItem(
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+    };
+  }
 }
 
 class TechItem {
@@ -338,6 +293,20 @@ class TechItem {
   final String icon;
 
   const TechItem({required this.name, required this.icon});
+
+  factory TechItem.fromJson(Map<String, dynamic> json) {
+    return TechItem(
+      name: json['name'] ?? '',
+      icon: json['icon'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'icon': icon,
+    };
+  }
 }
 
 class IntegrationItem {
@@ -345,6 +314,20 @@ class IntegrationItem {
   final String icon;
 
   const IntegrationItem({required this.title, required this.icon});
+
+  factory IntegrationItem.fromJson(Map<String, dynamic> json) {
+    return IntegrationItem(
+      title: json['title'] ?? '',
+      icon: json['icon'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'icon': icon,
+    };
+  }
 }
 
 class ProjectData {
@@ -352,6 +335,9 @@ class ProjectData {
   final String description;
   final List<String> tags;
   final String projectUrl;
+  final String githubUrl;
+  final String playStoreUrl;
+  final String appStoreUrl;
   final String imageUrl;
   final String backgroundStory;
   final List<FeatureItem> keyFeatures;
@@ -366,6 +352,9 @@ class ProjectData {
     required this.description,
     required this.tags,
     required this.projectUrl,
+    required this.githubUrl,
+    required this.playStoreUrl,
+    required this.appStoreUrl,
     required this.imageUrl,
     required this.backgroundStory,
     required this.keyFeatures,
@@ -375,6 +364,52 @@ class ProjectData {
     required this.screenshots,
     required this.integrations,
   });
+
+  factory ProjectData.fromJson(Map<String, dynamic> json) {
+    return ProjectData(
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      tags: List<String>.from(json['tags'] ?? []),
+      projectUrl: json['projectUrl'] ?? '',
+      githubUrl: json['githubUrl'] ?? '',
+      playStoreUrl: json['playStoreUrl'] ?? '',
+      appStoreUrl: json['appStoreUrl'] ?? '',
+      imageUrl: json['imageUrl'] ?? '',
+      backgroundStory: json['backgroundStory'] ?? '',
+      keyFeatures: (json['keyFeatures'] as List? ?? [])
+          .map((item) => FeatureItem.fromJson(item))
+          .toList(),
+      techStack: (json['techStack'] as List? ?? [])
+          .map((item) => TechItem.fromJson(item))
+          .toList(),
+      codeSnippetPath: json['codeSnippetPath'] ?? '',
+      codeSnippet: json['codeSnippet'] ?? '',
+      screenshots: List<String>.from(json['screenshots'] ?? []),
+      integrations: (json['integrations'] as List? ?? [])
+          .map((item) => IntegrationItem.fromJson(item))
+          .toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'description': description,
+      'tags': tags,
+      'projectUrl': projectUrl,
+      'githubUrl': githubUrl,
+      'playStoreUrl': playStoreUrl,
+      'appStoreUrl': appStoreUrl,
+      'imageUrl': imageUrl,
+      'backgroundStory': backgroundStory,
+      'keyFeatures': keyFeatures.map((item) => item.toJson()).toList(),
+      'techStack': techStack.map((item) => item.toJson()).toList(),
+      'codeSnippetPath': codeSnippetPath,
+      'codeSnippet': codeSnippet,
+      'screenshots': screenshots,
+      'integrations': integrations.map((item) => item.toJson()).toList(),
+    };
+  }
 }
 
 class ExperienceData {

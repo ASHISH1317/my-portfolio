@@ -13,7 +13,7 @@ class PortfolioBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(ThemeController(), permanent: true);
-    Get.lazyPut<HomeController>(() => HomeController());
+    Get.put(HomeController(), permanent: true);
     Get.lazyPut<HeroController>(() => HeroController());
     Get.lazyPut<AboutController>(() => AboutController());
     Get.lazyPut<SkillsController>(() => SkillsController());

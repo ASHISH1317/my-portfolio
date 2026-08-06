@@ -133,7 +133,7 @@ class ProjectsSection extends GetView<ProjectsController> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: Image.network(
+                          child: Image.asset(
                             project.imageUrl,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) =>
@@ -225,62 +225,6 @@ class ProjectsSection extends GetView<ProjectsController> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 16),
-                      // Key Highlights
-                      Text(
-                        "KEY HIGHLIGHTS",
-                        style: TextStyle(
-                          color: ThemeConfig.primary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      ...project.keyFeatures.take(2).map((feature) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 6.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 2.0),
-                                child: Icon(
-                                  Icons.check_circle_outline_rounded,
-                                  color: ThemeConfig.primary,
-                                  size: 14,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: ThemeConfig.body.copyWith(
-                                      fontSize: 12,
-                                      height: 1.4,
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: "${feature.title}: ",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: ThemeConfig.textPrimary,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: feature.description,
-                                        style: TextStyle(
-                                          color: ThemeConfig.textSecondary,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
-                      const SizedBox(height: 16),
                       // Tags
                       Wrap(
                         spacing: 8,
@@ -312,6 +256,33 @@ class ProjectsSection extends GetView<ProjectsController> {
                             ),
                           );
                         }).toList(),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          OutlinedButton.icon(
+                            onPressed: openContainer,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: ThemeConfig.primary,
+                              side: BorderSide(color: ThemeConfig.primary.withValues(alpha: 0.5), width: 1),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                            icon: const Icon(Icons.arrow_forward_rounded, size: 14),
+                            label: const Text(
+                              "VIEW DETAILS",
+                              style: TextStyle(
+                                fontFamily: "JetBrains Mono",
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

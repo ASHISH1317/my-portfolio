@@ -1,10 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import 'package:url_launcher/url_launcher.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/animated_section_divider.dart';
 import '../widgets/smooth_scroll_wrapper.dart';
+import '../widgets/theme_selector.dart';
+import 'package:get/get.dart';
 
 class ProjectDetailsPage extends StatefulWidget {
   final ProjectData project;
@@ -20,9 +25,88 @@ class ProjectDetailsPage extends StatefulWidget {
 
 class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey _backgroundRowKey = GlobalKey();
+  final GlobalKey _cleanArchRowKey = GlobalKey();
+  double _scrollOpacity = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (!mounted) return;
+    // Calculate a continuous opacity between 0.0 and 1.0 from scrollOffset 100 to 250
+    double opacity = ((_scrollController.offset - 100) / 150).clamp(0.0, 1.0);
+    if (opacity != _scrollOpacity) {
+      setState(() {
+        _scrollOpacity = opacity;
+      });
+    }
+  }
+
+  Future<void> _launchUrl(String url) async {
+    if (url.isEmpty) return;
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      debugPrint("Could not launch $url");
+    }
+  }
+
+  void _openFullImageDialog(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+          child: Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: Container(
+                    color: Colors.transparent,
+                  ),
+                ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.85,
+                    ),
+                    child: AspectRatio(
+                      aspectRatio: 9 / 16,
+                      child: Image.asset(
+                        imageUrl,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 16,
+                  right: 16,
+                  child: IconButton(
+                    icon: const Icon(Icons.close_rounded, color: Colors.white, size: 32),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
     super.dispose();
   }
@@ -32,7 +116,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 768;
 
-    return Scaffold(
+    return Obx(() => Scaffold(
       backgroundColor: ThemeConfig.background,
       body: Stack(
         children: [
@@ -66,7 +150,6 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           Positioned.fill(
             child: Column(
               children: [
-                _buildHeader(context, isMobile),
                 Expanded(
                   child: SmoothScrollWrapper(
                     controller: _scrollController,
@@ -79,34 +162,55 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                             horizontal: isMobile ? 16.0 : 24.0,
                             vertical: 40.0,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 40),
-                              _buildHeroSection(isMobile),
-                              const SizedBox(height: 40),
-                              AnimatedSectionDivider(),
-                              const SizedBox(height: 40),
-                              _buildBackgroundAndFeatures(isMobile),
-                              const SizedBox(height: 40),
-                              AnimatedSectionDivider(),
-                              const SizedBox(height: 40),
-                              _buildTechStackSection(width),
-                              const SizedBox(height: 40),
-                              AnimatedSectionDivider(),
-                              const SizedBox(height: 40),
-                              _buildCleanArchitectureSection(isMobile),
-                              const SizedBox(height: 40),
-                              AnimatedSectionDivider(),
-                              const SizedBox(height: 40),
-                              _buildScreenshotsSection(isMobile),
-                              const SizedBox(height: 40),
-                              AnimatedSectionDivider(),
-                              const SizedBox(height: 40),
-                              _buildIntegrationsSection(isMobile),
-                              const SizedBox(height: 80),
-                              _buildFooter(isMobile),
-                            ],
+                          child: Builder(
+                            builder: (context) {
+                              final List<Widget> childrenList = [];
+                              childrenList.add(const SizedBox(height: 40));
+                              childrenList.add(_buildHeroSection(isMobile));
+
+                              if (widget.project.backgroundStory.isNotEmpty || widget.project.keyFeatures.isNotEmpty) {
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(AnimatedSectionDivider());
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(_buildBackgroundAndFeatures(isMobile));
+                              }
+
+                              if (widget.project.techStack.isNotEmpty) {
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(AnimatedSectionDivider());
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(_buildTechStackSection(width));
+                              }
+
+                              if (widget.project.codeSnippet.isNotEmpty) {
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(AnimatedSectionDivider());
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(_buildCleanArchitectureSection(isMobile));
+                              }
+
+                              if (widget.project.screenshots.isNotEmpty) {
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(AnimatedSectionDivider());
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(_buildScreenshotsSection(isMobile));
+                              }
+
+                              if (widget.project.integrations.isNotEmpty) {
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(AnimatedSectionDivider());
+                                childrenList.add(const SizedBox(height: 40));
+                                childrenList.add(_buildIntegrationsSection(isMobile));
+                              }
+
+                              childrenList.add(const SizedBox(height: 80));
+                              childrenList.add(_buildFooter(isMobile));
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: childrenList,
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -116,117 +220,100 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
 
-  // Header Navigation Bar
-  Widget _buildHeader(BuildContext context, bool isMobile) {
-    return Container(
-      height: 64,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: ThemeConfig.background.withValues(alpha: 0.8),
-        border: const Border(
-          bottom: BorderSide(
-            color: Color(0x1a859490),
-            width: 1,
-          ),
-        ),
-      ),
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.arrow_back_rounded, color: ThemeConfig.primary),
-                      onPressed: () => Navigator.of(context).pop(),
-                      splashRadius: 20,
+          // Sleek Custom Sticky App Bar
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: ClipRect(
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 16 : 24,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: ThemeConfig.background.withValues(alpha: 0.85 * _scrollOpacity),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: ThemeConfig.outlineVariant.withValues(alpha: 0.15 * _scrollOpacity),
+                      width: 1,
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      "Portfolio",
-                      style: TextStyle(
-                        fontFamily: "JetBrains Mono",
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: ThemeConfig.primary,
-                        letterSpacing: -0.5,
+                  ),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 12 * _scrollOpacity,
+                    sigmaY: 12 * _scrollOpacity,
+                  ),
+                  child: SafeArea(
+                    bottom: false,
+                    child: SizedBox(
+                      height: 40,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Center-aligned Pinned Project Title
+                          Opacity(
+                            opacity: _scrollOpacity,
+                            child: Text(
+                              widget.project.title,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: isMobile ? 15 : 18,
+                                fontWeight: FontWeight.bold,
+                                color: ThemeConfig.textPrimary,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                          // Left-aligned Back Button
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () => Navigator.of(context).pop(),
+                                child: Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: ThemeConfig.background.withValues(alpha: 0.8 * (1 - _scrollOpacity)),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: ThemeConfig.outlineVariant.withValues(
+                                        alpha: 0.3 * (1 - _scrollOpacity) + 0.1 * _scrollOpacity,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.arrow_back_rounded,
+                                    color: ThemeConfig.primary,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          // Right-aligned Theme Selector
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: const ThemeSelector(),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                if (!isMobile)
-                  Row(
-                    children: [
-                      _buildHeaderLink("Projects", context, true),
-                      const SizedBox(width: 32),
-                      _buildHeaderLink("About", context, false),
-                      const SizedBox(width: 32),
-                      _buildHeaderLink("Resume", context, false),
-                      const SizedBox(width: 32),
-                      _buildHeaderLink("Contact", context, false),
-                    ],
                   ),
-                Row(
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.code_rounded, color: ThemeConfig.textSecondary, size: 20),
-                      onPressed: () {},
-                      tooltip: "View Code",
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.terminal_rounded, color: ThemeConfig.textSecondary, size: 20),
-                      onPressed: () {},
-                      tooltip: "Console",
-                    ),
-                  ],
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeaderLink(String label, BuildContext context, bool isActive) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: isActive ? ThemeConfig.primary : Colors.transparent,
-                width: 2,
               ),
             ),
           ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isActive ? ThemeConfig.primary : ThemeConfig.textSecondary,
-              fontFamily: "JetBrains Mono",
-              fontSize: 14,
-              fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
-            ),
-          ),
-        ),
+        ],
       ),
-    );
+    ));
   }
+
+
 
   // Hero Section
   Widget _buildHeroSection(bool isMobile) {
@@ -287,47 +374,93 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           runSpacing: 16,
           alignment: WrapAlignment.center,
           children: [
-            ElevatedButton.icon(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: ThemeConfig.primary,
-                foregroundColor: ThemeConfig.onPrimary,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
+            if (widget.project.githubUrl.isNotEmpty)
+              ElevatedButton.icon(
+                onPressed: () => _launchUrl(widget.project.githubUrl),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ThemeConfig.primary,
+                  foregroundColor: ThemeConfig.onPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  elevation: 0,
                 ),
-                elevation: 0,
-              ),
-              icon: const Icon(Icons.code_rounded, size: 20),
-              label: const Text(
-                "View Code",
-                style: TextStyle(
-                  fontFamily: "JetBrains Mono",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-            OutlinedButton.icon(
-              onPressed: () {},
-              style: OutlinedButton.styleFrom(
-                foregroundColor: ThemeConfig.primary,
-                side: BorderSide(color: ThemeConfig.primary, width: 1),
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
+                icon: const Icon(Icons.code_rounded, size: 20),
+                label: const Text(
+                  "View Code",
+                  style: TextStyle(
+                    fontFamily: "JetBrains Mono",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
-              icon: const Icon(Icons.open_in_new_rounded, size: 20),
-              label: const Text(
-                "Live Demo",
-                style: TextStyle(
-                  fontFamily: "JetBrains Mono",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+            if (widget.project.playStoreUrl.isNotEmpty)
+              ElevatedButton.icon(
+                onPressed: () => _launchUrl(widget.project.playStoreUrl),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ThemeConfig.primary,
+                  foregroundColor: ThemeConfig.onPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  elevation: 0,
+                ),
+                icon: const Icon(Icons.android_rounded, size: 20),
+                label: const Text(
+                  "Play Store",
+                  style: TextStyle(
+                    fontFamily: "JetBrains Mono",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
               ),
-            ),
+            if (widget.project.appStoreUrl.isNotEmpty)
+              ElevatedButton.icon(
+                onPressed: () => _launchUrl(widget.project.appStoreUrl),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ThemeConfig.primary,
+                  foregroundColor: ThemeConfig.onPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  elevation: 0,
+                ),
+                icon: const Icon(Icons.apple_rounded, size: 20),
+                label: const Text(
+                  "App Store",
+                  style: TextStyle(
+                    fontFamily: "JetBrains Mono",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            if (widget.project.projectUrl.isNotEmpty)
+              OutlinedButton.icon(
+                onPressed: () => _launchUrl(widget.project.projectUrl),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: ThemeConfig.primary,
+                  side: BorderSide(color: ThemeConfig.primary, width: 1),
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                icon: const Icon(Icons.open_in_new_rounded, size: 20),
+                label: const Text(
+                  "Website",
+                  style: TextStyle(
+                    fontFamily: "JetBrains Mono",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
           ],
         ),
       ],
@@ -349,11 +482,16 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     }
 
     return Row(
+      key: _backgroundRowKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           flex: 1,
-          child: _buildBackgroundStory(),
+          child: StickyContainer(
+            scrollController: _scrollController,
+            parentKey: _backgroundRowKey,
+            child: _buildBackgroundStory(),
+          ),
         ),
         SizedBox(width: spacing),
         Expanded(
@@ -441,11 +579,44 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   // Tech Stack Bento
   Widget _buildTechStackSection(double width) {
-    int crossAxisCount = 6;
-    if (width < 600) {
-      crossAxisCount = 2;
-    } else if (width < 900) {
-      crossAxisCount = 3;
+    final bool isMobile = width < 600;
+
+    Widget techContent;
+    if (isMobile) {
+      techContent = SizedBox(
+        height: 120,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          itemCount: widget.project.techStack.length,
+          itemBuilder: (context, index) {
+            final tech = widget.project.techStack[index];
+            return Padding(
+              padding: const EdgeInsets.only(right: 16.0),
+              child: SizedBox(
+                width: 132, // matches the childAspectRatio of 1.1 (120 * 1.1)
+                child: TechStackGridItem(tech: tech),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      techContent = Center(
+        child: Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: widget.project.techStack.map((tech) {
+            return SizedBox(
+              width: 132,
+              height: 120,
+              child: TechStackGridItem(tech: tech),
+            );
+          }).toList(),
+        ),
+      );
     }
 
     return Column(
@@ -455,21 +626,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           style: ThemeConfig.h2,
         ),
         const SizedBox(height: 48),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: crossAxisCount,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.1,
-          ),
-          itemCount: widget.project.techStack.length,
-          itemBuilder: (context, index) {
-            final tech = widget.project.techStack[index];
-            return TechStackGridItem(tech: tech);
-          },
-        ),
+        techContent,
       ],
     );
   }
@@ -488,6 +645,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     }
 
     return Row(
+      key: _cleanArchRowKey,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
@@ -500,7 +658,11 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         const SizedBox(width: 48),
         Expanded(
           flex: 2,
-          child: _buildMockIDE(),
+          child: StickyContainer(
+            scrollController: _scrollController,
+            parentKey: _cleanArchRowKey,
+            child: _buildMockIDE(),
+          ),
         ),
       ],
     );
@@ -516,20 +678,90 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         ),
         const SizedBox(height: 24),
         Text(
-          "Following strict separation of concerns, the project utilizes a Layered Clean Architecture (Domain, Data, Presentation). This ensures testability, maintainability, and easy integration of new features.",
+          "Following strict separation of concerns, the project utilizes a Layered Clean Architecture (Domain, Data, Presentation). This ensures high testability, easy maintenance, and loose coupling.",
           style: ThemeConfig.body.copyWith(height: 1.7),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 32),
+        _buildLayerCard(
+          title: "Presentation Layer (UI & State)",
+          description: "Handles responsive UI layout rendering, screen state, and reactive controller bindings (GetX/MVC).",
+          icon: Icons.layers_outlined,
+        ),
+        const SizedBox(height: 12),
+        _buildLayerCard(
+          title: "Domain Layer (Business Rules)",
+          description: "The core business logic layer housing entities and abstract contracts. Free of UI or network library dependencies.",
+          icon: Icons.brightness_auto_outlined,
+        ),
+        const SizedBox(height: 12),
+        _buildLayerCard(
+          title: "Data Layer (Network & Cache)",
+          description: "Manages network REST clients, data serializers, databases, and concrete repository implementations.",
+          icon: Icons.storage_outlined,
+        ),
+        const SizedBox(height: 32),
         Wrap(
           spacing: 10,
           runSpacing: 10,
           children: const [
             ArchTag(label: "SOLID"),
-            ArchTag(label: "MVC"),
-            ArchTag(label: "REPOSITORY"),
+            ArchTag(label: "DEPENDENCY INJECTION"),
+            ArchTag(label: "REPOSITORY PATTERN"),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildLayerCard({required String title, required String description, required IconData icon}) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: ThemeConfig.outlineVariant.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 2.0),
+            child: Icon(
+              icon,
+              color: ThemeConfig.primary,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: ThemeConfig.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: ThemeConfig.textSecondary,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -537,22 +769,22 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final lines = widget.project.codeSnippet.split('\n');
 
     return CustomCard(
-      backgroundColor: const Color(0xFF0E0E0E),
+      backgroundColor: ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // IDE Window Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(
-              color: Color(0xFF1A1A1A),
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.4),
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
               border: Border(
                 bottom: BorderSide(
-                  color: Color(0x22859490),
+                  color: ThemeConfig.outlineVariant.withValues(alpha: 0.2),
                   width: 1,
                 ),
               ),
@@ -705,21 +937,22 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           "High-Fidelity Interface",
           style: ThemeConfig.h2,
         ),
-        const SizedBox(height: 48),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: isMobile ? 1 : (widget.project.screenshots.length >= 4 ? 4 : widget.project.screenshots.length),
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio: 9 / 16,
+        const SizedBox(height: 12),
+        Text(
+          "SWIPE TO EXPLORE • CLICK TO EXPAND",
+          style: TextStyle(
+            color: ThemeConfig.textMuted,
+            fontFamily: "JetBrains Mono",
+            fontSize: 10,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.bold,
           ),
-          itemCount: widget.project.screenshots.length,
-          itemBuilder: (context, index) {
-            final screenshotUrl = widget.project.screenshots[index];
-            return ScreenshotGridItem(imageUrl: screenshotUrl);
-          },
+        ),
+        const SizedBox(height: 32),
+        ScreenshotsCarousel(
+          screenshots: widget.project.screenshots,
+          isMobile: isMobile,
+          onImageTap: (url) => _openFullImageDialog(context, url),
         ),
       ],
     );
@@ -852,19 +1085,20 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     return Wrap(
       spacing: 24,
       children: [
-        _buildSocialLink("Github"),
-        _buildSocialLink("LinkedIn"),
-        _buildSocialLink("Twitter"),
-        _buildSocialLink("Email"),
+        _buildSocialLink("Github", PortfolioData.github1),
+        _buildSocialLink("LinkedIn", PortfolioData.linkedin),
+        _buildSocialLink("Instagram", PortfolioData.instagram),
+        _buildSocialLink("WhatsApp", PortfolioData.whatsapp),
+        _buildSocialLink("Email", PortfolioData.emailUrl),
       ],
     );
   }
 
-  Widget _buildSocialLink(String label) {
+  Widget _buildSocialLink(String label, String url) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: () => _launchUrl(url),
         child: Text(
           label.toUpperCase(),
           style: TextStyle(
@@ -980,8 +1214,9 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
 // Screenshot item with hover animation
 class ScreenshotGridItem extends StatefulWidget {
   final String imageUrl;
+  final VoidCallback? onTap;
 
-  const ScreenshotGridItem({super.key, required this.imageUrl});
+  const ScreenshotGridItem({super.key, required this.imageUrl, this.onTap});
 
   @override
   State<ScreenshotGridItem> createState() => _ScreenshotGridItemState();
@@ -995,8 +1230,11 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
         transform: _isHovered
             ? (Matrix4.identity()..scale(1.05))
@@ -1022,7 +1260,7 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: Image.network(
+            child: Image.asset(
               widget.imageUrl,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => Container(
@@ -1039,6 +1277,218 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
           ),
         ),
       ),
+    ));
+  }
+}
+
+class ScreenshotsCarousel extends StatefulWidget {
+  final List<String> screenshots;
+  final bool isMobile;
+  final Function(String) onImageTap;
+
+  const ScreenshotsCarousel({
+    super.key,
+    required this.screenshots,
+    required this.isMobile,
+    required this.onImageTap,
+  });
+
+  @override
+  State<ScreenshotsCarousel> createState() => _ScreenshotsCarouselState();
+}
+
+class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
+  late PageController _pageController;
+  double _currentPage = 1000.0;
+  Timer? _autoScrollTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(
+      viewportFraction: widget.isMobile ? 0.65 : 0.28,
+      initialPage: 1000,
+    );
+    _pageController.addListener(() {
+      if (mounted) {
+        setState(() {
+          _currentPage = _pageController.page ?? 1000.0;
+        });
+      }
+    });
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _autoScrollTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_pageController.hasClients) {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.easeInOutCubic,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _autoScrollTimer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double pageSlotWidth = screenWidth * (widget.isMobile ? 0.65 : 0.28);
+    final double maxAllowedWidth = pageSlotWidth - 16;
+    
+    // Maintain a clean 9:16 aspect ratio
+    final double maxItemHeight = widget.isMobile ? 320.0 : 440.0;
+    double computedHeight = maxAllowedWidth * (16 / 9);
+    
+    if (computedHeight > maxItemHeight) {
+      computedHeight = maxItemHeight;
+    }
+    final double computedWidth = computedHeight * (9 / 16);
+
+    return SizedBox(
+      height: widget.isMobile ? 360 : 490,
+      child: PageView.builder(
+        controller: _pageController,
+        clipBehavior: Clip.none,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (context, index) {
+          final int realIndex = index % widget.screenshots.length;
+          final String screenshotUrl = widget.screenshots[realIndex];
+
+          double diff = (_currentPage - index).abs();
+          double scale = (1.05 - (diff * 0.15)).clamp(0.85, 1.05);
+          double opacity = (1.0 - (diff * 0.5)).clamp(0.5, 1.0);
+
+          return Center(
+            child: Opacity(
+              opacity: opacity,
+              child: Transform.scale(
+                scale: scale,
+                child: SizedBox(
+                  width: computedWidth,
+                  height: computedHeight,
+                  child: ScreenshotGridItem(
+                    imageUrl: screenshotUrl,
+                    onTap: () {
+                      _autoScrollTimer?.cancel();
+                      widget.onImageTap(screenshotUrl);
+                      Future.delayed(const Duration(seconds: 5), () {
+                        if (mounted) _startAutoScroll();
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
+
+class StickyContainer extends StatefulWidget {
+  final Widget child;
+  final ScrollController scrollController;
+  final GlobalKey parentKey;
+
+  const StickyContainer({
+    super.key,
+    required this.child,
+    required this.scrollController,
+    required this.parentKey,
+  });
+
+  @override
+  State<StickyContainer> createState() => _StickyContainerState();
+}
+
+class _StickyContainerState extends State<StickyContainer> {
+  final GlobalKey _childKey = GlobalKey();
+  double _offsetTop = 0.0;
+  double? _rowAbsoluteTop;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_updateOffset);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_updateOffset);
+    super.dispose();
+  }
+
+  void _updateOffset() {
+    if (!mounted) return;
+
+    final RenderBox? rowRenderBox = widget.parentKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? childRenderBox = _childKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (rowRenderBox != null && childRenderBox != null) {
+      if (_rowAbsoluteTop == null) {
+        final ScrollableState? scrollable = Scrollable.of(context);
+        final RenderBox? scrollRenderBox = scrollable?.context.findRenderObject() as RenderBox?;
+        if (scrollRenderBox != null) {
+          _rowAbsoluteTop = rowRenderBox.localToGlobal(Offset.zero, ancestor: scrollRenderBox).dy + widget.scrollController.offset;
+        }
+      }
+
+      if (_rowAbsoluteTop != null) {
+        final double rowHeight = rowRenderBox.size.height;
+        final double childHeight = childRenderBox.size.height;
+        final double currentScroll = widget.scrollController.offset;
+
+        // Sticky offset starting 100 pixels from top of screen
+        final double targetTopOffset = 100.0;
+        double newOffset = currentScroll - _rowAbsoluteTop! + targetTopOffset;
+
+        final double maxOffset = rowHeight - childHeight;
+        if (newOffset > maxOffset) {
+          newOffset = maxOffset;
+        }
+        if (newOffset < 0) {
+          newOffset = 0;
+        }
+
+        if (_offsetTop != newOffset) {
+          setState(() {
+            _offsetTop = newOffset;
+          });
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Opacity(
+          opacity: 0,
+          child: Container(
+            key: _childKey,
+            child: widget.child,
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: _offsetTop,
+          child: widget.child,
+        ),
+      ],
+    );
+  }
+}
+
+
