@@ -78,14 +78,14 @@ class SkillsSection extends GetView<SkillsController> {
               ],
             )
           else
-            Column(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: ScrollReveal(
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      ScrollReveal(
                         direction: RevealDirection.left,
                         delay: Duration.zero,
                         child: CustomCard(
@@ -93,28 +93,8 @@ class SkillsSection extends GetView<SkillsController> {
                           child: _buildCoreExpertiseCard(isMobile: false),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 24),
-                    Expanded(
-                      flex: 1,
-                      child: ScrollReveal(
-                        direction: RevealDirection.right,
-                        delay: Duration.zero,
-                        child: CustomCard(
-                          padding: EdgeInsets.zero,
-                          child: _buildStateManagementCard(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: ScrollReveal(
+                      const SizedBox(height: 24),
+                      ScrollReveal(
                         direction: RevealDirection.left,
                         delay: const Duration(milliseconds: 100),
                         child: CustomCard(
@@ -122,11 +102,24 @@ class SkillsSection extends GetView<SkillsController> {
                           child: _buildPowerhouseIntegrationsCard(isMobile: false),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 24),
-                    Expanded(
-                      flex: 1,
-                      child: ScrollReveal(
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 24),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      ScrollReveal(
+                        direction: RevealDirection.right,
+                        delay: Duration.zero,
+                        child: CustomCard(
+                          padding: EdgeInsets.zero,
+                          child: _buildStateManagementCard(),
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ScrollReveal(
                         direction: RevealDirection.right,
                         delay: const Duration(milliseconds: 100),
                         child: CustomCard(
@@ -134,8 +127,8 @@ class SkillsSection extends GetView<SkillsController> {
                           child: _buildWebAndEcommerceCard(),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

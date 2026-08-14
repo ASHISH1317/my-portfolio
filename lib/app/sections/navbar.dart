@@ -20,7 +20,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    final bool isMobile = width < 768;
+    final bool isMobile = width < 1150;
 
     return ClipRect(
       child: BackdropFilter(

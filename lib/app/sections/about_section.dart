@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
-import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
 import '../controllers/about_controller.dart';
+import '../widgets/tilt_card.dart';
 
 class AboutSection extends GetView<AboutController> {
   const AboutSection({super.key});
@@ -127,39 +127,7 @@ class AboutSection extends GetView<AboutController> {
       return ScrollReveal(
         direction: RevealDirection.up,
         delay: Duration(milliseconds: 150 + index * 80),
-        child: CustomCard(
-          glowColor: ThemeConfig.primary,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  hl["icon"] as IconData,
-                  color: ThemeConfig.primary,
-                  size: 28,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  hl["title"] as String,
-                  style: ThemeConfig.h3.copyWith(
-                    fontSize: 16,
-                    color: ThemeConfig.textPrimary,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  hl["desc"] as String,
-                  style: ThemeConfig.body.copyWith(
-                    fontSize: 13,
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        child: _HighlightCard(highlight: hl, index: index),
       );
     }
 
@@ -200,6 +168,195 @@ class AboutSection extends GetView<AboutController> {
   }
 }
 
+class _HighlightCard extends StatefulWidget {
+  final Map<String, dynamic> highlight;
+  final int index;
+
+  const _HighlightCard({
+    required this.highlight,
+    required this.index,
+  });
+
+  @override
+  State<_HighlightCard> createState() => _HighlightCardState();
+}
+
+class _HighlightCardState extends State<_HighlightCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final double radius = 20.0;
+
+    return TiltCard(
+      borderRadius: BorderRadius.circular(radius),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovered = true),
+        onExit: (_) => setState(() => _isHovered = false),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.all(1.5), // Outer border spacing
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            gradient: _isHovered
+                ? LinearGradient(
+                    colors: [
+                      ThemeConfig.primary,
+                      ThemeConfig.primary.withValues(alpha: 0.3),
+                      ThemeConfig.outlineVariant.withValues(alpha: 0.1),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  )
+                : LinearGradient(
+                    colors: [
+                      ThemeConfig.outline.withValues(alpha: 0.15),
+                      ThemeConfig.outline.withValues(alpha: 0.05),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(radius - 1.5),
+            child: Container(
+              color: ThemeConfig.surfaceContainerLow,
+              child: Stack(
+                children: [
+                  // Subtle Mesh Radial Glow in top right corner
+                  Positioned(
+                    top: -40,
+                    right: -40,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 350),
+                      opacity: _isHovered ? 0.22 : 0.05,
+                      child: Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: RadialGradient(
+                            colors: [
+                              ThemeConfig.primary,
+                              ThemeConfig.primary.withValues(alpha: 0),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Large Card Index Number
+                  Positioned(
+                    top: 12,
+                    right: 16,
+                    child: AnimatedDefaultTextStyle(
+                      duration: const Duration(milliseconds: 350),
+                      style: TextStyle(
+                        fontFamily: 'JetBrains Mono',
+                        fontSize: 34,
+                        fontWeight: FontWeight.w900,
+                        height: 1.0,
+                        color: _isHovered
+                            ? ThemeConfig.primary.withValues(alpha: 0.12)
+                            : ThemeConfig.textMuted.withValues(alpha: 0.05),
+                      ),
+                      child: Text("0${widget.index + 1}"),
+                    ),
+                  ),
+
+                  // Card Main Body Content
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Animated Glowy Icon Backdrop
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 350),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: _isHovered
+                                ? ThemeConfig.primary.withValues(alpha: 0.12)
+                                : ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(
+                              color: _isHovered
+                                  ? ThemeConfig.primary.withValues(alpha: 0.3)
+                                  : ThemeConfig.outline.withValues(alpha: 0.08),
+                              width: 1,
+                            ),
+                          ),
+                          child: AnimatedScale(
+                            scale: _isHovered ? 1.12 : 1.0,
+                            duration: const Duration(milliseconds: 350),
+                            curve: Curves.easeOutBack,
+                            child: AnimatedRotation(
+                              turns: _isHovered ? 0.02 : 0.0,
+                              duration: const Duration(milliseconds: 350),
+                              child: Icon(
+                                widget.highlight["icon"] as IconData,
+                                color: _isHovered ? ThemeConfig.primary : ThemeConfig.textPrimary.withValues(alpha: 0.8),
+                                size: 28,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Highlight Title
+                        Text(
+                          widget.highlight["title"] as String,
+                          style: ThemeConfig.h3.copyWith(
+                            fontSize: 16.5,
+                            fontWeight: FontWeight.w700,
+                            color: ThemeConfig.textPrimary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Highlight Description
+                        Text(
+                          widget.highlight["desc"] as String,
+                          style: ThemeConfig.body.copyWith(
+                            fontSize: 13,
+                            height: 1.55,
+                            color: ThemeConfig.textSecondary.withValues(alpha: 0.95),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // Bottom Right Interactive Arrow
+                  Positioned(
+                    bottom: 16,
+                    right: 20,
+                    child: AnimatedSlide(
+                      offset: _isHovered ? Offset.zero : const Offset(0.2, 0),
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeOutCubic,
+                      child: AnimatedOpacity(
+                        opacity: _isHovered ? 0.8 : 0.0,
+                        duration: const Duration(milliseconds: 250),
+                        child: Icon(
+                          Icons.arrow_forward_rounded,
+                          color: ThemeConfig.primary,
+                          size: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _HoverTag extends StatefulWidget {
   final String tag;
   const _HoverTag({required this.tag});
@@ -216,36 +373,40 @@ class _HoverTagState extends State<_HoverTag> {
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
+      child: AnimatedScale(
+        scale: _isHovered ? 1.05 : 1.0,
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: _isHovered
-              ? ThemeConfig.primary.withValues(alpha: 0.08)
-              : Colors.white.withValues(alpha: 0.02),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
             color: _isHovered
-                ? ThemeConfig.primary.withValues(alpha: 0.6)
-                : ThemeConfig.textMuted.withValues(alpha: 0.2),
-            width: 1,
+                ? ThemeConfig.primary.withValues(alpha: 0.08)
+                : Colors.white.withValues(alpha: 0.02),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: _isHovered
+                  ? ThemeConfig.primary.withValues(alpha: 0.6)
+                  : ThemeConfig.textMuted.withValues(alpha: 0.2),
+              width: 1,
+            ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: ThemeConfig.primary.withValues(alpha: 0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    )
+                  ]
+                : null,
           ),
-          boxShadow: _isHovered
-              ? [
-                  BoxShadow(
-                    color: ThemeConfig.primary.withValues(alpha: 0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 2),
-                  )
-                ]
-              : null,
-        ),
-        child: Text(
-          widget.tag,
-          style: TextStyle(
-            color: _isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
+          child: Text(
+            widget.tag,
+            style: TextStyle(
+              color: _isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
