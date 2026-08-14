@@ -1005,6 +1005,10 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               if (integration.icon == "dns") iconData = Icons.dns;
               if (integration.icon == "sync") iconData = Icons.sync;
               if (integration.icon == "folder_shared") iconData = Icons.folder_shared;
+              if (integration.icon == "api") iconData = Icons.api;
+              if (integration.icon == "shopping_cart") iconData = Icons.shopping_cart;
+              if (integration.icon == "movie") iconData = Icons.movie;
+              if (integration.icon == "monetization_on") iconData = Icons.monetization_on;
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
