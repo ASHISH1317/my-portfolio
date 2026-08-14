@@ -1,7 +1,71 @@
 import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
+
+enum _StarColorType { primary, secondary, white }
+
+class _Star {
+  final double x;
+  final double y;
+  final double radius;
+  final int layer;
+  final double speedX;
+  final double speedY;
+  final double twinkleSpeed;
+  final double twinklePhase;
+  final double baseOpacity;
+  final _StarColorType colorType;
+
+  _Star({
+    required this.x,
+    required this.y,
+    required this.radius,
+    required this.layer,
+    required this.speedX,
+    required this.speedY,
+    required this.twinkleSpeed,
+    required this.twinklePhase,
+    required this.baseOpacity,
+    required this.colorType,
+  });
+}
+
+class _ShootingStar {
+  final double startX;
+  final double startY;
+  final double endX;
+  final double endY;
+  final double speed;
+  final double length;
+  final double opacity;
+  double progress = 0.0;
+
+  _ShootingStar({
+    required this.startX,
+    required this.startY,
+    required this.endX,
+    required this.endY,
+    required this.speed,
+    required this.length,
+    required this.opacity,
+  });
+}
+
+class _Ripple {
+  final Offset center;
+  final double maxRadius;
+  double currentRadius = 0.0;
+  double opacity = 1.0;
+  final double expansionSpeed;
+
+  _Ripple({
+    required this.center,
+    required this.maxRadius,
+    required this.expansionSpeed,
+  });
+}
 
 class AnimatedBackground extends StatefulWidget {
   const AnimatedBackground({super.key});
@@ -12,8 +76,13 @@ class AnimatedBackground extends StatefulWidget {
 
 class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  final List<_Particle> _particles = [];
+  final List<_Star> _stars = [];
+  final List<_ShootingStar> _shootingStars = [];
+  final List<_Ripple> _ripples = [];
   final math.Random _random = math.Random();
+  Offset? _mousePosition;
+  late final Stopwatch _stopwatch;
+  int _lastSpawnTimeMs = 0;
 
   @override
   void initState() {
@@ -23,20 +92,155 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
       duration: const Duration(seconds: 20),
     )..repeat();
 
-    for (int i = 0; i < 35; i++) {
-      _particles.add(_Particle(
+    _controller.addListener(_onTick);
+    _stopwatch = Stopwatch()..start();
+    _lastSpawnTimeMs = -3000; // Spawns the first shooting star after 2 seconds
+
+    // Initialize stars (90 density for high-end feel while preserving CPU cycles)
+    for (int i = 0; i < 90; i++) {
+      int layer;
+      if (i < 60) {
+        layer = 0; // Far depth (rich backing canopy)
+      } else if (i < 80) {
+        layer = 1; // Mid depth (constellations)
+      } else {
+        layer = 2; // Near depth (glowing bright bodies)
+      }
+
+      double radius;
+      double baseOpacity;
+      if (layer == 0) {
+        radius = _random.nextDouble() * 0.7 + 0.5;
+        baseOpacity = _random.nextDouble() * 0.25 + 0.15;
+      } else if (layer == 1) {
+        radius = _random.nextDouble() * 1.0 + 1.2;
+        baseOpacity = _random.nextDouble() * 0.3 + 0.4;
+      } else {
+        radius = _random.nextDouble() * 1.4 + 2.2;
+        baseOpacity = _random.nextDouble() * 0.3 + 0.6;
+      }
+
+      final colorRand = _random.nextDouble();
+      _StarColorType colorType;
+      if (colorRand < 0.15) {
+        colorType = _StarColorType.primary;
+      } else if (colorRand < 0.25) {
+        colorType = _StarColorType.secondary;
+      } else {
+        colorType = _StarColorType.white;
+      }
+
+      _stars.add(_Star(
         x: _random.nextDouble(),
         y: _random.nextDouble(),
-        radius: _random.nextDouble() * 3 + 1.5,
-        speedX: (_random.nextDouble() - 0.5) * 0.05,
-        speedY: (_random.nextDouble() - 0.5) * 0.05,
-        opacity: _random.nextDouble() * 0.5 + 0.2,
+        radius: radius,
+        layer: layer,
+        speedX: (_random.nextDouble() - 0.5) * 0.04,
+        speedY: (_random.nextDouble() - 0.5) * 0.04,
+        twinkleSpeed: _random.nextInt(4) + 2.0,
+        twinklePhase: _random.nextDouble() * 2 * math.pi,
+        baseOpacity: baseOpacity,
+        colorType: colorType,
       ));
     }
   }
 
+  void _onTick() {
+    if (!mounted) return;
+    _updateShootingStars();
+    _updateRipples();
+  }
+
+  void _updateShootingStars() {
+    // 1. Update existing shooting stars
+    for (int i = _shootingStars.length - 1; i >= 0; i--) {
+      final star = _shootingStars[i];
+      star.progress += star.speed;
+      if (star.progress >= 1.0) {
+        _shootingStars.removeAt(i);
+      }
+    }
+
+    // 2. Spawn a new shooting star every 5 seconds
+    final elapsedMs = _stopwatch.elapsedMilliseconds;
+    if (elapsedMs - _lastSpawnTimeMs >= 5000) {
+      _lastSpawnTimeMs = elapsedMs;
+      _spawnShootingStar();
+    }
+  }
+
+  void _spawnShootingStar() {
+    // Spawns a shooting star from one of 4 different paths/edges
+    final pathType = _random.nextInt(4);
+    double startX, startY, endX, endY;
+
+    switch (pathType) {
+      case 0:
+        // Top edge, moving diagonally downwards to the right
+        startX = _random.nextDouble() * 0.5; // left half of top edge
+        startY = 0.0;
+        endX = startX + 0.3 + _random.nextDouble() * 0.2;
+        endY = 0.6 + _random.nextDouble() * 0.4;
+        break;
+      case 1:
+        // Top edge, moving diagonally downwards to the left
+        startX = 0.5 + _random.nextDouble() * 0.5; // right half of top edge
+        startY = 0.0;
+        endX = startX - 0.3 - _random.nextDouble() * 0.2;
+        endY = 0.6 + _random.nextDouble() * 0.4;
+        break;
+      case 2:
+        // Left edge, moving diagonally downwards to the right
+        startX = 0.0;
+        startY = 0.1 + _random.nextDouble() * 0.4; // upper half of left edge
+        endX = 0.7 + _random.nextDouble() * 0.3;
+        endY = startY + 0.3 + _random.nextDouble() * 0.2;
+        break;
+      case 3:
+      default:
+        // Right edge, moving diagonally downwards to the left
+        startX = 1.0;
+        startY = 0.1 + _random.nextDouble() * 0.4; // upper half of right edge
+        endX = 0.0 + _random.nextDouble() * 0.3;
+        endY = startY + 0.3 + _random.nextDouble() * 0.2;
+        break;
+    }
+
+    _shootingStars.add(_ShootingStar(
+      startX: startX,
+      startY: startY,
+      endX: endX,
+      endY: endY,
+      speed: 0.012 + _random.nextDouble() * 0.008, // slightly slower for better visibility
+      length: 0.07 + _random.nextDouble() * 0.05,
+      opacity: _random.nextDouble() * 0.4 + 0.6,
+    ));
+  }
+
+  void _updateRipples() {
+    for (int i = _ripples.length - 1; i >= 0; i--) {
+      final ripple = _ripples[i];
+      ripple.currentRadius += ripple.expansionSpeed;
+      ripple.opacity = 1.0 - (ripple.currentRadius / ripple.maxRadius);
+      if (ripple.currentRadius >= ripple.maxRadius) {
+        _ripples.removeAt(i);
+      }
+    }
+  }
+
+  void _spawnRipple(Offset position) {
+    setState(() {
+      _ripples.add(_Ripple(
+        center: position,
+        maxRadius: 280.0,
+        expansionSpeed: 8.0,
+      ));
+    });
+  }
+
   @override
   void dispose() {
+    _controller.removeListener(_onTick);
     _controller.dispose();
     super.dispose();
   }
@@ -48,106 +252,283 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> with SingleTick
       final secondaryColor = ThemeConfig.secondary;
       final bgColor = ThemeConfig.background;
 
-      return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return CustomPaint(
-            painter: _BackgroundPainter(
-              progress: _controller.value,
-              particles: _particles,
-              primaryColor: primaryColor,
-              secondaryColor: secondaryColor,
-              backgroundColor: bgColor,
-            ),
-            child: Container(),
-          );
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTapDown: (details) {
+          _spawnRipple(details.localPosition);
         },
+        child: MouseRegion(
+          onHover: (event) {
+            setState(() {
+              _mousePosition = event.localPosition;
+            });
+          },
+          onExit: (event) {
+            setState(() {
+              _mousePosition = null;
+            });
+          },
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: _BackgroundPainter(
+                  progress: _controller.value,
+                  stars: _stars,
+                  shootingStars: List.from(_shootingStars),
+                  ripples: List.from(_ripples),
+                  mousePosition: _mousePosition,
+                  primaryColor: primaryColor,
+                  secondaryColor: secondaryColor,
+                  backgroundColor: bgColor,
+                ),
+                child: Container(),
+              );
+            },
+          ),
+        ),
       );
     });
   }
 }
 
-class _Particle {
-  double x;
-  double y;
-  double radius;
-  double speedX;
-  double speedY;
-  double opacity;
-
-  _Particle({
-    required this.x,
-    required this.y,
-    required this.radius,
-    required this.speedX,
-    required this.speedY,
-    required this.opacity,
-  });
-}
-
 class _BackgroundPainter extends CustomPainter {
   final double progress;
-  final List<_Particle> particles;
+  final List<_Star> stars;
+  final List<_ShootingStar> shootingStars;
+  final List<_Ripple> ripples;
+  final Offset? mousePosition;
   final Color primaryColor;
   final Color secondaryColor;
   final Color backgroundColor;
 
   _BackgroundPainter({
     required this.progress,
-    required this.particles,
+    required this.stars,
+    required this.shootingStars,
+    required this.ripples,
+    required this.mousePosition,
     required this.primaryColor,
     required this.secondaryColor,
     required this.backgroundColor,
   });
 
+  Offset _getStarPosition(_Star star, Size size) {
+    double speedMultiplier = star.layer == 0 ? 0.15 : (star.layer == 1 ? 0.4 : 0.8);
+    double driftX = (star.x + star.speedX * progress * speedMultiplier) % 1.0;
+    double driftY = (star.y + star.speedY * progress * speedMultiplier) % 1.0;
+    if (driftX < 0) driftX += 1.0;
+    if (driftY < 0) driftY += 1.0;
+
+    Offset pos = Offset(driftX * size.width, driftY * size.height);
+
+    // Apply interactive Mouse Gravity
+    if (mousePosition != null) {
+      final distVec = pos - mousePosition!;
+      final distance = distVec.distance;
+      const maxGravityDistance = 150.0;
+      if (distance < maxGravityDistance) {
+        double interactionStrength = star.layer == 0 ? 4.0 : (star.layer == 1 ? 12.0 : 24.0);
+        final force = (1.0 - (distance / maxGravityDistance)) * interactionStrength;
+        final direction = distVec.direction;
+        pos += Offset(math.cos(direction) * force, math.sin(direction) * force);
+      }
+    }
+
+    // Apply Click Ripple Displacement (shockwaves)
+    for (var ripple in ripples) {
+      final distVec = pos - ripple.center;
+      final distance = distVec.distance;
+      
+      const waveWidth = 60.0;
+      final distFromWaveFront = (distance - ripple.currentRadius).abs();
+      if (distFromWaveFront < waveWidth && distance > 10.0) {
+        final waveFactor = 1.0 - (distFromWaveFront / waveWidth);
+        final decayFactor = ripple.opacity;
+        
+        double basePush = star.layer == 0 ? 8.0 : (star.layer == 1 ? 25.0 : 50.0);
+        final pushForce = waveFactor * decayFactor * basePush;
+        
+        final direction = distVec.direction;
+        pos += Offset(math.cos(direction) * pushForce, math.sin(direction) * pushForce);
+      }
+    }
+
+    return pos;
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
-    // 1. Solid theme background
+    // 1. Draw space theme background
     final bgPaint = Paint()..color = backgroundColor;
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), bgPaint);
 
-    // 2. Ambient glowing color orbs
-    final orb1Center = Offset(
-      size.width * 0.2 + math.sin(progress * 2 * math.pi) * 80,
-      size.height * 0.3 + math.cos(progress * 2 * math.pi) * 60,
+    // 2. Draw drifting, breathing cosmic nebulae
+    final nebula1Center = Offset(
+      size.width * 0.25 + math.sin(progress * 2 * math.pi) * 120,
+      size.height * 0.35 + math.sin(progress * 4 * math.pi) * 60,
     );
-    final orb2Center = Offset(
-      size.width * 0.8 - math.cos(progress * 2 * math.pi) * 90,
-      size.height * 0.7 - math.sin(progress * 2 * math.pi) * 70,
+    final nebula2Center = Offset(
+      size.width * 0.75 + math.cos(progress * 2 * math.pi) * 100,
+      size.height * 0.65 - math.sin(progress * 2 * math.pi) * 80,
+    );
+    final nebula3Center = Offset(
+      size.width * 0.45 + math.cos(progress * 2 * math.pi + math.pi/4) * 70,
+      size.height * 0.5 + math.sin(progress * 2 * math.pi) * 50,
     );
 
     final orbPaint1 = Paint()
       ..shader = RadialGradient(
         colors: [
-          primaryColor.withValues(alpha: 0.15),
+          primaryColor.withValues(alpha: 0.16),
+          primaryColor.withValues(alpha: 0.05),
           Colors.transparent,
         ],
-      ).createShader(Rect.fromCircle(center: orb1Center, radius: size.width * 0.4));
+      ).createShader(Rect.fromCircle(center: nebula1Center, radius: size.width * 0.45));
 
     final orbPaint2 = Paint()
       ..shader = RadialGradient(
         colors: [
           secondaryColor.withValues(alpha: 0.12),
+          secondaryColor.withValues(alpha: 0.03),
           Colors.transparent,
         ],
-      ).createShader(Rect.fromCircle(center: orb2Center, radius: size.width * 0.45));
+      ).createShader(Rect.fromCircle(center: nebula2Center, radius: size.width * 0.50));
 
-    canvas.drawCircle(orb1Center, size.width * 0.4, orbPaint1);
-    canvas.drawCircle(orb2Center, size.width * 0.45, orbPaint2);
+    final orbPaint3 = Paint()
+      ..shader = RadialGradient(
+        colors: [
+          primaryColor.withValues(alpha: 0.08),
+          Colors.transparent,
+        ],
+      ).createShader(Rect.fromCircle(center: nebula3Center, radius: size.width * 0.35));
 
-    // 3. Floating Particles
-    final particlePaint = Paint();
-    for (var p in particles) {
-      double currentX = (p.x + p.speedX * progress) % 1.0;
-      double currentY = (p.y + p.speedY * progress) % 1.0;
-      if (currentX < 0) currentX += 1.0;
-      if (currentY < 0) currentY += 1.0;
+    canvas.drawCircle(nebula1Center, size.width * 0.45, orbPaint1);
+    canvas.drawCircle(nebula2Center, size.width * 0.50, orbPaint2);
+    canvas.drawCircle(nebula3Center, size.width * 0.35, orbPaint3);
 
-      final dx = currentX * size.width;
-      final dy = currentY * size.height;
+    // 3. Draw Constellation lines between stars of the same layer (Mid and Near)
+    final linePaint = Paint()..strokeWidth = 0.5;
+    for (int i = 0; i < stars.length; i++) {
+      final s1 = stars[i];
+      if (s1.layer == 0) continue; // Skip far stars for cleaner visuals
 
-      particlePaint.color = primaryColor.withValues(alpha: p.opacity * 0.6);
-      canvas.drawCircle(Offset(dx, dy), p.radius, particlePaint);
+      final s1Pos = _getStarPosition(s1, size);
+
+      for (int j = i + 1; j < stars.length; j++) {
+        final s2 = stars[j];
+        if (s1.layer != s2.layer) continue;
+
+        final s2Pos = _getStarPosition(s2, size);
+        final dist = (s1Pos - s2Pos).distance;
+        if (dist < 100) {
+          final opacity = (1.0 - (dist / 100)) * 0.08 * (s1.baseOpacity + s2.baseOpacity) / 2.0;
+          linePaint.color = primaryColor.withValues(alpha: opacity);
+          canvas.drawLine(s1Pos, s2Pos, linePaint);
+        }
+      }
+    }
+
+    // 4. Draw interactive constellation lines to the mouse position
+    if (mousePosition != null) {
+      for (var star in stars) {
+        if (star.layer == 0) continue;
+        final starPos = _getStarPosition(star, size);
+        final dist = (starPos - mousePosition!).distance;
+        if (dist < 120) {
+          final opacity = (1.0 - (dist / 120)) * 0.12;
+          linePaint.color = primaryColor.withValues(alpha: opacity);
+          canvas.drawLine(starPos, mousePosition!, linePaint);
+        }
+      }
+    }
+
+    // 5. Draw the Stars
+    final starPaint = Paint();
+    for (var star in stars) {
+      final pos = _getStarPosition(star, size);
+
+      // Twinkling effect: Calculate unique oscillating factor
+      final twinkleFactor = (0.3 + 0.7 * math.sin(progress * 2 * math.pi * star.twinkleSpeed + star.twinklePhase).abs());
+      final currentOpacity = star.baseOpacity * twinkleFactor;
+
+      Color starColor;
+      switch (star.colorType) {
+        case _StarColorType.primary:
+          starColor = primaryColor;
+          break;
+        case _StarColorType.secondary:
+          starColor = secondaryColor;
+          break;
+        case _StarColorType.white:
+          starColor = Colors.white;
+          break;
+      }
+
+      // Add a subtle outer glow for near stars
+      if (star.layer == 2) {
+        final glowPaint = Paint()
+          ..color = starColor.withValues(alpha: currentOpacity * 0.3)
+          ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+        canvas.drawCircle(pos, star.radius * 2.0, glowPaint);
+      }
+
+      starPaint.color = starColor.withValues(alpha: currentOpacity);
+      canvas.drawCircle(pos, star.radius, starPaint);
+    }
+
+    // 6. Draw Shooting Stars
+    for (var ss in shootingStars) {
+      final currentProgress = ss.progress;
+      final tailProgress = math.max(0.0, currentProgress - ss.length);
+
+      final currentX = ss.startX + (ss.endX - ss.startX) * currentProgress;
+      final currentY = ss.startY + (ss.endY - ss.startY) * currentProgress;
+
+      final tailX = ss.startX + (ss.endX - ss.startX) * tailProgress;
+      final tailY = ss.startY + (ss.endY - ss.startY) * tailProgress;
+
+      final headPos = Offset(currentX * size.width, currentY * size.height);
+      final tailPos = Offset(tailX * size.width, tailY * size.height);
+
+      final lifeFade = 1.0 - currentProgress;
+      final alpha = ss.opacity * lifeFade;
+
+      final ssPaint = Paint()
+        ..shader = ui.Gradient.linear(
+          headPos,
+          tailPos,
+          [
+            primaryColor.withValues(alpha: alpha),
+            Colors.transparent,
+          ],
+        )
+        ..strokeWidth = 2.0
+        ..strokeCap = StrokeCap.round;
+
+      canvas.drawLine(headPos, tailPos, ssPaint);
+
+      // Draw a tiny bright center point for extra high-end feel
+      final headPaint = Paint()
+        ..color = Colors.white.withValues(alpha: alpha)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.0);
+      canvas.drawCircle(headPos, 2.0, headPaint);
+    }
+
+    // 7. Draw click ripples (glowing expanding shockwaves)
+    for (var ripple in ripples) {
+      final ripplePaint = Paint()
+        ..color = primaryColor.withValues(alpha: ripple.opacity * 0.12)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0 + (1.0 - ripple.opacity) * 6.0
+        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 8.0);
+      canvas.drawCircle(ripple.center, ripple.currentRadius, ripplePaint);
+
+      final sharpPaint = Paint()
+        ..color = primaryColor.withValues(alpha: ripple.opacity * 0.18)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.0;
+      canvas.drawCircle(ripple.center, ripple.currentRadius, sharpPaint);
     }
   }
 
