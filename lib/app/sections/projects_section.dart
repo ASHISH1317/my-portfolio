@@ -133,9 +133,24 @@ class ProjectsSection extends GetView<ProjectsController> {
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: Image.asset(
+                          child: Image.network(
                             project.imageUrl,
                             fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                color: ThemeConfig.surfaceContainerHigh,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    color: ThemeConfig.primary,
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
                             errorBuilder: (context, error, stackTrace) =>
                                 Container(
                                   color: ThemeConfig.surfaceContainerHigh,

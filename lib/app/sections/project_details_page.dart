@@ -81,9 +81,34 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                     ),
                     child: AspectRatio(
                       aspectRatio: 9 / 16,
-                      child: Image.asset(
+                      child: Image.network(
                         imageUrl,
                         fit: BoxFit.contain,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: ThemeConfig.surfaceContainerHigh,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: ThemeConfig.primary,
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) => Container(
+                          color: ThemeConfig.surfaceContainerHigh,
+                          child: Center(
+                            child: Icon(
+                              Icons.broken_image_outlined,
+                              color: ThemeConfig.textMuted,
+                              size: 40,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -1260,9 +1285,24 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(15),
-            child: Image.asset(
+            child: Image.network(
               widget.imageUrl,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Container(
+                  color: ThemeConfig.surfaceContainerHigh,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: ThemeConfig.primary,
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  ),
+                );
+              },
               errorBuilder: (context, error, stackTrace) => Container(
                 color: ThemeConfig.surfaceContainerHigh,
                 child: Center(

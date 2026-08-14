@@ -71,7 +71,7 @@ class PortfolioData {
       githubUrl: "",
       playStoreUrl: "https://play.google.com/store/apps/details?id=com.hogr.hogr&hl=enIN",
       appStoreUrl: "https://apps.apple.com/in/app/hogr-the-food-app/id6451259467",
-      imageUrl: "assets/images/projects/hogr/HOGR 1.jpg",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%201.jpg",
       backgroundStory: "HOGR revolutionized digital dining by addressing a core gap: eating is inherently social, yet existing apps treated it as a cold transaction. We designed an ecosystem that couples a real-time social feed with group ordering workflows, mapping services, and intelligent recommendation systems.\n\nOur engineering challenge was syncing collaborative, multi-user shared carts with millisecond latencies, alongside processing short-form video streaming feeds smoothly on consumer devices. Leveraging Flutter's high-performance rendering and a scalable Supabase backend, HOGR delivers an engaging experience that is both visually stunning and operationally robust.",
       keyFeatures: [
         FeatureItem(
@@ -111,14 +111,14 @@ class PortfolioData {
       codeSnippetPath: "lib/app/modules/home/bindings/home_binding.dart",
       codeSnippet: "class HomeBinding extends Bindings {\n  @override\n  void dependencies() {\n    Get.lazyPut<HomeController>(() => HomeController());\n    Get.lazyPut<HomeProvider>(() => HomeProvider());\n    Get.lazyPut<HomeRepository>(() => HomeRepository(\n      provider: Get.find()\n    ));\n  }\n}",
       screenshots: [
-        "assets/images/projects/hogr/HOGR 1.jpg",
-        "assets/images/projects/hogr/HOGR 2.jpg",
-        "assets/images/projects/hogr/HOGR 3.jpg",
-        "assets/images/projects/hogr/HOGR 4.jpg",
-        "assets/images/projects/hogr/HOGR 5.jpg",
-        "assets/images/projects/hogr/HOGR 6.jpg",
-        "assets/images/projects/hogr/HOGR 7.jpg",
-        "assets/images/projects/hogr/HOGR 8.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%201.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%202.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%203.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%204.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%205.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%206.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%207.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/hogr/HOGR%208.jpg",
       ],
       integrations: [
         IntegrationItem(title: "Google Maps SDK Integration", icon: "map"),
