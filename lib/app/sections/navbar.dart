@@ -48,14 +48,25 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                     onTap: () => onNavItemTap(0),
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: Text(
-                        "<ashish.dev />",
-                        style: TextStyle(
-                          color: ThemeConfig.textPrimary,
-                          fontFamily: "JetBrains Mono",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            "assets/app_icon/app_icon_nobg.png",
+                            width: 26,
+                            height: 26,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            "<ashish.dev />",
+                            style: TextStyle(
+                              color: ThemeConfig.textPrimary,
+                              fontFamily: "JetBrains Mono",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2, end: 0),
@@ -69,8 +80,6 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                           icon: Icon(Icons.description_outlined, color: ThemeConfig.primary),
                           onPressed: () => ResumePreviewDialog.show(context),
                         ),
-                        const SizedBox(width: 4),
-                        const ThemeSelector(),
                         const SizedBox(width: 8),
                         IconButton(
                           icon: Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
@@ -94,9 +103,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                         _buildNavItem("Education", 6),
                         const SizedBox(width: 20),
                         _buildNavItem("Contact", 7),
-                        const SizedBox(width: 20),
-                        const ThemeSelector(),
-                        const SizedBox(width: 16),
+                        const SizedBox(width: 24),
                         // Resume button
                         OutlinedButton.icon(
                           onPressed: () => ResumePreviewDialog.show(context),
@@ -154,39 +161,40 @@ class _LetsTalkButtonState extends State<_LetsTalkButton> {
 
   @override
   Widget build(BuildContext context) {
+    final Color contentColor = _isHovered ? ThemeConfig.onPrimary : ThemeConfig.primary;
+    final Color bgColor = _isHovered ? ThemeConfig.primary : ThemeConfig.primary.withValues(alpha: 0.05);
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOutCubic,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: _isHovered ? ThemeConfig.primary : ThemeConfig.primary.withValues(alpha: 0.85),
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: ThemeConfig.primary.withValues(alpha: 0.3),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    )
-                  ]
-                : [],
+      child: AnimatedScale(
+        scale: _isHovered ? 1.05 : 1.0,
+        duration: const Duration(milliseconds: 150),
+        child: OutlinedButton.icon(
+          onPressed: widget.onTap,
+          style: OutlinedButton.styleFrom(
+            backgroundColor: bgColor,
+            foregroundColor: contentColor,
+            side: BorderSide(
+              color: _isHovered ? ThemeConfig.primary : ThemeConfig.primary.withValues(alpha: 0.4),
+              width: 1.5,
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           ),
-          transform: _isHovered
-              ? (Matrix4.identity()..translate(0, -2, 0))
-              : Matrix4.identity(),
-          child: Text(
+          icon: Icon(
+            Icons.chat_bubble_outline_rounded,
+            size: 16,
+            color: contentColor,
+          ),
+          label: Text(
             "Let's Talk",
             style: TextStyle(
-              color: ThemeConfig.onPrimary,
-              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontSize: 13,
               fontFamily: "JetBrains Mono",
-              fontWeight: FontWeight.w500,
+              color: contentColor,
             ),
           ),
         ),
