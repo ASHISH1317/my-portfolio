@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../widgets/glowing_button.dart';
 import '../widgets/cool_dialog.dart';
+import '../widgets/custom_card.dart';
+import '../widgets/resume_preview_dialog.dart';
+import '../data/portfolio_data.dart';
 import '../controllers/hero_controller.dart';
 
 class HeroSection extends StatefulWidget {
@@ -200,6 +203,14 @@ class _HeroSectionState extends State<HeroSection> {
                 onPressed: widget.onWorkPressed,
               ),
               GlowingButton(
+                text: "Resume / CV",
+                isSecondary: true,
+                icon: Icons.description_outlined,
+                onPressed: () {
+                  ResumePreviewDialog.show(context);
+                },
+              ),
+              GlowingButton(
                 text: "Get In Touch",
                 isSecondary: true,
                 icon: Icons.mail_outline_rounded,
@@ -254,25 +265,17 @@ class _HeroSectionState extends State<HeroSection> {
           return ScrollReveal(
             direction: RevealDirection.up,
             delay: Duration(milliseconds: 500 + index * 80),
-            child: Container(
+            child: CustomCard(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: ThemeConfig.outlineVariant.withValues(alpha: 0.15),
-                  width: 1,
-                ),
-              ),
               child: Row(
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: ThemeConfig.primary.withValues(alpha: 0.08),
+                      color: ThemeConfig.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: ThemeConfig.primary.withValues(alpha: 0.15),
+                        color: ThemeConfig.primary.withValues(alpha: 0.2),
                         width: 1,
                       ),
                     ),

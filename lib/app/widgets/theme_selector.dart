@@ -59,39 +59,18 @@ class ThemeSelector extends StatelessWidget {
           ),
         ),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: ThemeConfig.outlineVariant.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(12),
+            color: ThemeConfig.outlineVariant.withValues(alpha: 0.15),
+            shape: BoxShape.circle,
             border: Border.all(
-              color: ThemeConfig.outlineVariant.withValues(alpha: 0.4),
+              color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                getThemeIcon(currentTheme),
-                color: ThemeConfig.primary,
-                size: 18,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                getThemeName(currentTheme),
-                style: TextStyle(
-                  color: ThemeConfig.textPrimary,
-                  fontFamily: "JetBrains Mono",
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Icon(
-                Icons.arrow_drop_down_rounded,
-                color: ThemeConfig.textSecondary,
-                size: 18,
-              ),
-            ],
+          child: Icon(
+            getThemeIcon(currentTheme),
+            color: ThemeConfig.primary,
+            size: 18,
           ),
         ),
         itemBuilder: (BuildContext context) {

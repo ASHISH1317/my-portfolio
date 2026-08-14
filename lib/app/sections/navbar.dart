@@ -1,7 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../data/theme_config.dart';
 import '../widgets/theme_selector.dart';
+import '../widgets/resume_preview_dialog.dart';
 
 class Navbar extends StatelessWidget implements PreferredSizeWidget {
   final Function(int) onNavItemTap;
@@ -20,77 +22,104 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 768;
 
-    return Container(
-      height: 64,
-      decoration: BoxDecoration(
-        color: ThemeConfig.background.withValues(alpha: 0.85),
-        border: Border(
-          bottom: BorderSide(
-            color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Center(
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
         child: Container(
-          constraints: const BoxConstraints(maxWidth: 1280),
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Brand Logo
-              GestureDetector(
-                onTap: () => onNavItemTap(0),
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: Text(
-                    "<ashish.dev />",
-                    style: TextStyle(
-                      color: ThemeConfig.textPrimary,
-                      fontFamily: "JetBrains Mono",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+          height: 64,
+          decoration: BoxDecoration(
+            color: ThemeConfig.background.withValues(alpha: 0.75),
+            border: Border(
+              bottom: BorderSide(
+                color: ThemeConfig.outlineVariant.withValues(alpha: 0.3),
+                width: 1,
+              ),
+            ),
+          ),
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 1280),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Brand Logo
+                  GestureDetector(
+                    onTap: () => onNavItemTap(0),
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Text(
+                        "<ashish.dev />",
+                        style: TextStyle(
+                          color: ThemeConfig.textPrimary,
+                          fontFamily: "JetBrains Mono",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2, end: 0),
-              // Nav items
-              if (isMobile)
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const ThemeSelector(),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
-                      onPressed: onMenuOpen,
-                    ),
-                  ],
-                )
-              else
-                Row(
-                  children: [
-                    _buildNavItem("About", 1),
-                    const SizedBox(width: 24),
-                    _buildNavItem("Skills", 2),
-                    const SizedBox(width: 24),
-                    _buildNavItem("Experience", 3),
-                    const SizedBox(width: 24),
-                    _buildNavItem("Packages", 4),
-                    const SizedBox(width: 24),
-                    _buildNavItem("Projects", 5),
-                    const SizedBox(width: 24),
-                    _buildNavItem("Education", 6),
-                    const SizedBox(width: 24),
-                    _buildNavItem("Contact", 7),
-                    const SizedBox(width: 24),
-                    const ThemeSelector(),
-                    const SizedBox(width: 24),
-                    // "Let's Talk" button
-                    _LetsTalkButton(onTap: () => onNavItemTap(7)),
-                  ],
-                ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.2, end: 0),
-            ],
+                  ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2, end: 0),
+                  // Nav items
+                  if (isMobile)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          tooltip: 'Resume Preview',
+                          icon: Icon(Icons.description_outlined, color: ThemeConfig.primary),
+                          onPressed: () => ResumePreviewDialog.show(context),
+                        ),
+                        const SizedBox(width: 4),
+                        const ThemeSelector(),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          icon: Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
+                          onPressed: onMenuOpen,
+                        ),
+                      ],
+                    )
+                  else
+                    Row(
+                      children: [
+                        _buildNavItem("About", 1),
+                        const SizedBox(width: 20),
+                        _buildNavItem("Skills", 2),
+                        const SizedBox(width: 20),
+                        _buildNavItem("Experience", 3),
+                        const SizedBox(width: 20),
+                        _buildNavItem("Packages", 4),
+                        const SizedBox(width: 20),
+                        _buildNavItem("Projects", 5),
+                        const SizedBox(width: 20),
+                        _buildNavItem("Education", 6),
+                        const SizedBox(width: 20),
+                        _buildNavItem("Contact", 7),
+                        const SizedBox(width: 20),
+                        const ThemeSelector(),
+                        const SizedBox(width: 16),
+                        // Resume button
+                        OutlinedButton.icon(
+                          onPressed: () => ResumePreviewDialog.show(context),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: ThemeConfig.primary,
+                            side: BorderSide(color: ThemeConfig.primary.withOpacity(0.5)),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          ),
+                          icon: const Icon(Icons.description_outlined, size: 16),
+                          label: const Text(
+                            "Resume",
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        // "Let's Talk" button
+                        _LetsTalkButton(onTap: () => onNavItemTap(7)),
+                      ],
+                    ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.2, end: 0),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -104,6 +133,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
       title: title,
       isActive: isActive,
       onTap: () => onNavItemTap(index),
+      index: index,
     );
   }
 
@@ -169,12 +199,14 @@ class NavItemWidget extends StatefulWidget {
   final String title;
   final bool isActive;
   final VoidCallback onTap;
+  final int? index;
 
   const NavItemWidget({
     super.key,
     required this.title,
     required this.isActive,
     required this.onTap,
+    this.index,
   });
 
   @override
@@ -187,6 +219,7 @@ class _NavItemWidgetState extends State<NavItemWidget> {
   @override
   Widget build(BuildContext context) {
     final bool isHighlighted = widget.isActive || _isHovered;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -196,23 +229,57 @@ class _NavItemWidgetState extends State<NavItemWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                color: widget.isActive
-                    ? ThemeConfig.primary
-                    : (_isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary),
-                fontFamily: "JetBrains Mono",
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
+            const SizedBox(height: 6),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: widget.isActive
+                        ? ThemeConfig.primary
+                        : (_isHovered ? ThemeConfig.primary : ThemeConfig.textSecondary),
+                    fontFamily: "JetBrains Mono",
+                    fontWeight: isHighlighted ? FontWeight.bold : FontWeight.w500,
+                    fontSize: 14,
+                  ),
+                ),
+                if (widget.index != null) ...[
+                  const SizedBox(width: 6),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                    decoration: BoxDecoration(
+                      color: isHighlighted
+                          ? ThemeConfig.primary.withValues(alpha: 0.15)
+                          : ThemeConfig.outlineVariant.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: isHighlighted
+                            ? ThemeConfig.primary.withValues(alpha: 0.3)
+                            : ThemeConfig.outlineVariant.withValues(alpha: 0.25),
+                        width: 1,
+                      ),
+                    ),
+                    child: Text(
+                      "${widget.index}",
+                      style: TextStyle(
+                        color: isHighlighted ? ThemeConfig.primary : ThemeConfig.textMuted,
+                        fontFamily: "JetBrains Mono",
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
             const SizedBox(height: 4),
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutCubic,
               height: 2,
-              width: isHighlighted ? 16 : 0,
+              width: isHighlighted ? 18 : 0,
               decoration: BoxDecoration(
                 color: ThemeConfig.primary,
                 borderRadius: BorderRadius.circular(1),

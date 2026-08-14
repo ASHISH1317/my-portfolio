@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
@@ -72,7 +71,7 @@ class AboutSection extends GetView<AboutController> {
             style: ThemeConfig.bodyLarge.copyWith(
               fontSize: 17,
               height: 1.7,
-              color: ThemeConfig.textPrimary.withOpacity(0.9),
+              color: ThemeConfig.textPrimary.withValues(alpha: 0.9),
             ),
           ),
         ),
@@ -222,19 +221,19 @@ class _HoverTagState extends State<_HoverTag> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: _isHovered
-              ? ThemeConfig.primary.withOpacity(0.08)
-              : Colors.white.withOpacity(0.02),
+              ? ThemeConfig.primary.withValues(alpha: 0.08)
+              : Colors.white.withValues(alpha: 0.02),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: _isHovered
-                ? ThemeConfig.primary.withOpacity(0.6)
-                : ThemeConfig.textMuted.withOpacity(0.2),
+                ? ThemeConfig.primary.withValues(alpha: 0.6)
+                : ThemeConfig.textMuted.withValues(alpha: 0.2),
             width: 1,
           ),
           boxShadow: _isHovered
               ? [
                   BoxShadow(
-                    color: ThemeConfig.primary.withOpacity(0.1),
+                    color: ThemeConfig.primary.withValues(alpha: 0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   )

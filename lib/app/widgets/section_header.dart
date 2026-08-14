@@ -6,12 +6,12 @@ class SectionHeader extends StatelessWidget {
   final String subtitle;
   final String index;
 
-  SectionHeader({
-    Key? key,
+  const SectionHeader({
+    super.key,
     required this.title,
     required this.subtitle,
-    required this.index,
-  }) : super(key: key);
+    this.index = "00",
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,29 +22,40 @@ class SectionHeader extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Styled 2-digit index tag
+            // Styled Keyboard Shortcut Hint Chip
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: ThemeConfig.primary.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(4),
+                color: ThemeConfig.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: ThemeConfig.primary.withOpacity(0.2),
+                  color: ThemeConfig.primary.withValues(alpha: 0.25),
                   width: 1,
                 ),
               ),
-              child: Text(
-                index,
-                style: TextStyle(
-                  fontFamily: ThemeConfig.fontFamily,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                  color: ThemeConfig.primary,
-                  letterSpacing: 1.0,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.keyboard,
+                    size: 13,
+                    color: ThemeConfig.primary,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    index,
+                    style: TextStyle(
+                      fontFamily: "JetBrains Mono",
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: ThemeConfig.primary,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             // Uppercase subtitle tagline
             Text(
               subtitle.toUpperCase(),
@@ -52,7 +63,7 @@ class SectionHeader extends StatelessWidget {
                 fontFamily: ThemeConfig.fontFamily,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: ThemeConfig.textSecondary.withOpacity(0.8),
+                color: ThemeConfig.textSecondary.withValues(alpha: 0.8),
                 letterSpacing: 1.5,
               ),
             ),

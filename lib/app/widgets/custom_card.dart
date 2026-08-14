@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../data/theme_config.dart';
+import 'tilt_card.dart';
 
 class CustomCard extends StatefulWidget {
   final Widget child;
+  final EdgeInsetsGeometry? padding;
   final VoidCallback? onTap;
-  final bool highlightBorder;
+  final double? borderRadius;
+  final bool enableHover;
   final Color? glowColor;
   final Color? backgroundColor;
+  final bool highlightBorder;
 
   const CustomCard({
     super.key,
     required this.child,
+    this.padding,
     this.onTap,
-    this.highlightBorder = false,
+    this.borderRadius,
+    this.enableHover = true,
     this.glowColor,
     this.backgroundColor,
+    this.highlightBorder = false,
   });
 
   @override
@@ -26,46 +34,58 @@ class _CustomCardState extends State<CustomCard> {
 
   @override
   Widget build(BuildContext context) {
-    final activeColor = widget.glowColor ?? ThemeConfig.primary;
-    final bg = widget.backgroundColor ?? ThemeConfig.surfaceContainerLow;
+    final double radius = widget.borderRadius ?? 16.0;
 
-    return MouseRegion(
+    Widget cardWidget = MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: GestureDetector(
         onTap: widget.onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-            transform: _isHovered
-                ? (Matrix4.identity()..translate(0, -6, 0)..scale(1.02))
-                : Matrix4.identity(),
-            decoration: BoxDecoration(
-              color: bg,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: _isHovered
-                    ? activeColor.withOpacity(0.6)
-                    : (widget.highlightBorder ? ThemeConfig.primary.withOpacity(0.3) : ThemeConfig.outlineVariant.withOpacity(0.3)),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: _isHovered
-                      ? activeColor.withOpacity(0.15)
-                      : Colors.transparent,
-                  blurRadius: 24,
-                  offset: const Offset(0, 10),
-                )
-              ],
+        child: Obx(() => AnimatedContainer(
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeInOut,
+          padding: widget.padding ?? const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: _isHovered && widget.enableHover
+                ? ThemeConfig.surfaceContainerHigh
+                : ThemeConfig.surface,
+            borderRadius: BorderRadius.circular(radius),
+            border: Border.all(
+              color: _isHovered && widget.enableHover
+                  ? ThemeConfig.primary.withValues(alpha: 0.5)
+                  : ThemeConfig.outline,
+              width: 1,
             ),
-            child: widget.child,
+            boxShadow: _isHovered && widget.enableHover
+                ? [
+                    BoxShadow(
+                      color: ThemeConfig.primary.withValues(alpha: 0.15),
+                      blurRadius: 20,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 8),
+                    ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
           ),
-        ),
+          child: widget.child,
+        )),
       ),
     );
+
+    if (widget.enableHover) {
+      return TiltCard(
+        borderRadius: BorderRadius.circular(radius),
+        child: cardWidget,
+      );
+    }
+
+    return cardWidget;
   }
 }

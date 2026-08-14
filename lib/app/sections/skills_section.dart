@@ -5,6 +5,7 @@ import '../widgets/scroll_reveal.dart';
 import 'package:get/get.dart';
 import '../data/theme_config.dart';
 import '../widgets/section_header.dart';
+import '../widgets/custom_card.dart';
 import '../controllers/skills_controller.dart';
 
 class SkillsSection extends GetView<SkillsController> {
@@ -42,25 +43,37 @@ class SkillsSection extends GetView<SkillsController> {
                 ScrollReveal(
                   direction: RevealDirection.up,
                   delay: Duration.zero,
-                  child: _buildCoreExpertiseCard(isMobile: true),
+                  child: CustomCard(
+                    padding: EdgeInsets.zero,
+                    child: _buildCoreExpertiseCard(isMobile: true),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ScrollReveal(
                   direction: RevealDirection.up,
                   delay: const Duration(milliseconds: 100),
-                  child: _buildStateManagementCard(),
+                  child: CustomCard(
+                    padding: EdgeInsets.zero,
+                    child: _buildStateManagementCard(),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ScrollReveal(
                   direction: RevealDirection.up,
                   delay: const Duration(milliseconds: 200),
-                  child: _buildPowerhouseIntegrationsCard(isMobile: true),
+                  child: CustomCard(
+                    padding: EdgeInsets.zero,
+                    child: _buildPowerhouseIntegrationsCard(isMobile: true),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 ScrollReveal(
                   direction: RevealDirection.up,
                   delay: const Duration(milliseconds: 300),
-                  child: _buildWebAndEcommerceCard(),
+                  child: CustomCard(
+                    padding: EdgeInsets.zero,
+                    child: _buildWebAndEcommerceCard(),
+                  ),
                 ),
               ],
             )
@@ -75,7 +88,10 @@ class SkillsSection extends GetView<SkillsController> {
                       child: ScrollReveal(
                         direction: RevealDirection.left,
                         delay: Duration.zero,
-                        child: _buildCoreExpertiseCard(isMobile: false),
+                        child: CustomCard(
+                          padding: EdgeInsets.zero,
+                          child: _buildCoreExpertiseCard(isMobile: false),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 24),
@@ -84,7 +100,10 @@ class SkillsSection extends GetView<SkillsController> {
                       child: ScrollReveal(
                         direction: RevealDirection.right,
                         delay: Duration.zero,
-                        child: _buildStateManagementCard(),
+                        child: CustomCard(
+                          padding: EdgeInsets.zero,
+                          child: _buildStateManagementCard(),
+                        ),
                       ),
                     ),
                   ],
@@ -98,7 +117,10 @@ class SkillsSection extends GetView<SkillsController> {
                       child: ScrollReveal(
                         direction: RevealDirection.left,
                         delay: const Duration(milliseconds: 100),
-                        child: _buildPowerhouseIntegrationsCard(isMobile: false),
+                        child: CustomCard(
+                          padding: EdgeInsets.zero,
+                          child: _buildPowerhouseIntegrationsCard(isMobile: false),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 24),
@@ -107,7 +129,10 @@ class SkillsSection extends GetView<SkillsController> {
                       child: ScrollReveal(
                         direction: RevealDirection.right,
                         delay: const Duration(milliseconds: 100),
-                        child: _buildWebAndEcommerceCard(),
+                        child: CustomCard(
+                          padding: EdgeInsets.zero,
+                          child: _buildWebAndEcommerceCard(),
+                        ),
                       ),
                     ),
                   ],

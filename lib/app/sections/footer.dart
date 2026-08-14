@@ -32,9 +32,19 @@ class Footer extends StatelessWidget {
     final bool isMobile = width < 768;
 
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 48),
+      width: double.infinity,
+      padding: const EdgeInsets.only(top: 48, bottom: 88),
       decoration: BoxDecoration(
-        color: ThemeConfig.background,
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            ThemeConfig.background.withValues(alpha: 0.4),
+            ThemeConfig.background,
+            ThemeConfig.background.withValues(alpha: 0.4),
+          ],
+          stops: const [0.0, 0.5, 1.0],
+        ),
       ),
       child: Center(
         child: Container(

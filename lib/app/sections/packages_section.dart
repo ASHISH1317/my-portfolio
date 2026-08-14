@@ -7,6 +7,7 @@ import '../data/portfolio_data.dart';
 import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
 import '../widgets/scroll_reveal.dart';
+import '../widgets/package_code_dialog.dart';
 
 class PackagesSection extends StatelessWidget {
   const PackagesSection({super.key});
@@ -108,14 +109,38 @@ class _PackageCardState extends State<PackageCard> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () => _launchUrl(widget.package.pubUrl),
-                  icon: Icon(
-                    Icons.open_in_new_rounded,
-                    color: ThemeConfig.primary,
-                    size: 20,
-                  ),
-                  tooltip: "View on pub.dev",
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => PackageCodeDialog(
+                            package: {
+                              "name": widget.package.title,
+                              "description": widget.package.description,
+                              "pubUrl": widget.package.pubUrl,
+                            },
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.code_rounded,
+                        color: ThemeConfig.primary,
+                        size: 20,
+                      ),
+                      tooltip: "Code Playground",
+                    ),
+                    IconButton(
+                      onPressed: () => _launchUrl(widget.package.pubUrl),
+                      icon: Icon(
+                        Icons.open_in_new_rounded,
+                        color: ThemeConfig.primary,
+                        size: 20,
+                      ),
+                      tooltip: "View on pub.dev",
+                    ),
+                  ],
                 ),
               ],
             ),

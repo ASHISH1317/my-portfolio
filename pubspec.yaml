@@ -41,6 +41,8 @@ dependencies:
   flutter_animate: ^4.5.0
   animations: ^2.0.11
   visibility_detector: ^0.4.0+2
+  pdf: ^3.11.1
+  printing: ^5.13.1
 
 dev_dependencies:
   flutter_test:
