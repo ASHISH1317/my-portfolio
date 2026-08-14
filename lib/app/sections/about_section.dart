@@ -247,25 +247,6 @@ class _HighlightCardState extends State<_HighlightCard> {
                     ),
                   ),
 
-                  // Large Card Index Number
-                  Positioned(
-                    top: 12,
-                    right: 16,
-                    child: AnimatedDefaultTextStyle(
-                      duration: const Duration(milliseconds: 350),
-                      style: TextStyle(
-                        fontFamily: 'JetBrains Mono',
-                        fontSize: 34,
-                        fontWeight: FontWeight.w900,
-                        height: 1.0,
-                        color: _isHovered
-                            ? ThemeConfig.primary.withValues(alpha: 0.12)
-                            : ThemeConfig.textMuted.withValues(alpha: 0.05),
-                      ),
-                      child: Text("0${widget.index + 1}"),
-                    ),
-                  ),
-
                   // Card Main Body Content
                   Padding(
                     padding: const EdgeInsets.all(20.0),
@@ -325,26 +306,6 @@ class _HighlightCardState extends State<_HighlightCard> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-
-                  // Bottom Right Interactive Arrow
-                  Positioned(
-                    bottom: 16,
-                    right: 20,
-                    child: AnimatedSlide(
-                      offset: _isHovered ? Offset.zero : const Offset(0.2, 0),
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeOutCubic,
-                      child: AnimatedOpacity(
-                        opacity: _isHovered ? 0.8 : 0.0,
-                        duration: const Duration(milliseconds: 250),
-                        child: Icon(
-                          Icons.arrow_forward_rounded,
-                          color: ThemeConfig.primary,
-                          size: 16,
-                        ),
-                      ),
                     ),
                   ),
                 ],

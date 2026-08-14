@@ -35,6 +35,7 @@ class _CustomCardState extends State<CustomCard> {
   @override
   Widget build(BuildContext context) {
     final double radius = widget.borderRadius ?? 16.0;
+    final bool hoverActive = _isHovered && widget.enableHover;
 
     Widget cardWidget = MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -42,40 +43,61 @@ class _CustomCardState extends State<CustomCard> {
       cursor: widget.onTap != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: GestureDetector(
         onTap: widget.onTap,
-        child: Obx(() => AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          padding: widget.padding ?? const EdgeInsets.all(24),
-          decoration: BoxDecoration(
-            color: _isHovered && widget.enableHover
-                ? ThemeConfig.surfaceContainerHigh
-                : ThemeConfig.surface,
-            borderRadius: BorderRadius.circular(radius),
-            border: Border.all(
-              color: _isHovered && widget.enableHover
-                  ? ThemeConfig.primary.withValues(alpha: 0.5)
-                  : ThemeConfig.outline,
-              width: 1,
+        child: Obx(() {
+          final Color innerBgColor = widget.backgroundColor ?? 
+              (hoverActive ? ThemeConfig.surfaceContainerHigh : ThemeConfig.surface);
+
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+            padding: const EdgeInsets.all(1.5), // Outer border thickness
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              gradient: hoverActive
+                  ? LinearGradient(
+                      colors: [
+                        ThemeConfig.primary,
+                        ThemeConfig.primary.withValues(alpha: 0.3),
+                        ThemeConfig.outlineVariant.withValues(alpha: 0.1),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    )
+                  : LinearGradient(
+                      colors: [
+                        ThemeConfig.outline.withValues(alpha: 0.15),
+                        ThemeConfig.outline.withValues(alpha: 0.05),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+              boxShadow: hoverActive
+                  ? [
+                      BoxShadow(
+                        color: ThemeConfig.primary.withValues(alpha: 0.15),
+                        blurRadius: 20,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 8),
+                      ),
+                    ]
+                  : [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
             ),
-            boxShadow: _isHovered && widget.enableHover
-                ? [
-                    BoxShadow(
-                      color: ThemeConfig.primary.withValues(alpha: 0.15),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 8),
-                    ),
-                  ]
-                : [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-          ),
-          child: widget.child,
-        )),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(radius - 1.5),
+              child: Container(
+                color: innerBgColor,
+                padding: widget.padding ?? const EdgeInsets.all(24),
+                child: widget.child,
+              ),
+            ),
+          );
+        }),
       ),
     );
 

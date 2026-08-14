@@ -224,146 +224,99 @@ class _ContactSectionState extends State<ContactSection> {
 
   Widget _buildFormCard({required bool isMobile}) {
     return CustomCard(
-      glowColor: const Color(0xFF25D366),
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Send Message",
-                style: ThemeConfig.h3.copyWith(fontSize: 20),
-              ),
-              const SizedBox(height: 24),
-              _buildTextField(
-                controller: controller.nameController,
-                label: "YOUR NAME",
-                validator: (val) => val == null || val.isEmpty ? "Please enter your name" : null,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                controller: controller.emailController,
-                label: "EMAIL ADDRESS",
-                keyboardType: TextInputType.emailAddress,
-                validator: (val) => val == null || !val.contains("@") ? "Please enter a valid email" : null,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                controller: controller.subjectController,
-                label: "SUBJECT",
-                validator: (val) => val == null || val.isEmpty ? "Please enter a subject" : null,
-              ),
-              const SizedBox(height: 20),
-              _buildTextField(
-                controller: controller.messageController,
-                label: "MESSAGE",
-                maxLines: 4,
-                validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
-              ),
-              const SizedBox(height: 32),
-              isMobile
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildSubmitButton(
-                          onTap: () => controller.submitViaWhatsApp(context),
-                          color: const Color(0xFF25D366),
-                          icon: FontAwesomeIcons.whatsapp,
-                          iconColor: Colors.white,
-                          textColor: Colors.white,
-                          text: "Send via WhatsApp",
-                          isFullWidth: true,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildSubmitButton(
-                          onTap: () => controller.submitViaEmail(context),
-                          color: ThemeConfig.primary,
-                          icon: Icons.mail_outline_rounded,
-                          iconColor: Colors.black,
-                          textColor: Colors.black,
-                          text: "Send via Email",
-                          isFullWidth: true,
-                        ),
-                      ],
-                    )
-                  : Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: [
-                        _buildSubmitButton(
-                          onTap: () => controller.submitViaWhatsApp(context),
-                          color: const Color(0xFF25D366),
-                          icon: FontAwesomeIcons.whatsapp,
-                          iconColor: Colors.white,
-                          textColor: Colors.white,
-                          text: "Send via WhatsApp",
-                          isFullWidth: false,
-                        ),
-                        _buildSubmitButton(
-                          onTap: () => controller.submitViaEmail(context),
-                          color: ThemeConfig.primary,
-                          icon: Icons.mail_outline_rounded,
-                          iconColor: Colors.black,
-                          textColor: Colors.black,
-                          text: "Send via Email",
-                          isFullWidth: false,
-                        ),
-                      ],
-                    ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSubmitButton({
-    required VoidCallback onTap,
-    required Color color,
-    required dynamic icon,
-    required Color iconColor,
-    required Color textColor,
-    required String text,
-    required bool isFullWidth,
-  }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.2),
-                blurRadius: 16,
-                offset: const Offset(0, 8),
-              )
-            ],
-          ),
-          child: Row(
-            mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon is IconData
-                  ? Icon(icon, color: iconColor, size: 20)
-                  : FaIcon(icon, color: iconColor, size: 20),
-              const SizedBox(width: 10),
-              Text(
-                text,
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
+      padding: isMobile
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+          : const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
+      child: Form(
+        key: controller.formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.chat_bubble_outline_rounded,
+                  color: ThemeConfig.primary,
+                  size: 20,
                 ),
-              ),
-            ],
-          ),
+                const SizedBox(width: 8),
+                Text(
+                  "Send Message",
+                  style: ThemeConfig.h3.copyWith(fontSize: 20),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            _buildTextField(
+              controller: controller.nameController,
+              label: "YOUR NAME",
+              validator: (val) => val == null || val.isEmpty ? "Please enter your name" : null,
+            ),
+            const SizedBox(height: 20),
+            _buildTextField(
+              controller: controller.emailController,
+              label: "EMAIL ADDRESS",
+              keyboardType: TextInputType.emailAddress,
+              validator: (val) => val == null || !val.contains("@") ? "Please enter a valid email" : null,
+            ),
+            const SizedBox(height: 20),
+            _buildTextField(
+              controller: controller.subjectController,
+              label: "SUBJECT",
+              validator: (val) => val == null || val.isEmpty ? "Please enter a subject" : null,
+            ),
+            const SizedBox(height: 20),
+            _buildTextField(
+              controller: controller.messageController,
+              label: "MESSAGE",
+              maxLines: 4,
+              validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
+            ),
+            const SizedBox(height: 32),
+            isMobile
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _SubmitButton(
+                        onTap: () => controller.submitViaWhatsApp(context),
+                        baseColor: const Color(0xFF25D366),
+                        icon: FontAwesomeIcons.whatsapp,
+                        text: "Send via WhatsApp",
+                        isFullWidth: true,
+                      ),
+                      const SizedBox(height: 16),
+                      _SubmitButton(
+                        onTap: () => controller.submitViaEmail(context),
+                        baseColor: ThemeConfig.primary,
+                        icon: Icons.mail_outline_rounded,
+                        text: "Send via Email",
+                        isFullWidth: true,
+                        isPrimaryTextDark: true,
+                      ),
+                    ],
+                  )
+                : Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: [
+                      _SubmitButton(
+                        onTap: () => controller.submitViaWhatsApp(context),
+                        baseColor: const Color(0xFF25D366),
+                        icon: FontAwesomeIcons.whatsapp,
+                        text: "Send via WhatsApp",
+                        isFullWidth: false,
+                      ),
+                      _SubmitButton(
+                        onTap: () => controller.submitViaEmail(context),
+                        baseColor: ThemeConfig.primary,
+                        icon: Icons.mail_outline_rounded,
+                        text: "Send via Email",
+                        isFullWidth: false,
+                        isPrimaryTextDark: true,
+                      ),
+                    ],
+                  ),
+          ],
         ),
       ),
     );
@@ -384,17 +337,22 @@ class _ContactSectionState extends State<ContactSection> {
       style: TextStyle(color: ThemeConfig.textPrimary),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: ThemeConfig.textSecondary, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1),
+        labelStyle: TextStyle(
+          color: ThemeConfig.textSecondary.withValues(alpha: 0.7),
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1,
+        ),
         floatingLabelStyle: TextStyle(color: ThemeConfig.primary),
-        fillColor: ThemeConfig.outlineVariant.withValues(alpha: 0.15),
+        fillColor: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ThemeConfig.outlineVariant),
+          borderSide: BorderSide(color: ThemeConfig.outline.withValues(alpha: 0.12)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: ThemeConfig.outlineVariant),
+          borderSide: BorderSide(color: ThemeConfig.outline.withValues(alpha: 0.12)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -426,6 +384,95 @@ class _ContactSectionState extends State<ContactSection> {
       },
       secondaryButtonText: "Cancel",
       onSecondaryPressed: () => Navigator.of(context).pop(),
+    );
+  }
+}
+
+class _SubmitButton extends StatefulWidget {
+  final VoidCallback onTap;
+  final Color baseColor;
+  final dynamic icon;
+  final String text;
+  final bool isFullWidth;
+  final bool isPrimaryTextDark;
+
+  const _SubmitButton({
+    required this.onTap,
+    required this.baseColor,
+    required this.icon,
+    required this.text,
+    required this.isFullWidth,
+    this.isPrimaryTextDark = false,
+  });
+
+  @override
+  State<_SubmitButton> createState() => _SubmitButtonState();
+}
+
+class _SubmitButtonState extends State<_SubmitButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final Color contentColor = _isHovered
+        ? (widget.isPrimaryTextDark ? Colors.black : Colors.white)
+        : widget.baseColor;
+
+    final Color bgColor = _isHovered
+        ? widget.baseColor
+        : widget.baseColor.withValues(alpha: 0.05);
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedScale(
+          scale: _isHovered ? 1.025 : 1.0,
+          duration: const Duration(milliseconds: 150),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: _isHovered ? widget.baseColor : widget.baseColor.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
+              boxShadow: _isHovered
+                  ? [
+                      BoxShadow(
+                        color: widget.baseColor.withValues(alpha: 0.25),
+                        blurRadius: 16,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 6),
+                      )
+                    ]
+                  : null,
+            ),
+            child: Row(
+              mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                widget.icon is IconData
+                    ? Icon(widget.icon, color: contentColor, size: 20)
+                    : FaIcon(widget.icon, color: contentColor, size: 20),
+                const SizedBox(width: 10),
+                Text(
+                  widget.text,
+                  style: TextStyle(
+                    color: contentColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

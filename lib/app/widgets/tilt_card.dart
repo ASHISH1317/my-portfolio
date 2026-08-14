@@ -9,7 +9,7 @@ class TiltCard extends StatefulWidget {
   const TiltCard({
     super.key,
     required this.child,
-    this.maxTiltAngle = 0.08,
+    this.maxTiltAngle = 0.05, // Reduced from 0.08 for a subtle tilt
     this.borderRadius,
   });
 
