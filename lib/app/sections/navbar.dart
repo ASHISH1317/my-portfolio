@@ -21,6 +21,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 1150;
+    final double itemSpacing = width < 1300 ? 12.0 : 20.0;
 
     return ClipRect(
       child: BackdropFilter(
@@ -85,25 +86,27 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                           icon: Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
                           onPressed: onMenuOpen,
                         ),
+                        const SizedBox(width: 8),
+                        const ThemeSelector(),
                       ],
                     )
                   else
                     Row(
                       children: [
                         _buildNavItem("About", 1),
-                        const SizedBox(width: 20),
+                        SizedBox(width: itemSpacing),
                         _buildNavItem("Skills", 2),
-                        const SizedBox(width: 20),
+                        SizedBox(width: itemSpacing),
                         _buildNavItem("Experience", 3),
-                        const SizedBox(width: 20),
+                        SizedBox(width: itemSpacing),
                         _buildNavItem("Packages", 4),
-                        const SizedBox(width: 20),
+                        SizedBox(width: itemSpacing),
                         _buildNavItem("Projects", 5),
-                        const SizedBox(width: 20),
+                        SizedBox(width: itemSpacing),
                         _buildNavItem("Education", 6),
-                        const SizedBox(width: 20),
+                        SizedBox(width: itemSpacing),
                         _buildNavItem("Contact", 7),
-                        const SizedBox(width: 24),
+                        SizedBox(width: itemSpacing + 4),
                         // Resume button
                         OutlinedButton.icon(
                           onPressed: () => ResumePreviewDialog.show(context),
@@ -122,6 +125,8 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                         const SizedBox(width: 12),
                         // "Let's Talk" button
                         _LetsTalkButton(onTap: () => onNavItemTap(7)),
+                        const SizedBox(width: 16),
+                        const ThemeSelector(),
                       ],
                     ).animate().fadeIn(delay: 200.ms).slideX(begin: 0.2, end: 0),
                 ],
@@ -227,6 +232,8 @@ class _NavItemWidgetState extends State<NavItemWidget> {
   @override
   Widget build(BuildContext context) {
     final bool isHighlighted = widget.isActive || _isHovered;
+    final double width = MediaQuery.of(context).size.width;
+    final bool showBadge = width >= 1300;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -253,7 +260,7 @@ class _NavItemWidgetState extends State<NavItemWidget> {
                     fontSize: 14,
                   ),
                 ),
-                if (widget.index != null) ...[
+                if (widget.index != null && showBadge) ...[
                   const SizedBox(width: 6),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),

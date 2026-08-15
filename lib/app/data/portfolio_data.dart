@@ -1210,6 +1210,21 @@ class ProjectData {
     );
   }
 
+  String get platformText {
+    final hasWeb = projectUrl.isNotEmpty;
+    final hasAndroid = playStoreUrl.isNotEmpty || apkUrl.isNotEmpty;
+    final hasIOS = appStoreUrl.isNotEmpty;
+
+    if ((hasAndroid || hasIOS) && hasWeb) {
+      return "iOS, Android & Website";
+    } else if (hasAndroid || hasIOS) {
+      return "iOS & Android";
+    } else if (hasWeb) {
+      return "Website";
+    }
+    return "iOS & Android";
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'title': title,

@@ -63,7 +63,7 @@ class ResumePdfGenerator {
 
               // NAME HEADER (CENTERED & SPACED)
               pw.Text(
-                PortfolioData.fullName.toUpperCase(),
+                PortfolioData.fullName.toUpperCase().replaceAll(' ', '\u00A0\u00A0'),
                 style: pw.TextStyle(
                   font: fontBold,
                   fontSize: 24,
@@ -73,7 +73,7 @@ class ResumePdfGenerator {
               ),
               pw.SizedBox(height: 4),
               pw.Text(
-                PortfolioData.title.toUpperCase(),
+                PortfolioData.title.toUpperCase().replaceAll(' ', '\u00A0\u00A0'),
                 style: pw.TextStyle(
                   font: fontSemiBold,
                   fontSize: 10,
@@ -193,6 +193,37 @@ class ResumePdfGenerator {
                                 ),
                               );
                             }),
+
+                            pw.SizedBox(height: 8),
+                            pw.Container(height: 0.8, color: dividerColor),
+                            pw.SizedBox(height: 10),
+
+                            // ADDITIONAL TECH
+                            _buildCircleSectionHeader('TECHNOLOGIES', primaryColor, textPrimary, fontBold),
+                            pw.SizedBox(height: 6),
+                            ...[
+                              "Git & GitHub Version Control",
+                              "GitHub Actions (CI/CD)",
+                              "GraphQL & REST APIs",
+                              "SQLite / Hive / PostgreSQL",
+                              "Docker Containers",
+                              "HTML5, CSS3 & TypeScript",
+                              "Agile & Scrum Practices",
+                              "Jira & Slack Collaboration",
+                            ].map((tech) {
+                              return pw.Padding(
+                                padding: const pw.EdgeInsets.only(bottom: 3),
+                                child: pw.Row(
+                                  children: [
+                                    pw.Text('• ', style: pw.TextStyle(font: fontBold, fontSize: 8, color: primaryColor)),
+                                    pw.Text(
+                                      tech,
+                                      style: pw.TextStyle(font: fontRegular, fontSize: 7.5, color: textSecondary),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                           ],
                         ),
                       ),
@@ -279,41 +310,41 @@ class ResumePdfGenerator {
                             }),
 
                             pw.SizedBox(height: 6),
-                            pw.Container(height: 0.8, color: dividerColor),
-                            pw.SizedBox(height: 8),
+              pw.Container(height: 0.8, color: dividerColor),
+              pw.SizedBox(height: 8),
 
-                            // FEATURED PROJECTS
-                            _buildCircleSectionHeader('FEATURED PROJECTS', primaryColor, textPrimary, fontBold),
-                            pw.SizedBox(height: 8),
+              // FEATURED PROJECTS
+              _buildCircleSectionHeader('FEATURED PROJECTS', primaryColor, textPrimary, fontBold),
+              pw.SizedBox(height: 8),
 
-                            ...PortfolioData.projects.map((proj) {
-                              return pw.Container(
-                                margin: const pw.EdgeInsets.only(bottom: 6),
-                                child: pw.Column(
-                                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                  children: [
-                                    pw.Row(
-                                      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        pw.Text(
-                                          proj.title,
-                                          style: pw.TextStyle(font: fontBold, fontSize: 8.5, color: textPrimary),
-                                        ),
-                                        pw.Text(
-                                          'iOS & Android',
-                                          style: pw.TextStyle(font: fontSemiBold, fontSize: 7, color: primaryColor),
-                                        ),
-                                      ],
-                                    ),
-                                    pw.SizedBox(height: 2),
-                                    pw.Text(
-                                      proj.description,
-                                      style: pw.TextStyle(font: fontRegular, fontSize: 7.4, color: textSecondary, lineSpacing: 1.1),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }),
+              ...(() {
+                final previewProjects = PortfolioData.projects
+                    .takeWhile((proj) => proj.title.toLowerCase() != 'slay')
+                    .toList();
+                return List.generate((previewProjects.length / 2).ceil(), (index) {
+                  final proj1 = previewProjects[index * 2];
+                  final proj2 = (index * 2 + 1 < previewProjects.length) ? previewProjects[index * 2 + 1] : null;
+                  return pw.Container(
+                    margin: const pw.EdgeInsets.only(bottom: 6),
+                    child: pw.Row(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Expanded(
+                          child: _buildPdfProjectItem(proj1, fontBold, fontSemiBold, fontRegular, textPrimary, textSecondary, primaryColor),
+                        ),
+                        pw.SizedBox(width: 14),
+                        pw.Expanded(
+                          child: proj2 != null
+                              ? _buildPdfProjectItem(proj2, fontBold, fontSemiBold, fontRegular, textPrimary, textSecondary, primaryColor)
+                              : pw.SizedBox(),
+                        ),
+                      ],
+                    ),
+                  );
+                });
+              })(),
+
+                            // ... (rest of code)
                           ],
                         ),
                       ),
@@ -331,6 +362,52 @@ class ResumePdfGenerator {
     );
 
     return pdf.save();
+  }
+
+  static pw.Widget _buildPdfProjectItem(
+    ProjectData proj,
+    pw.Font fontBold,
+    pw.Font fontSemiBold,
+    pw.Font fontRegular,
+    PdfColor textPrimary,
+    PdfColor textSecondary,
+    PdfColor primaryColor,
+  ) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Expanded(
+              child: pw.Text(
+                proj.title,
+                maxLines: 1,
+                overflow: pw.TextOverflow.clip,
+                style: pw.TextStyle(font: fontBold, fontSize: 8.0, color: textPrimary),
+              ),
+            ),
+            pw.SizedBox(width: 4),
+            pw.Text(
+              proj.platformText,
+              style: pw.TextStyle(font: fontSemiBold, fontSize: 6.2, color: primaryColor),
+            ),
+          ],
+        ),
+        pw.SizedBox(height: 2),
+        pw.Text(
+          proj.description,
+          style: pw.TextStyle(font: fontRegular, fontSize: 6.8, color: textSecondary, lineSpacing: 1.05),
+        ),
+        pw.SizedBox(height: 1.5),
+        pw.Text(
+          'Tech Stack: ${proj.techStack.map((t) => t.name).join(", ")}',
+          maxLines: 1,
+          overflow: pw.TextOverflow.clip,
+          style: pw.TextStyle(font: fontSemiBold, fontSize: 6.2, color: primaryColor),
+        ),
+      ],
+    );
   }
 
   static pw.Widget _buildContactRow(String text, PdfColor textColor, pw.Font fontRegular) {
@@ -359,7 +436,7 @@ class ResumePdfGenerator {
         ),
         pw.SizedBox(width: 6),
         pw.Text(
-          title.toUpperCase(),
+          title.toUpperCase().replaceAll(' ', '\u00A0\u00A0'),
           style: pw.TextStyle(
             font: fontBold,
             fontSize: 9,

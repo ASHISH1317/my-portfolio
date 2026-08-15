@@ -354,11 +354,43 @@ class _ResumePreviewDialogState extends State<ResumePreviewDialog> {
             ),
           );
         }),
+
+        const SizedBox(height: 12),
+        Divider(color: cardBorderColor, thickness: 1),
+        const SizedBox(height: 16),
+
+        // ADDITIONAL TECH
+        _buildCircleSectionHeader('T', 'ECHNOLOGIES', accentColor, textColor, circleBadgeBg),
+        const SizedBox(height: 12),
+        ...[
+          "Git & GitHub Version Control",
+          "GitHub Actions (CI/CD)",
+          "GraphQL & REST APIs",
+          "SQLite / Hive / PostgreSQL",
+          "Docker Containers",
+          "HTML5, CSS3 & TypeScript",
+          "Agile & Scrum Practices",
+          "Jira & Slack Collaboration",
+        ].map((tech) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Text('• ', style: TextStyle(color: accentColor, fontWeight: FontWeight.bold, fontSize: 13)),
+                Text(
+                  tech,
+                  style: TextStyle(fontSize: 12.5, color: mutedTextColor),
+                ),
+              ],
+            ),
+          );
+        }),
       ],
     );
   }
 
   Widget _buildRightColumn(Color accentColor, Color textColor, Color mutedTextColor, Color cardBorderColor, Color circleBadgeBg) {
+    final bool isMobile = MediaQuery.of(context).size.width < 768;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -445,42 +477,90 @@ class _ResumePreviewDialogState extends State<ResumePreviewDialog> {
         // FEATURED PROJECTS
         _buildCircleSectionHeader('F', 'EATURED PROJECTS', accentColor, textColor, circleBadgeBg),
         const SizedBox(height: 12),
-        ...PortfolioData.projects.map((proj) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        if (isMobile)
+          ...PortfolioData.projects
+              .takeWhile((proj) => proj.title.toLowerCase() != 'slay')
+              .map((proj) => Padding(
+                    padding: const EdgeInsets.only(bottom: 14),
+                    child: _buildDialogProjectItem(proj, accentColor, textColor, mutedTextColor),
+                  ))
+        else
+          ...(() {
+            final previewProjects = PortfolioData.projects
+                .takeWhile((proj) => proj.title.toLowerCase() != 'slay')
+                .toList();
+            return List.generate((previewProjects.length / 2).ceil(), (index) {
+              final proj1 = previewProjects[index * 2];
+              final proj2 = (index * 2 + 1 < previewProjects.length) ? previewProjects[index * 2 + 1] : null;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 14),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      proj.title,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
-                      ),
+                    Expanded(
+                      child: _buildDialogProjectItem(proj1, accentColor, textColor, mutedTextColor),
                     ),
-                    Text(
-                      'iOS & Android',
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.bold,
-                        color: accentColor,
-                      ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: proj2 != null
+                          ? _buildDialogProjectItem(proj2, accentColor, textColor, mutedTextColor)
+                          : const SizedBox(),
                     ),
                   ],
                 ),
-                const SizedBox(height: 3),
-                Text(
-                  proj.description,
-                  style: TextStyle(fontSize: 12.5, height: 1.4, color: mutedTextColor),
+              );
+            });
+          })(),
+      ],
+    );
+  }
+
+  Widget _buildDialogProjectItem(ProjectData proj, Color accentColor, Color textColor, Color mutedTextColor) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                proj.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
                 ),
-              ],
+              ),
             ),
-          );
-        }),
+            const SizedBox(width: 8),
+            Text(
+              proj.platformText,
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                color: accentColor,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 3),
+        Text(
+          proj.description,
+          style: TextStyle(fontSize: 12, height: 1.35, color: mutedTextColor),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          'Tech Stack: ${proj.techStack.map((t) => t.name).join(", ")}',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 10.5,
+            fontWeight: FontWeight.w600,
+            color: accentColor.withValues(alpha: 0.8),
+          ),
+        ),
       ],
     );
   }
