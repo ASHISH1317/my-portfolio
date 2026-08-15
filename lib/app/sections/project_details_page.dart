@@ -1019,6 +1019,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           screenshots: widget.project.webScreenshots,
           isMobile: isMobile,
           isLandscape: true,
+          siteUrl: widget.project.projectUrl,
           onImageTap: (url) => _openFullImageDialog(context, url, isLandscape: true),
         ),
       );
@@ -1259,7 +1260,7 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
             width: 1.5,
           ),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -1268,7 +1269,7 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
               color: ThemeConfig.primary,
               size: 32,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 6),
             Text(
               widget.tech.name.toUpperCase(),
               textAlign: TextAlign.center,
@@ -1291,12 +1292,14 @@ class ScreenshotGridItem extends StatefulWidget {
   final String imageUrl;
   final VoidCallback? onTap;
   final bool isLandscape;
+  final String siteUrl;
 
   const ScreenshotGridItem({
     super.key,
     required this.imageUrl,
     this.onTap,
     this.isLandscape = false,
+    this.siteUrl = '',
   });
 
   @override
@@ -1353,6 +1356,7 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
           child: widget.isLandscape
               ? BrowserDeviceFrame(
                   isHovered: _isHovered,
+                  siteUrl: widget.siteUrl,
                   child: imageWidget,
                 )
               : imageWidget,
@@ -1414,11 +1418,13 @@ class MobileDeviceFrame extends StatelessWidget {
 class BrowserDeviceFrame extends StatelessWidget {
   final Widget child;
   final bool isHovered;
+  final String siteUrl;
 
   const BrowserDeviceFrame({
     super.key,
     required this.child,
     required this.isHovered,
+    this.siteUrl = '',
   });
 
   @override
@@ -1493,15 +1499,15 @@ class BrowserDeviceFrame extends StatelessWidget {
                           width: 0.5,
                         ),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.lock_rounded, size: 8, color: Colors.green),
-                            SizedBox(width: 4),
+                            const Icon(Icons.lock_rounded, size: 8, color: Colors.green),
+                            const SizedBox(width: 4),
                             Text(
-                              "https://trainovate.org",
-                              style: TextStyle(
+                              siteUrl.isNotEmpty ? siteUrl : 'https://example.com',
+                              style: const TextStyle(
                                 fontSize: 8,
                                 color: Colors.grey,
                                 fontFamily: "JetBrains Mono",
@@ -1536,6 +1542,7 @@ class ScreenshotsCarousel extends StatefulWidget {
   final bool isMobile;
   final Function(String) onImageTap;
   final bool isLandscape;
+  final String siteUrl;
 
   const ScreenshotsCarousel({
     super.key,
@@ -1543,6 +1550,7 @@ class ScreenshotsCarousel extends StatefulWidget {
     required this.isMobile,
     required this.onImageTap,
     this.isLandscape = false,
+    this.siteUrl = '',
   });
 
   @override
@@ -1643,6 +1651,7 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
                   child: ScreenshotGridItem(
                     imageUrl: screenshotUrl,
                     isLandscape: widget.isLandscape,
+                    siteUrl: widget.siteUrl,
                     onTap: () {
                       _autoScrollTimer?.cancel();
                       widget.onImageTap(screenshotUrl);

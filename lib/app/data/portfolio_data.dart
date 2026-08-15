@@ -398,6 +398,73 @@ class PortfolioData {
         IntegrationItem(title: "Fancy Color & Exchange Calculator", icon: "monetization_on"),
       ],
     ),
+    ProjectData(
+      title: "The D Wave",
+      description: "A science-driven skincare and beauty platform built on Shopify Hydrogen, combining AI-powered skin analysis, personalized skincare recommendations, QGEN™ plant stem cell technology, and full e-commerce into one cohesive digital ecosystem.",
+      tags: ["Shopify", "Hydrogen", "React", "TypeScript", "Gemini AI", "GraphQL", "Storefront API"],
+      projectUrl: "https://dwaveskin.com/",
+      githubUrl: "",
+      playStoreUrl: "",
+      appStoreUrl: "",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-1.png",
+      backgroundStory: "The D Wave is a science-driven skincare and beauty platform focused on plant stem cell technology and cellular skincare. The challenge was building a complete digital ecosystem that blended cutting-edge AI with a world-class e-commerce experience.\n\nThe platform was engineered using Shopify Hydrogen — Shopify's official React-based headless commerce framework — paired with Vite and React Router 7 for a blazing-fast, SSR-powered storefront. The crown feature is the AI Skin Analyser, which uses Google Gemini's multimodal vision API to analyse user-submitted photos and detect skin concerns including texture, pigmentation, pores, dryness, ageing, and sun damage, then generates a fully personalized D Wave skincare regime. Custom Hono server middleware, Shopify Metaobject persistence, and GraphQL Storefront API queries power the full product and content layer.",
+      keyFeatures: [
+        FeatureItem(
+          title: "AI Skin Analyser",
+          description: "Users upload a photo and receive a comprehensive AI-driven skin analysis covering texture, pigmentation, pores, dryness, ageing, and sun damage, powered by Google Gemini Vision.",
+        ),
+        FeatureItem(
+          title: "Personalized Skincare Regime",
+          description: "Based on the AI analysis, the platform curates a bespoke D Wave product regime tailored precisely to each user's unique skin profile and concerns.",
+        ),
+        FeatureItem(
+          title: "QGEN™ Technology Showcase",
+          description: "Dedicated content experience showcasing D Wave's proprietary QGEN™ plant stem cell delivery technology, backed by research and certification documentation.",
+        ),
+        FeatureItem(
+          title: "Headless Shopify Storefront",
+          description: "Fully headless e-commerce powered by Shopify's Storefront GraphQL API, enabling custom product discovery, collection browsing, cart, and checkout flows.",
+        ),
+        FeatureItem(
+          title: "Skincare Routine Builder",
+          description: "Curated routine discovery for skin concerns — ageing, pigmentation, hydration, acne, and pores — guiding users toward a consistent, science-backed skincare regimen.",
+        ),
+        FeatureItem(
+          title: "Editorial Blog & Education Hub",
+          description: "A rich editorial content layer featuring skincare articles, brand research stories, ingredient science, and manufacturing transparency.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Shopify Hydrogen", icon: "storefront"),
+        TechItem(name: "React 18", icon: "code"),
+        TechItem(name: "TypeScript", icon: "terminal"),
+        TechItem(name: "React Router 7", icon: "route"),
+        TechItem(name: "Vite", icon: "bolt"),
+        TechItem(name: "GraphQL Storefront API", icon: "api"),
+        TechItem(name: "Google Gemini AI", icon: "auto_awesome"),
+        TechItem(name: "Hono Server", icon: "dns"),
+      ],
+      codeSnippetPath: "app/routes/api.gemini.jsx",
+      codeSnippet: "// AI Skin Analyser — Gemini Vision API Integration\nexport async function action({ request, context }) {\n  const { imageBase64, mimeType } = await request.json();\n  const prompt = generateSkinAnalyzerPrompt();\n\n  const response = await fetch(\n    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=\${GEMINI_API_KEY}`,\n    {\n      method: 'POST',\n      headers: { 'Content-Type': 'application/json' },\n      body: JSON.stringify({\n        contents: [{\n          parts: [\n            { text: prompt },\n            { inline_data: { mime_type: mimeType, data: imageBase64 } },\n          ],\n        }],\n        generationConfig: { responseMimeType: 'application/json' },\n      }),\n    }\n  );\n\n  const data = await response.json();\n  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;\n  const analysis = parseModelJsonResponse(text);\n\n  // Persist result to Shopify Metaobject\n  await saveSkinAnalysisToMetaobject(context, analysis);\n  return json({ success: true, analysis });\n}",
+      screenshots: [],
+      webScreenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-1.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-2.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-3.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-4.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-5.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-6.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/the-d-wave/the-d-wave-7.png",
+      ],
+      integrations: [
+        IntegrationItem(title: "Shopify Storefront GraphQL API", icon: "storefront"),
+        IntegrationItem(title: "Google Gemini Vision AI", icon: "auto_awesome"),
+        IntegrationItem(title: "Shopify Metaobject Persistence", icon: "database"),
+        IntegrationItem(title: "Hono & Node.js Custom Server", icon: "dns"),
+        IntegrationItem(title: "Nodemailer Email Transactional", icon: "email"),
+        IntegrationItem(title: "Orbo AI Skin Integration", icon: "face_retouching_natural"),
+      ],
+    ),
   ];
 
   static const List<ExperienceData> experiences = [
