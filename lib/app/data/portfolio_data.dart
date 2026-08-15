@@ -11,7 +11,7 @@ class PortfolioData {
 
   static const List<Map<String, String>> stats = [
     {"value": "4+", "label": "Years Experience"},
-    {"value": "7+", "label": "Projects Delivered"},
+    {"value": "8+", "label": "Projects Delivered"},
     {"value": "15+", "label": "Technologies"},
     {"value": "5+", "label": "App Store Launches"},
   ];
@@ -532,6 +532,67 @@ class PortfolioData {
         IntegrationItem(title: "CSV & Excel Logs Exporter", icon: "table_chart"),
         IntegrationItem(title: "Vibration & Haptic Feedback", icon: "vibration"),
         IntegrationItem(title: "Ringtone Sound Cues", icon: "audiotrack"),
+      ],
+    ),
+    ProjectData(
+      title: "Texplain",
+      description: "A dynamic, AI-powered web platform designed to translate dense, technical language into clear, jargon-free explanations. It transforms complex concepts into plain English or adapts them for specific audiences such as CEOs, managers, boards, and stakeholders.",
+      tags: ["Framer AI", "Supabase", "OpenAI", "Deno", "TypeScript", "Stripe"],
+      projectUrl: "https://texpla.in/",
+      githubUrl: "",
+      playStoreUrl: "",
+      appStoreUrl: "",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/texplain/texplain-1.png",
+      backgroundStory: "Texplain helps professionals communicate critical technical information clearly and confidently under pressure. The front-end website was designed and built utilizing Framer AI, a modern no-code web platform that allows high-fidelity visual layout design, quick publishing, and native integration of custom React code components to handle custom forms and user authentication interfaces.\n\nThe core translation logic is powered by a high-concurrency Supabase Edge Functions backend written in TypeScript running on Deno. The backend interfaces with OpenAI's Chat Completions API using the gpt-4o-mini model, leveraging custom system prompts to translate technical text based on targeted audience requirements (Plain English, CEO, Manager, Board, and Stakeholder). Additional features include passwordless OTP authentication, Stripe subscription billing with automated webhook processing, team management permissions, and translation history logging.",
+      keyFeatures: [
+        FeatureItem(
+          title: "Multi-Audience Translation Engine",
+          description: "Instantly simplifies dense, jargon-filled technical terms and tailors explanations to suit CEOs, non-technical managers, board members, or external stakeholders.",
+        ),
+        FeatureItem(
+          title: "Framer AI Frontend Integration",
+          description: "Visually polished, highly responsive landing page and interfaces built in Framer with custom React component code integrations.",
+        ),
+        FeatureItem(
+          title: "Supabase Edge Functions",
+          description: "Serverless backend architecture written in TypeScript running on Deno for highly performant and globally distributed API endpoints.",
+        ),
+        FeatureItem(
+          title: "Secure OTP Authentication",
+          description: "A seamless, secure passwordless email login and signup flow via custom one-time password (OTP) delivery.",
+        ),
+        FeatureItem(
+          title: "Stripe Subscription & Billing",
+          description: "Comprehensive monetization system with subscription plan management, secure checkout, and webhooks processing plan expirations.",
+        ),
+        FeatureItem(
+          title: "Team Workspace & History",
+          description: "Supports multi-user team collaboration with custom invitation workflows, roles, and a shared history tracking saved explanations.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Framer AI", icon: "web"),
+        TechItem(name: "Supabase Edge Functions", icon: "dns"),
+        TechItem(name: "OpenAI GPT-4o-mini", icon: "auto_awesome"),
+        TechItem(name: "Deno & TypeScript", icon: "code"),
+        TechItem(name: "Stripe Payments", icon: "payment"),
+        TechItem(name: "PostgreSQL Database", icon: "database"),
+      ],
+      codeSnippetPath: "supabase/functions/textplain/index.ts",
+      codeSnippet: "// Edge Function Handler calling OpenAI API with Custom System Prompts\nasync function fetchExplanation(input: string, audience: string) {\n  const response = await fetch(OPENAI_URL, {\n    method: \"POST\",\n    headers: {\n      Authorization: `Bearer \${OPENAI_API_KEY}`,\n      \"Content-Type\": \"application/json\",\n    },\n    body: JSON.stringify({\n      model: MODEL,\n      messages: [\n        { role: \"system\", content: CORE_SYSTEM_PROMPT },\n        { role: \"user\", content: `Audience: \${audience}\\n\\nTechnical text:\\n\${input}` },\n      ],\n      max_tokens: MAX_TOKENS,\n      temperature: TEMPERATURE,\n    }),\n  });\n\n  const data = await response.json();\n  return data?.choices?.[0]?.message?.content || null;\n}",
+      screenshots: [],
+      webScreenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/texplain/texplain-1.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/texplain/texplain-2.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/texplain/texplain-3.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/texplain/texplain-4.png",
+      ],
+      integrations: [
+        IntegrationItem(title: "OpenAI Chat Completions API", icon: "auto_awesome"),
+        IntegrationItem(title: "Supabase DB & Edge Runtime", icon: "dns"),
+        IntegrationItem(title: "Stripe Webhooks & Billing Portal", icon: "payment"),
+        IntegrationItem(title: "Custom OTP Authentication", icon: "security"),
+        IntegrationItem(title: "Framer React Component Integration", icon: "extension"),
       ],
     ),
   ];
