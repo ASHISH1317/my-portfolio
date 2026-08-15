@@ -466,6 +466,28 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   ),
                 ),
               ),
+            if (widget.project.apkUrl.isNotEmpty)
+              ElevatedButton.icon(
+                onPressed: () => _launchUrl(widget.project.apkUrl),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ThemeConfig.primary,
+                  foregroundColor: ThemeConfig.onPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  elevation: 0,
+                ),
+                icon: const Icon(Icons.download_rounded, size: 20),
+                label: const Text(
+                  "Download APK",
+                  style: TextStyle(
+                    fontFamily: "JetBrains Mono",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
             if (widget.project.projectUrl.isNotEmpty)
               OutlinedButton.icon(
                 onPressed: () => _launchUrl(widget.project.projectUrl),
@@ -1045,17 +1067,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             runSpacing: 16,
             alignment: WrapAlignment.center,
             children: widget.project.integrations.map((integration) {
-              IconData iconData = Icons.extension;
-              if (integration.icon == "map") iconData = Icons.map;
-              if (integration.icon == "payments") iconData = Icons.payments;
-              if (integration.icon == "notifications_active") iconData = Icons.notifications_active;
-              if (integration.icon == "dns") iconData = Icons.dns;
-              if (integration.icon == "sync") iconData = Icons.sync;
-              if (integration.icon == "folder_shared") iconData = Icons.folder_shared;
-              if (integration.icon == "api") iconData = Icons.api;
-              if (integration.icon == "shopping_cart") iconData = Icons.shopping_cart;
-              if (integration.icon == "movie") iconData = Icons.movie;
-              if (integration.icon == "monetization_on") iconData = Icons.monetization_on;
+              IconData iconData = _getIconData(integration.icon);
 
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -1232,16 +1244,7 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
 
   @override
   Widget build(BuildContext context) {
-    IconData iconData = Icons.extension;
-    if (widget.tech.icon == "flutter") iconData = Icons.flutter_dash;
-    if (widget.tech.icon == "terminal") iconData = Icons.terminal;
-    if (widget.tech.icon == "database") iconData = Icons.storage;
-    if (widget.tech.icon == "local_fire_department") {
-      iconData = Icons.local_fire_department;
-    }
-    if (widget.tech.icon == "api") iconData = Icons.api;
-    if (widget.tech.icon == "rebase_edit") iconData = Icons.transform;
-    if (widget.tech.icon == "sync") iconData = Icons.sync;
+    IconData iconData = _getIconData(widget.tech.icon);
 
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
@@ -1764,6 +1767,85 @@ class _StickyContainerState extends State<StickyContainer> {
         ),
       ],
     );
+  }
+}
+
+IconData _getIconData(String iconName) {
+  switch (iconName) {
+    case 'flutter':
+      return Icons.flutter_dash;
+    case 'terminal':
+      return Icons.terminal;
+    case 'database':
+    case 'storage':
+      return Icons.storage;
+    case 'local_fire_department':
+      return Icons.local_fire_department;
+    case 'api':
+      return Icons.api;
+    case 'rebase_edit':
+      return Icons.transform;
+    case 'sync':
+      return Icons.sync;
+    case 'map':
+      return Icons.map;
+    case 'payment':
+    case 'payments':
+      return Icons.payments;
+    case 'notifications_active':
+      return Icons.notifications_active;
+    case 'dns':
+      return Icons.dns;
+    case 'folder_shared':
+      return Icons.folder_shared;
+    case 'shopping_cart':
+      return Icons.shopping_cart;
+    case 'movie':
+      return Icons.movie;
+    case 'monetization_on':
+      return Icons.monetization_on;
+    case 'apple':
+      return Icons.apple;
+    case 'security':
+      return Icons.security;
+    case 'cloud_done':
+      return Icons.cloud_done;
+    case 'fingerprint':
+      return Icons.fingerprint;
+    case 'save':
+      return Icons.save;
+    case 'analytics':
+      return Icons.analytics;
+    case 'timer':
+      return Icons.timer;
+    case 'storefront':
+      return Icons.storefront;
+    case 'auto_awesome':
+      return Icons.auto_awesome;
+    case 'email':
+      return Icons.email;
+    case 'face_retouching_natural':
+      return Icons.face_retouching_natural;
+    case 'table_chart':
+      return Icons.table_chart;
+    case 'vibration':
+      return Icons.vibration;
+    case 'audiotrack':
+      return Icons.audiotrack;
+    case 'code':
+      return Icons.code;
+    case 'web':
+      return Icons.web;
+    case 'queue':
+      return Icons.queue;
+    case 'bolt':
+      return Icons.bolt;
+    case 'route':
+      return Icons.route;
+    case 'gesture':
+      return Icons.gesture;
+    default:
+      return Icons.extension;
   }
 }
 

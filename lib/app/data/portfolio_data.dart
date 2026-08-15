@@ -3,9 +3,9 @@ class PortfolioData {
   static const String fullName = "Ashish Vasava";
   static const String title = "Senior Flutter Developer";
   static const String heroTagline = "Hi, I'm Ashish";
-  static const String heroSubTagline = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, and seamless system integrations that drive user engagement and business growth.";
+  static const String heroSubTagline = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, offline-first architectures, and seamless system integrations that drive user engagement and business growth.";
   
-  static const String aboutText1 = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, and seamless system integrations that drive user engagement and business growth.";
+  static const String aboutText1 = "Senior Flutter Developer with 4+ years of experience crafting high-performance, production-grade mobile applications. Specializing in Clean Architecture, robust state management, offline-first architectures, and seamless system integrations that drive user engagement and business growth.";
   static const String aboutText2 = "Currently leading engineering efforts as Tech Lead at Dharma Tech, I translate client visions into scalable, pixel-perfect cross-platform products. Previously, at IT Futurz, I engineered real-time apps and mastered reactive programming.";
   static const String aboutText3 = "I focus on delivering real business value—combining clean, maintainable codebases with optimized performance to achieve stellar App Store ratings and high user retention. Let's build something exceptional together.";
 
@@ -465,6 +465,75 @@ class PortfolioData {
         IntegrationItem(title: "Orbo AI Skin Integration", icon: "face_retouching_natural"),
       ],
     ),
+    ProjectData(
+      title: "Vigilo ERC",
+      description: "A professional offline-first exam session management and invigilation dashboard. Vigilo ERC features a live countdown timer, interactive incident logging, 4-step quick add exam wizards, and local SQLite data encryption for secure exam room controls.",
+      tags: ["Flutter", "Dart", "SQLite", "Hive", "Local Storage", "Custom Painter"],
+      projectUrl: "",
+      githubUrl: "",
+      playStoreUrl: "",
+      appStoreUrl: "",
+      apkUrl: "https://drive.google.com/file/d/1lLFmDSf61YwlPdMAJh0wKUvzUUrN2uNP/view?usp=sharing",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-1.jpg",
+      backgroundStory: "Vigilo ERC was developed to solve a critical real-world problem in schools, colleges, and universities: managing exam room invigilation and logging incidents in real time without relying on unstable internet connections. The mobile app provides invigilators and exam officers with a single source of truth for timekeeping and event logs.\n\nThe engineering challenge lay in ensuring complete offline resilience and absolute data integrity. Because exam logs must be reliable and tampering-proof, I designed a multi-layer storage architecture. The app initially utilizes Hive local storage for speed and seamless synchronization, then automatically migrates data to a structured SQLite database using sqflite. To make the interface highly readable in stressful classroom settings, I implemented custom UI elements including a custom-painted circular countdown timer (RingPainter) and a 4-step interactive exam creation wizard.",
+      keyFeatures: [
+        FeatureItem(
+          title: "Circular Countdown Timer",
+          description: "A highly visual countdown ring drawn using a CustomPainter with smooth animation and dynamic glow adjustments based on the theme state.",
+        ),
+        FeatureItem(
+          title: "Incident Logging Engine",
+          description: "Allows invigilators to record real-time incident reports (e.g. candidate query, late entry, illness) during active exam sessions.",
+        ),
+        FeatureItem(
+          title: "SQLite & Hive Data Sync",
+          description: "An offline-first local data syncing engine that performs automated schema migrations from Hive key-value boxes to SQLite relational databases.",
+        ),
+        FeatureItem(
+          title: "4-Step Exam Setup Wizard",
+          description: "An intuitive wizard that guides users through setting up exam centers, rooms, candidate counts, and planned timing parameters.",
+        ),
+        FeatureItem(
+          title: "Export Logs to CSV/Excel",
+          description: "Integrates with spreadsheet decoders and path providers to compile, format, and share official exam records and incident sheets.",
+        ),
+        FeatureItem(
+          title: "Dynamic License Activation",
+          description: "A secure licensing layer featuring cryptographic keys to unlock Core, Pro, and Pilot tiers for specific educational organizations.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Flutter", icon: "flutter"),
+        TechItem(name: "Dart", icon: "terminal"),
+        TechItem(name: "SQLite (sqflite)", icon: "database"),
+        TechItem(name: "Hive Storage", icon: "dns"),
+        TechItem(name: "Custom Painter", icon: "gesture"),
+        TechItem(name: "Shared Preferences", icon: "save"),
+        TechItem(name: "Spreadsheet Decoder", icon: "table_chart"),
+      ],
+      codeSnippetPath: "lib/views/widgets/ring_painter_widget.dart",
+      codeSnippet: "class RingPainter extends CustomPainter {\n  const RingPainter({\n    required this.progress,\n    required this.trackColor,\n    required this.progressColor,\n    required this.strokeWidth,\n    this.isRunning = false,\n    this.isDark = false,\n  });\n\n  final double progress;\n  final Color trackColor, progressColor;\n  final double strokeWidth;\n  final bool isRunning;\n  final bool isDark;\n\n  @override\n  void paint(Canvas canvas, Size size) {\n    final center = size.center(Offset.zero);\n    final r = (size.shortestSide - strokeWidth) / 2;\n    final track = Paint()\n      ..style = PaintingStyle.stroke\n      ..strokeWidth = strokeWidth - 1\n      ..color = trackColor\n      ..strokeCap = StrokeCap.round;\n\n    final glowOpacity = isDark ? 0.10 : (isRunning ? 0.07 : 0.09);\n    final glowWidth = isDark ? (strokeWidth + 3) : (strokeWidth + 2);\n    final glowBlur = isDark ? 4.0 : 3.0;\n\n    final glow = Paint()\n      ..color = progressColor.withValues(alpha: glowOpacity)\n      ..style = PaintingStyle.stroke\n      ..strokeWidth = glowWidth\n      ..strokeCap = StrokeCap.round\n      ..maskFilter = MaskFilter.blur(BlurStyle.normal, glowBlur);\n\n    final progOpacity = isDark ? 1.0 : (isRunning ? 0.90 : 1.0);\n    final prog = Paint()\n      ..style = PaintingStyle.stroke\n      ..strokeWidth = strokeWidth\n      ..color = progressColor.withValues(alpha: progOpacity)\n      ..strokeCap = StrokeCap.round;\n\n    canvas.drawCircle(center, r, track);\n    final start = -math.pi / 2;\n    final sweep = progress.clamp(0.0, 1.0) * 2 * math.pi;\n    final rect = Rect.fromCircle(center: center, radius: r);\n\n    canvas.drawArc(rect, start, sweep, false, glow);\n    canvas.drawArc(rect, start, sweep, false, prog);\n  }\n\n  @override\n  bool shouldRepaint(covariant RingPainter old) => old.progress != progress;\n}",
+      screenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-1.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-2.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-3.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-4.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-5.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-6.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-7.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-8.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-9.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/vigilo-app/vigilo-10.jpg",
+      ],
+      integrations: [
+        IntegrationItem(title: "sqflite Local Database", icon: "dns"),
+        IntegrationItem(title: "Hive Session Snapshots Storage", icon: "storage"),
+        IntegrationItem(title: "Custom Painter Timer", icon: "timer"),
+        IntegrationItem(title: "CSV & Excel Logs Exporter", icon: "table_chart"),
+        IntegrationItem(title: "Vibration & Haptic Feedback", icon: "vibration"),
+        IntegrationItem(title: "Ringtone Sound Cues", icon: "audiotrack"),
+      ],
+    ),
   ];
 
   static const List<ExperienceData> experiences = [
@@ -673,6 +742,7 @@ class ProjectData {
   final String githubUrl;
   final String playStoreUrl;
   final String appStoreUrl;
+  final String apkUrl;
   final String imageUrl;
   final String backgroundStory;
   final List<FeatureItem> keyFeatures;
@@ -691,6 +761,7 @@ class ProjectData {
     required this.githubUrl,
     required this.playStoreUrl,
     required this.appStoreUrl,
+    this.apkUrl = "",
     required this.imageUrl,
     required this.backgroundStory,
     required this.keyFeatures,
@@ -711,6 +782,7 @@ class ProjectData {
       githubUrl: json['githubUrl'] ?? '',
       playStoreUrl: json['playStoreUrl'] ?? '',
       appStoreUrl: json['appStoreUrl'] ?? '',
+      apkUrl: json['apkUrl'] ?? '',
       imageUrl: json['imageUrl'] ?? '',
       backgroundStory: json['backgroundStory'] ?? '',
       keyFeatures: (json['keyFeatures'] as List? ?? [])
@@ -738,6 +810,7 @@ class ProjectData {
       'githubUrl': githubUrl,
       'playStoreUrl': playStoreUrl,
       'appStoreUrl': appStoreUrl,
+      'apkUrl': apkUrl,
       'imageUrl': imageUrl,
       'backgroundStory': backgroundStory,
       'keyFeatures': keyFeatures.map((item) => item.toJson()).toList(),
