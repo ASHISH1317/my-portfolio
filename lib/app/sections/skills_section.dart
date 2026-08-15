@@ -54,7 +54,7 @@ class SkillsSection extends GetView<SkillsController> {
                   delay: const Duration(milliseconds: 100),
                   child: CustomCard(
                     padding: EdgeInsets.zero,
-                    child: _buildStateManagementCard(),
+                    child: _buildStateManagementCard(isMobile: true),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -72,7 +72,7 @@ class SkillsSection extends GetView<SkillsController> {
                   delay: const Duration(milliseconds: 300),
                   child: CustomCard(
                     padding: EdgeInsets.zero,
-                    child: _buildWebAndEcommerceCard(),
+                    child: _buildWebAndEcommerceCard(isMobile: true),
                   ),
                 ),
               ],
@@ -115,7 +115,7 @@ class SkillsSection extends GetView<SkillsController> {
                         delay: Duration.zero,
                         child: CustomCard(
                           padding: EdgeInsets.zero,
-                          child: _buildStateManagementCard(),
+                          child: _buildStateManagementCard(isMobile: false),
                         ),
                       ),
                       const SizedBox(height: 24),
@@ -124,7 +124,7 @@ class SkillsSection extends GetView<SkillsController> {
                         delay: const Duration(milliseconds: 100),
                         child: CustomCard(
                           padding: EdgeInsets.zero,
-                          child: _buildWebAndEcommerceCard(),
+                          child: _buildWebAndEcommerceCard(isMobile: false),
                         ),
                       ),
                     ],
@@ -139,7 +139,9 @@ class SkillsSection extends GetView<SkillsController> {
 
   Widget _buildCoreExpertiseCard({required bool isMobile}) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+          : const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: ThemeConfig.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
@@ -246,9 +248,11 @@ class SkillsSection extends GetView<SkillsController> {
     );
   }
 
-  Widget _buildStateManagementCard() {
+  Widget _buildStateManagementCard({bool isMobile = false}) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+          : const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: ThemeConfig.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),
@@ -291,7 +295,9 @@ class SkillsSection extends GetView<SkillsController> {
       final tileTriggers = controller.tileTriggers;
 
       return Container(
-        padding: const EdgeInsets.all(32),
+        padding: isMobile
+            ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+            : const EdgeInsets.all(32),
         decoration: BoxDecoration(
           color: ThemeConfig.surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
@@ -495,9 +501,11 @@ class SkillsSection extends GetView<SkillsController> {
     });
   }
 
-  Widget _buildWebAndEcommerceCard() {
+  Widget _buildWebAndEcommerceCard({bool isMobile = false}) {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: isMobile
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+          : const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: ThemeConfig.surfaceContainerLow,
         borderRadius: BorderRadius.circular(16),

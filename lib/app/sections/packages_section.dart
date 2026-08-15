@@ -89,13 +89,15 @@ class _PackageCardState extends State<PackageCard> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isMobile = MediaQuery.of(context).size.width < 950;
     return CustomCard(
       glowColor: ThemeConfig.primary,
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      padding: isMobile
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+          : const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
             // Title & Pub Icon link
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,8 +250,7 @@ class _PackageCardState extends State<PackageCard> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

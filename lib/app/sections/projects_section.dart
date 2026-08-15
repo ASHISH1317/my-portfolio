@@ -119,6 +119,7 @@ class ProjectsSection extends GetView<ProjectsController> {
           return CustomCard(
             glowColor: ThemeConfig.primary,
             onTap: openContainer,
+            padding: EdgeInsets.zero,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -189,7 +190,9 @@ class ProjectsSection extends GetView<ProjectsController> {
                 ),
                 // Content
                 Padding(
-                  padding: const EdgeInsets.all(24.0),
+                  padding: MediaQuery.of(context).size.width < 650
+                      ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+                      : const EdgeInsets.all(24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

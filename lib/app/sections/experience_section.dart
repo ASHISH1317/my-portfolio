@@ -101,11 +101,12 @@ class ExperienceSection extends GetView<ExperienceController> {
                   Expanded(
                     child: CustomCard(
                       glowColor: exp.isCurrent ? ThemeConfig.primary : Colors.transparent,
-                      child: Padding(
-                        padding: EdgeInsets.all(isMobile ? 16.0 : 24.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                      padding: isMobile
+                          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+                          : const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                             if (isMobile)
                               _buildMobileCardHeader(exp)
                             else
@@ -200,13 +201,12 @@ class ExperienceSection extends GetView<ExperienceController> {
                                   ],
                                 ),
                               ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
               ),
             ),
           );

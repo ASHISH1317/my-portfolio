@@ -501,7 +501,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         children: [
           _buildBackgroundStory(),
           SizedBox(height: spacing),
-          _buildKeyFeaturesCard(),
+          _buildKeyFeaturesCard(isMobile: true),
         ],
       );
     }
@@ -521,7 +521,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         SizedBox(width: spacing),
         Expanded(
           flex: 1,
-          child: _buildKeyFeaturesCard(),
+          child: _buildKeyFeaturesCard(isMobile: false),
         ),
       ],
     );
@@ -544,12 +544,13 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     );
   }
 
-  Widget _buildKeyFeaturesCard() {
+  Widget _buildKeyFeaturesCard({bool isMobile = false}) {
     return CustomCard(
       backgroundColor: ThemeConfig.surfaceContainerLow,
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: Column(
+      padding: isMobile
+          ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
+          : const EdgeInsets.all(32.0),
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -598,8 +599,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 
   // Tech Stack Bento
@@ -795,6 +795,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
     return CustomCard(
       backgroundColor: ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.2),
+      padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
