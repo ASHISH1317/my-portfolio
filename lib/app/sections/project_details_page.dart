@@ -1290,8 +1290,14 @@ class _TechStackGridItemState extends State<TechStackGridItem> {
 class ScreenshotGridItem extends StatefulWidget {
   final String imageUrl;
   final VoidCallback? onTap;
+  final bool isLandscape;
 
-  const ScreenshotGridItem({super.key, required this.imageUrl, this.onTap});
+  const ScreenshotGridItem({
+    super.key,
+    required this.imageUrl,
+    this.onTap,
+    this.isLandscape = false,
+  });
 
   @override
   State<ScreenshotGridItem> createState() => _ScreenshotGridItemState();
@@ -1302,6 +1308,36 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget imageWidget = Image.network(
+      widget.imageUrl,
+      fit: BoxFit.contain,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Container(
+          color: ThemeConfig.surfaceContainerHigh,
+          child: Center(
+            child: CircularProgressIndicator(
+              color: ThemeConfig.primary,
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded /
+                      loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) => Container(
+        color: ThemeConfig.surfaceContainerHigh,
+        child: Center(
+          child: Icon(
+            Icons.broken_image_outlined,
+            color: ThemeConfig.textMuted,
+            size: 40,
+          ),
+        ),
+      ),
+    );
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -1310,66 +1346,193 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
-        transform: _isHovered
-            ? (Matrix4.identity()..scale(1.05))
-            : Matrix4.identity(),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: _isHovered
-                  ? ThemeConfig.primary.withValues(alpha: 0.6)
-                  : ThemeConfig.outlineVariant.withValues(alpha: 0.3),
-              width: 1.5,
-            ),
-            boxShadow: _isHovered
-                ? [
-                    BoxShadow(
-                      color: ThemeConfig.primary.withValues(alpha: 0.15),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                    )
-                  ]
-                : [],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              widget.imageUrl,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return Container(
-                  color: ThemeConfig.surfaceContainerHigh,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: ThemeConfig.primary,
-                      value: loadingProgress.expectedTotalBytes != null
-                          ? loadingProgress.cumulativeBytesLoaded /
-                              loadingProgress.expectedTotalBytes!
-                          : null,
-                    ),
-                  ),
-                );
-              },
-              errorBuilder: (context, error, stackTrace) => Container(
-                color: ThemeConfig.surfaceContainerHigh,
-                child: Center(
-                  child: Icon(
-                    Icons.broken_image_outlined,
-                    color: ThemeConfig.textMuted,
-                    size: 40,
-                  ),
+          curve: Curves.easeOutCubic,
+          transform: _isHovered
+              ? (Matrix4.identity()..scale(1.05))
+              : Matrix4.identity(),
+          child: widget.isLandscape
+              ? BrowserDeviceFrame(
+                  isHovered: _isHovered,
+                  child: imageWidget,
+                )
+              : MobileDeviceFrame(
+                  isHovered: _isHovered,
+                  child: imageWidget,
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+// Smartphone Mockup Frame
+class MobileDeviceFrame extends StatelessWidget {
+  final Widget child;
+  final bool isHovered;
+
+  const MobileDeviceFrame({
+    super.key,
+    required this.child,
+    required this.isHovered,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1E1E), // Dark Bezel
+        borderRadius: BorderRadius.circular(32),
+        border: Border.all(
+          color: isHovered
+              ? ThemeConfig.primary
+              : const Color(0xFF333333),
+          width: 3.0,
+        ),
+        boxShadow: isHovered
+            ? [
+                BoxShadow(
+                  color: ThemeConfig.primary.withValues(alpha: 0.25),
+                  blurRadius: 25,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 12),
+                ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.4),
+                  blurRadius: 15,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 4.0), // Reduced vertical bezel padding
+        child: child,
+      ),
+    );
+  }
+}
+
+// Web Browser Window Mockup Frame
+class BrowserDeviceFrame extends StatelessWidget {
+  final Widget child;
+  final bool isHovered;
+
+  const BrowserDeviceFrame({
+    super.key,
+    required this.child,
+    required this.isHovered,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: ThemeConfig.surface,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: isHovered
+              ? ThemeConfig.primary
+              : ThemeConfig.outlineVariant.withValues(alpha: 0.3),
+          width: 1.5,
+        ),
+        boxShadow: isHovered
+            ? [
+                BoxShadow(
+                  color: ThemeConfig.primary.withValues(alpha: 0.2),
+                  blurRadius: 25,
+                  spreadRadius: 2,
+                  offset: const Offset(0, 12),
+                ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 15,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+      ),
+      child: Column(
+        children: [
+          // Browser Window header bar (Mac control buttons + URL input)
+          Container(
+            height: 32,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.5),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(10.5)),
+              border: Border(
+                bottom: BorderSide(
+                  color: ThemeConfig.outlineVariant.withValues(alpha: 0.2),
+                  width: 1,
                 ),
               ),
             ),
+            child: Row(
+              children: [
+                // Mac buttons (Close, Minimize, Zoom)
+                Row(
+                  children: [
+                    Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFF5F56), shape: BoxShape.circle)),
+                    const SizedBox(width: 6),
+                    Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFFFFBD2E), shape: BoxShape.circle)),
+                    const SizedBox(width: 6),
+                    Container(width: 8, height: 8, decoration: const BoxDecoration(color: Color(0xFF27C93F), shape: BoxShape.circle)),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                // Browser URL address bar
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxHeight: 20),
+                      width: 260,
+                      decoration: BoxDecoration(
+                        color: ThemeConfig.background.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: ThemeConfig.outlineVariant.withValues(alpha: 0.15),
+                          width: 0.5,
+                        ),
+                      ),
+                      child: const Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.lock_rounded, size: 8, color: Colors.green),
+                            SizedBox(width: 4),
+                            Text(
+                              "https://trainovate.org",
+                              style: TextStyle(
+                                fontSize: 8,
+                                color: Colors.grey,
+                                fontFamily: "JetBrains Mono",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 40),
+              ],
+            ),
           ),
-        ),
+          // Screen area containing web page screenshot
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12.0, bottom: 12.0, top: 4.0),
+              child: child,
+            ),
+          ),
+        ],
       ),
-    ));
+    );
   }
 }
+
 
 class ScreenshotsCarousel extends StatefulWidget {
   final List<String> screenshots;
@@ -1399,8 +1562,8 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
     super.initState();
     _pageController = PageController(
       viewportFraction: widget.isMobile
-          ? (widget.isLandscape ? 0.85 : 0.65)
-          : (widget.isLandscape ? 0.55 : 0.28),
+          ? (widget.isLandscape ? 0.85 : 0.72)
+          : (widget.isLandscape ? 0.55 : 0.32),
       initialPage: 1000,
     );
     _pageController.addListener(() {
@@ -1436,17 +1599,17 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double pageSlotWidth = screenWidth *
         (widget.isMobile
-            ? (widget.isLandscape ? 0.85 : 0.65)
-            : (widget.isLandscape ? 0.55 : 0.28));
+            ? (widget.isLandscape ? 0.85 : 0.72)
+            : (widget.isLandscape ? 0.55 : 0.32));
     final double maxAllowedWidth = pageSlotWidth - 16;
     
     final double maxItemHeight = widget.isLandscape
         ? (widget.isMobile ? 220.0 : 360.0)
-        : (widget.isMobile ? 320.0 : 440.0);
+        : (widget.isMobile ? 360.0 : 480.0);
         
     double computedHeight = widget.isLandscape
         ? maxAllowedWidth * (9 / 16)
-        : maxAllowedWidth * (16 / 9);
+        : maxAllowedWidth * (19.5 / 9);
     
     if (computedHeight > maxItemHeight) {
       computedHeight = maxItemHeight;
@@ -1454,12 +1617,12 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
     
     final double computedWidth = widget.isLandscape
         ? computedHeight * (16 / 9)
-        : computedHeight * (9 / 16);
+        : computedHeight * (9 / 19.5);
 
     return SizedBox(
       height: widget.isLandscape
-          ? (widget.isMobile ? 260 : 410)
-          : (widget.isMobile ? 360 : 490),
+          ? (widget.isMobile ? 280.0 : 440.0)
+          : (widget.isMobile ? 380.0 : 520.0),
       child: PageView.builder(
         controller: _pageController,
         clipBehavior: Clip.none,
@@ -1482,6 +1645,7 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
                   height: computedHeight,
                   child: ScreenshotGridItem(
                     imageUrl: screenshotUrl,
+                    isLandscape: widget.isLandscape,
                     onTap: () {
                       _autoScrollTimer?.cancel();
                       widget.onImageTap(screenshotUrl);
