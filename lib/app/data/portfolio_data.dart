@@ -206,6 +206,70 @@ class PortfolioData {
         IntegrationItem(title: "AWS S3 Cloud Assets Management", icon: "cloud_done"),
       ],
     ),
+    ProjectData(
+      title: "YP Club",
+      description: "A private, invite-only founder network and business community platform. It facilitates curated peer-to-peer networking, event booking, AI-matched founder dinners, and business referrals.",
+      tags: ["Flutter", "React Native", "TypeScript", "GraphQL", "Biometrics", "Telr SDK"],
+      projectUrl: "",
+      githubUrl: "",
+      playStoreUrl: "https://play.google.com/store/apps/details?id=com.ypclub.app",
+      appStoreUrl: "https://apps.apple.com/us/app/yp-club/id6476503681",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-1.jpg",
+      backgroundStory: "YP Club is a premium, private founder community based in Dubai. The platform's mobile experience was engineered in two distinct architectures: initially built in Flutter using GetX state management, and subsequently migrated to React Native with TypeScript. The Flutter app utilized GetX bindings, Firebase Auth, and local_auth integration. The React Native version utilized TanStack React Query, Zustand, and a GraphQL API engine via graphql-codegen.\n\nTo meet high vetting and privacy standards, both apps integrate local biometric authentication (FaceID/TouchID), waitlist state management, and direct founder chat services, along with Telr Payment SDK integrations for Middle-East transactions.",
+      keyFeatures: [
+        FeatureItem(
+          title: "Hybrid Tech Deployments",
+          description: "Engineered in both Flutter (GetX architecture) and React Native (Zustand & TypeScript) configurations.",
+        ),
+        FeatureItem(
+          title: "Secure Biometric Signatures",
+          description: "Touch ID/Face ID integration utilizing react-native-biometrics on React Native and local_auth on Flutter.",
+        ),
+        FeatureItem(
+          title: "GraphQL & Ky API Client",
+          description: "Type-safe operations using GraphQL queries/mutations combined with Ky for high-speed REST endpoints.",
+        ),
+        FeatureItem(
+          title: "Private Forums & Real-time Chat",
+          description: "Direct peer-to-peer messaging and discussion boards for founders to coordinate and share opportunities.",
+        ),
+        FeatureItem(
+          title: "Middle-East Payment SDK",
+          description: "Regional credit card and Telr Payment SDK integrations for membership plans and dues.",
+        ),
+        FeatureItem(
+          title: "Interactive Membership Lifecycle",
+          description: "Detailed onboarding and waitlist tracking synced with state transitions like active, paused, or cancelled.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Flutter", icon: "flutter"),
+        TechItem(name: "React Native", icon: "code"),
+        TechItem(name: "TypeScript & Dart", icon: "terminal"),
+        TechItem(name: "GraphQL & REST", icon: "api"),
+        TechItem(name: "Biometrics", icon: "fingerprint"),
+        TechItem(name: "Telr Payment SDK", icon: "payment"),
+      ],
+      codeSnippetPath: "src/services/biometrics.ts & lib/app/modules/biometric/controller/biometric_controller.dart",
+      codeSnippet: "// React Native (TypeScript) - Cryptographic Signature\nclass BiometricService {\n  private rnBiometrics = new ReactNativeBiometrics();\n  async authenticateWithBiometrics(promptMessage?: string): Promise<BiometricResult> {\n    const { signature, success } = await this.rnBiometrics.createSignature({\n      payload: 'biometric_authentication',\n      promptMessage: promptMessage || 'Confirm identity',\n    });\n    return { signature, success };\n  }\n}\n\n// Flutter (Dart) - Local Authentication\nclass BiometricController extends GetxController {\n  final LocalAuthentication auth = LocalAuthentication();\n  Future<void> authenticate() async {\n    final bool result = await auth.authenticate(\n      localizedReason: \"Confirm it's you\",\n      biometricOnly: true,\n    );\n    if (result) flowController.nextPage(nextStep: 'nationality');\n  }\n}",
+      screenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-1.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-2.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-3.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-4.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-5.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-6.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/yp-club/yp-club-7.jpg",
+      ],
+      integrations: [
+        IntegrationItem(title: "Biometrics (Flutter & React Native)", icon: "fingerprint"),
+        IntegrationItem(title: "GraphQL Operations (Codegen)", icon: "security"),
+        IntegrationItem(title: "Telr Middle-East Payments", icon: "payment"),
+        IntegrationItem(title: "TanStack React Query Cache", icon: "sync"),
+        IntegrationItem(title: "Zustand, GetX & MMKV", icon: "save"),
+        IntegrationItem(title: "Mixpanel & Clarity Analytics", icon: "analytics"),
+      ],
+    ),
   ];
 
   static const List<ExperienceData> experiences = [
