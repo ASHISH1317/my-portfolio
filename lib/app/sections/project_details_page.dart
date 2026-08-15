@@ -1355,10 +1355,7 @@ class _ScreenshotGridItemState extends State<ScreenshotGridItem> {
                   isHovered: _isHovered,
                   child: imageWidget,
                 )
-              : MobileDeviceFrame(
-                  isHovered: _isHovered,
-                  child: imageWidget,
-                ),
+              : imageWidget,
         ),
       ),
     );
