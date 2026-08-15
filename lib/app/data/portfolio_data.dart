@@ -129,6 +129,83 @@ class PortfolioData {
         IntegrationItem(title: "Push Notifications Engine", icon: "notifications_active"),
       ],
     ),
+    ProjectData(
+      title: "Trainovate",
+      description: "A modern e-learning ecosystem featuring secure video lectures, interactive quizzes, progress tracking, and custom certificate generation. Built with standard state management and integrated with Paymongo, Apple Pay, and In-App Purchases, featuring robust corporate group licensing.",
+      tags: ["Flutter", "Node.js", "GetX", "Next.js", "PostgreSQL", "Socket.IO"],
+      projectUrl: "https://new.trainovate.org/",
+      githubUrl: "",
+      playStoreUrl: "https://play.google.com/store/apps/details?id=com.trainovate.app&hl=en_IN",
+      appStoreUrl: "https://apps.apple.com/us/app/trainovate/id6752285691",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-1.png",
+      backgroundStory: "Trainovate was built to solve a critical issue in regional e-learning: providing high-quality, flexible, and interactive courses with localized payments and group coordination support. I engineered the cross-platform mobile app in Flutter using GetX, while the system is powered by a high-concurrency Node.js microservices backend and a Next.js front-end.\n\nA significant achievement was building the Corporate Group system, allowing companies to buy seat licenses, bulk-manage user allocations asynchronously via BullMQ/Redis worker queues, and track employee learning metrics. I also implemented localized regional payments (Paymongo with GCash/PayMaya) and native iOS In-App Purchase logic, handling sandbox/production verification securely.",
+      keyFeatures: [
+        FeatureItem(
+          title: "Structured Video Learning",
+          description: "Organized course modules, video lessons with secure playback, progress bookmarking, and resume-from-left-off logic.",
+        ),
+        FeatureItem(
+          title: "Corporate Groups & Licenses",
+          description: "Administrative tools for corporations to buy seats, bulk-assign courses to employees, and monitor training progress.",
+        ),
+        FeatureItem(
+          title: "Multi-Gateway Payments",
+          description: "Seamless localized payments using Paymongo (GCash, PayMaya, PHP cards) alongside native iOS In-App Purchases.",
+        ),
+        FeatureItem(
+          title: "Interactive Assessments",
+          description: "Engaging quiz structures including MCQs, open-book questions, and interactive H5P learning models.",
+        ),
+        FeatureItem(
+          title: "Auto-Generated Certifications",
+          description: "Automated verification of completion criteria followed by dynamic PDF certificate generation and secure hosting.",
+        ),
+        FeatureItem(
+          title: "Admin Management Dashboard",
+          description: "A feature-rich admin panel built in React utilizing Ant Design for managing courses, tracking progress, and audit logging.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Flutter", icon: "flutter"),
+        TechItem(name: "GetX", icon: "rebase_edit"),
+        TechItem(name: "Node.js", icon: "code"),
+        TechItem(name: "Next.js", icon: "web"),
+        TechItem(name: "React.js", icon: "terminal"),
+        TechItem(name: "PostgreSQL", icon: "database"),
+        TechItem(name: "Redis & Bull", icon: "queue"),
+        TechItem(name: "Socket.IO", icon: "bolt"),
+      ],
+      codeSnippetPath: "lib/app/modules/checkout/controllers/checkout_controller.dart",
+      codeSnippet: "class CheckoutController extends GetxController {\n  final InAppPurchase _iap = InAppPurchase.instance;\n  StreamSubscription<List<PurchaseDetails>>? _subscription;\n  RxBool isLoading = false.obs;\n\n  Future<void> purchaseCourseIOS(String courseId) async {\n    isLoading(true);\n    final bool available = await _iap.isAvailable();\n    if (!available) {\n      showError('In-App Purchases are not available on this device');\n      return;\n    }\n\n    final ProductDetailsResponse response = await _iap.queryProductDetails({IosIapData.kCoursePurchaseId});\n    if (response.productDetails.isEmpty) {\n      showError('Course purchase product not found');\n      return;\n    }\n\n    final ProductDetails productDetails = response.productDetails.first;\n    _subscription = _iap.purchaseStream.listen((purchaseList) async {\n      for (var purchase in purchaseList) {\n        if (purchase.status == PurchaseStatus.purchased) {\n          await verifyAndCompletePurchase(purchase, courseId);\n        } else if (purchase.status == PurchaseStatus.error) {\n          showError(purchase.error?.message);\n          isLoading(false);\n        }\n      }\n    });\n\n    await _iap.buyNonConsumable(purchaseParam: PurchaseParam(productDetails: productDetails));\n  }\n}",
+      screenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-1.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-2.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-3.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-4.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-5.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-6.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-7.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/app/Trainovate-app-8.jpg",
+      ],
+      webScreenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-1.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-2.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-3.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-4.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-5.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-6.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-7.png",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/trainovate/website/Trainovate-website-8.png",
+      ],
+      integrations: [
+        IntegrationItem(title: "Paymongo Regional Payment Gateway", icon: "payment"),
+        IntegrationItem(title: "iOS In-App Purchases & Apple Pay", icon: "apple"),
+        IntegrationItem(title: "FCM Push Notifications System", icon: "notifications_active"),
+        IntegrationItem(title: "OAuth Authentication (Apple & Google)", icon: "security"),
+        IntegrationItem(title: "Interactive H5P Content Hosting", icon: "extension"),
+        IntegrationItem(title: "AWS S3 Cloud Assets Management", icon: "cloud_done"),
+      ],
+    ),
   ];
 
   static const List<ExperienceData> experiences = [
@@ -329,7 +406,6 @@ class IntegrationItem {
     };
   }
 }
-
 class ProjectData {
   final String title;
   final String description;
@@ -345,6 +421,7 @@ class ProjectData {
   final String codeSnippetPath;
   final String codeSnippet;
   final List<String> screenshots;
+  final List<String> webScreenshots;
   final List<IntegrationItem> integrations;
 
   const ProjectData({
@@ -362,6 +439,7 @@ class ProjectData {
     required this.codeSnippetPath,
     required this.codeSnippet,
     required this.screenshots,
+    this.webScreenshots = const [],
     required this.integrations,
   });
 
@@ -385,6 +463,7 @@ class ProjectData {
       codeSnippetPath: json['codeSnippetPath'] ?? '',
       codeSnippet: json['codeSnippet'] ?? '',
       screenshots: List<String>.from(json['screenshots'] ?? []),
+      webScreenshots: List<String>.from(json['webScreenshots'] ?? []),
       integrations: (json['integrations'] as List? ?? [])
           .map((item) => IntegrationItem.fromJson(item))
           .toList(),
@@ -407,6 +486,7 @@ class ProjectData {
       'codeSnippetPath': codeSnippetPath,
       'codeSnippet': codeSnippet,
       'screenshots': screenshots,
+      'webScreenshots': webScreenshots,
       'integrations': integrations.map((item) => item.toJson()).toList(),
     };
   }

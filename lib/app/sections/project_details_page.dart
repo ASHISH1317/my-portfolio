@@ -54,7 +54,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     }
   }
 
-  void _openFullImageDialog(BuildContext context, String imageUrl) {
+  void _openFullImageDialog(BuildContext context, String imageUrl, {bool isLandscape = false}) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -78,9 +78,10 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       maxHeight: MediaQuery.of(context).size.height * 0.85,
+                      maxWidth: isLandscape ? MediaQuery.of(context).size.width * 0.9 : MediaQuery.of(context).size.width * 0.5,
                     ),
                     child: AspectRatio(
-                      aspectRatio: 9 / 16,
+                      aspectRatio: isLandscape ? 16 / 9 : 9 / 16,
                       child: Image.network(
                         imageUrl,
                         fit: BoxFit.contain,
@@ -214,7 +215,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                                 childrenList.add(_buildCleanArchitectureSection(isMobile));
                               }
 
-                              if (widget.project.screenshots.isNotEmpty) {
+                              if (widget.project.screenshots.isNotEmpty || widget.project.webScreenshots.isNotEmpty) {
                                 childrenList.add(const SizedBox(height: 40));
                                 childrenList.add(AnimatedSectionDivider());
                                 childrenList.add(const SizedBox(height: 40));
@@ -677,17 +678,17 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           flex: 1,
           child: Padding(
             padding: const EdgeInsets.only(top: 24.0),
-            child: _buildCleanArchText(),
+            child: StickyContainer(
+              scrollController: _scrollController,
+              parentKey: _cleanArchRowKey,
+              child: _buildCleanArchText(),
+            ),
           ),
         ),
         const SizedBox(width: 48),
         Expanded(
           flex: 2,
-          child: StickyContainer(
-            scrollController: _scrollController,
-            parentKey: _cleanArchRowKey,
-            child: _buildMockIDE(),
-          ),
+          child: _buildMockIDE(),
         ),
       ],
     );
@@ -794,7 +795,6 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
     final lines = widget.project.codeSnippet.split('\n');
 
     return CustomCard(
-      backgroundColor: ThemeConfig.surfaceContainerHigh.withValues(alpha: 0.2),
       padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -957,13 +957,17 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
   // Screenshots Gallery
   Widget _buildScreenshotsSection(bool isMobile) {
-    return Column(
-      children: [
+    final List<Widget> children = [];
+
+    if (widget.project.screenshots.isNotEmpty) {
+      children.add(
         Text(
-          "High-Fidelity Interface",
+          "Mobile Application Gallery",
           style: ThemeConfig.h2,
         ),
-        const SizedBox(height: 12),
+      );
+      children.add(const SizedBox(height: 12));
+      children.add(
         Text(
           "SWIPE TO EXPLORE • CLICK TO EXPAND",
           style: TextStyle(
@@ -974,13 +978,54 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 32),
+      );
+      children.add(const SizedBox(height: 32));
+      children.add(
         ScreenshotsCarousel(
           screenshots: widget.project.screenshots,
           isMobile: isMobile,
-          onImageTap: (url) => _openFullImageDialog(context, url),
+          isLandscape: false,
+          onImageTap: (url) => _openFullImageDialog(context, url, isLandscape: false),
         ),
-      ],
+      );
+    }
+
+    if (widget.project.webScreenshots.isNotEmpty) {
+      if (children.isNotEmpty) {
+        children.add(const SizedBox(height: 60));
+      }
+      children.add(
+        Text(
+          "Web Platform Gallery",
+          style: ThemeConfig.h2,
+        ),
+      );
+      children.add(const SizedBox(height: 12));
+      children.add(
+        Text(
+          "SWIPE TO EXPLORE • CLICK TO EXPAND",
+          style: TextStyle(
+            color: ThemeConfig.textMuted,
+            fontFamily: "JetBrains Mono",
+            fontSize: 10,
+            letterSpacing: 1.5,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      );
+      children.add(const SizedBox(height: 32));
+      children.add(
+        ScreenshotsCarousel(
+          screenshots: widget.project.webScreenshots,
+          isMobile: isMobile,
+          isLandscape: true,
+          onImageTap: (url) => _openFullImageDialog(context, url, isLandscape: true),
+        ),
+      );
+    }
+
+    return Column(
+      children: children,
     );
   }
 
@@ -1330,12 +1375,14 @@ class ScreenshotsCarousel extends StatefulWidget {
   final List<String> screenshots;
   final bool isMobile;
   final Function(String) onImageTap;
+  final bool isLandscape;
 
   const ScreenshotsCarousel({
     super.key,
     required this.screenshots,
     required this.isMobile,
     required this.onImageTap,
+    this.isLandscape = false,
   });
 
   @override
@@ -1351,7 +1398,9 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
   void initState() {
     super.initState();
     _pageController = PageController(
-      viewportFraction: widget.isMobile ? 0.65 : 0.28,
+      viewportFraction: widget.isMobile
+          ? (widget.isLandscape ? 0.85 : 0.65)
+          : (widget.isLandscape ? 0.55 : 0.28),
       initialPage: 1000,
     );
     _pageController.addListener(() {
@@ -1385,20 +1434,32 @@ class _ScreenshotsCarouselState extends State<ScreenshotsCarousel> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final double pageSlotWidth = screenWidth * (widget.isMobile ? 0.65 : 0.28);
+    final double pageSlotWidth = screenWidth *
+        (widget.isMobile
+            ? (widget.isLandscape ? 0.85 : 0.65)
+            : (widget.isLandscape ? 0.55 : 0.28));
     final double maxAllowedWidth = pageSlotWidth - 16;
     
-    // Maintain a clean 9:16 aspect ratio
-    final double maxItemHeight = widget.isMobile ? 320.0 : 440.0;
-    double computedHeight = maxAllowedWidth * (16 / 9);
+    final double maxItemHeight = widget.isLandscape
+        ? (widget.isMobile ? 220.0 : 360.0)
+        : (widget.isMobile ? 320.0 : 440.0);
+        
+    double computedHeight = widget.isLandscape
+        ? maxAllowedWidth * (9 / 16)
+        : maxAllowedWidth * (16 / 9);
     
     if (computedHeight > maxItemHeight) {
       computedHeight = maxItemHeight;
     }
-    final double computedWidth = computedHeight * (9 / 16);
+    
+    final double computedWidth = widget.isLandscape
+        ? computedHeight * (16 / 9)
+        : computedHeight * (9 / 16);
 
     return SizedBox(
-      height: widget.isMobile ? 360 : 490,
+      height: widget.isLandscape
+          ? (widget.isMobile ? 260 : 410)
+          : (widget.isMobile ? 360 : 490),
       child: PageView.builder(
         controller: _pageController,
         clipBehavior: Clip.none,
