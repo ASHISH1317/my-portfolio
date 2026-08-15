@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app/data/theme_config.dart';
-import 'app/portfolio_home.dart';
 import 'app/bindings/portfolio_binding.dart';
 import 'app/widgets/smooth_scroll_behavior.dart';
+import 'app/routes/app_pages.dart';
 
 void main() {
   runApp(const MyApp());
@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
         ),
         fontFamily: ThemeConfig.fontFamily,
       ),
-      home: const PortfolioHome(),
+      initialRoute: AppPages.INITIAL,
+      getPages: AppPages.routes,
     );
   }
 }

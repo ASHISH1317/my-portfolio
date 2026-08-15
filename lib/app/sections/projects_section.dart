@@ -8,6 +8,7 @@ import '../widgets/custom_card.dart';
 import '../widgets/section_header.dart';
 import 'project_details_page.dart';
 import '../controllers/projects_controller.dart';
+import '../routes/app_routes.dart';
 
 class ProjectsSection extends GetView<ProjectsController> {
   const ProjectsSection({super.key});
@@ -17,11 +18,8 @@ class ProjectsSection extends GetView<ProjectsController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      final showAll = controller.showAll.value;
       final totalProjects = controller.projects.length;
-      final displayCount = showAll
-          ? totalProjects
-          : (_initialLimit < totalProjects ? _initialLimit : totalProjects);
+      final displayCount = _initialLimit < totalProjects ? _initialLimit : totalProjects;
       final hasMore = totalProjects > _initialLimit;
 
       return Container(
@@ -54,15 +52,15 @@ class ProjectsSection extends GetView<ProjectsController> {
                 );
               },
             ),
-            if (hasMore && !showAll) ...[
+            if (hasMore) ...[
               const SizedBox(height: 48),
               Center(
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    controller.toggleShowAll();
+                    Get.toNamed(Routes.PROJECTS);
                   },
                   style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: ThemeConfig.outline),
+                    side: BorderSide(color: ThemeConfig.primary.withValues(alpha: 0.5)),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 32,
                       vertical: 16,
@@ -72,17 +70,19 @@ class ProjectsSection extends GetView<ProjectsController> {
                     ),
                   ),
                   icon: Text(
-                    "View ${totalProjects - _initialLimit} More Projects",
+                    "Explore All Projects",
                     style: TextStyle(
-                      color: ThemeConfig.textPrimary,
+                      color: ThemeConfig.primary,
                       fontFamily: "JetBrains Mono",
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
                     ),
                   ),
                   label: Icon(
-                    Icons.expand_more_rounded,
-                    color: ThemeConfig.textPrimary,
+                    Icons.arrow_forward_rounded,
+                    color: ThemeConfig.primary,
+                    size: 16,
                   ),
                 ),
               ),
