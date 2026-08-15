@@ -1,11 +1,13 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:animations/animations.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
-import '../widgets/animated_background.dart';
+import '../widgets/theme_selector.dart';
 import '../widgets/smooth_scroll_wrapper.dart';
 import '../widgets/custom_card.dart';
+import '../routes/app_routes.dart';
 import '../controllers/all_projects_controller.dart';
 import 'project_details_page.dart';
 
@@ -17,176 +19,238 @@ class AllProjectsPage extends GetView<AllProjectsController> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isMobile = screenWidth < 768;
 
-    return Scaffold(
-      backgroundColor: ThemeConfig.background,
-      body: Stack(
-        children: [
-          // Slow dynamic ambient background
-          const Positioned.fill(
-            child: AnimatedBackground(),
-          ),
+    return Obx(() {
+      return Scaffold(
+        backgroundColor: ThemeConfig.background,
+        body: Stack(
+          children: [
+            // Background decorations (Subtle ambient glows, same as details page)
+            Positioned(
+              top: -200,
+              left: -200,
+              child: Container(
+                width: 600,
+                height: 600,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ThemeConfig.primary.withValues(alpha: 0.04),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 100,
+              right: -200,
+              child: Container(
+                width: 500,
+                height: 500,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ThemeConfig.primary.withValues(alpha: 0.02),
+                ),
+              ),
+            ),
 
-          // Content
-          Positioned.fill(
-            child: Column(
-              children: [
-                // Header / AppBar
-                _buildHeader(context, isMobile),
+            // Scrollable Content
+            Positioned.fill(
+              child: SmoothScrollWrapper(
+                controller: controller.scrollController,
+                child: SingleChildScrollView(
+                  controller: controller.scrollController,
+                  child: Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 1280),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 16.0 : 24.0,
+                        vertical: 30.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 70), // Clear sticky app bar space
 
-                // Main Section Scrollable Content
-                Expanded(
-                  child: SmoothScrollWrapper(
-                    controller: controller.scrollController,
-                    child: SingleChildScrollView(
-                      controller: controller.scrollController,
-                      child: Center(
-                        child: Container(
-                          constraints: const BoxConstraints(maxWidth: 1280),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isMobile ? 16.0 : 24.0,
-                            vertical: 30.0,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Search and Filter widgets
-                              _buildSearchAndFilters(context),
-                              const SizedBox(height: 40),
+                          // Page Title & Subtitle inside scroll view
+                          _buildPageHeader(context, isMobile),
+                          const SizedBox(height: 32),
 
-                              // Projects Grid
-                              Obx(() {
-                                final filtered = controller.filteredProjects;
-                                if (filtered.isEmpty) {
-                                  return _buildEmptyState();
-                                }
-                                return LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    final double maxWidth = constraints.maxWidth;
-                                    final int columns = maxWidth < 650
-                                        ? 1
-                                        : (maxWidth < 1000 ? 2 : 3);
-                                    const double spacing = 24.0;
-                                    final double cardWidth =
-                                        (maxWidth - (columns - 1) * spacing) / columns;
+                          // Search and Filter widgets
+                          _buildSearchAndFilters(context),
+                          const SizedBox(height: 40),
 
-                                    return Wrap(
-                                      spacing: spacing,
-                                      runSpacing: spacing,
-                                      children: List.generate(filtered.length, (index) {
-                                        final project = filtered[index];
-                                        return SizedBox(
-                                          width: cardWidth,
-                                          child: _buildProjectCard(context, project, index),
-                                        );
-                                      }),
-                                    );
-                                  },
+                          // Projects Grid
+                          Obx(() {
+                            final filtered = controller.filteredProjects;
+                            if (filtered.isEmpty) {
+                              return _buildEmptyState();
+                            }
+                            return LayoutBuilder(
+                              builder: (context, constraints) {
+                                final double maxWidth = constraints.maxWidth;
+                                final int columns = maxWidth < 650
+                                    ? 1
+                                    : (maxWidth < 1000 ? 2 : 3);
+                                const double spacing = 24.0;
+                                final double cardWidth =
+                                    (maxWidth - (columns - 1) * spacing) / columns;
+
+                                return SizedBox(
+                                  width: maxWidth,
+                                  child: Wrap(
+                                    spacing: spacing,
+                                    runSpacing: spacing,
+                                    children: List.generate(filtered.length, (index) {
+                                      final project = filtered[index];
+                                      return SizedBox(
+                                        width: cardWidth,
+                                        child: _buildProjectCard(context, project, index),
+                                      );
+                                    }),
+                                  ),
                                 );
-                              }),
-                              const SizedBox(height: 60),
-                            ],
-                          ),
-                        ),
+                              },
+                            );
+                          }),
+                          const SizedBox(height: 60),
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+
+            // Sleek Sticky App Bar (same style as details page, with scroll search)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: _buildStickyAppBar(context, isMobile),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
-  Widget _buildHeader(BuildContext context, bool isMobile) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 16.0 : 40.0,
-        vertical: 20.0,
-      ),
-      decoration: BoxDecoration(
-        color: ThemeConfig.background.withValues(alpha: 0.8),
-        border: Border(
-          bottom: BorderSide(
-            color: ThemeConfig.outlineVariant.withValues(alpha: 0.1),
-            width: 1,
+  Widget _buildStickyAppBar(BuildContext context, bool isMobile) {
+    return Obx(() {
+      final double opacity = controller.scrollOpacity.value;
+
+      return ClipRect(
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: isMobile ? 16 : 24,
+            vertical: 12,
           ),
-        ),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Row(
-          children: [
-            // Back Button
-            InkWell(
-              onTap: () => Get.back(),
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: ThemeConfig.outlineVariant.withValues(alpha: 0.2),
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
+          decoration: BoxDecoration(
+            color: ThemeConfig.background.withValues(alpha: 0.85 * opacity),
+            border: Border(
+              bottom: BorderSide(
+                color: ThemeConfig.outlineVariant.withValues(alpha: 0.15 * opacity),
+                width: 1,
+              ),
+            ),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 12 * opacity,
+              sigmaY: 12 * opacity,
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: SizedBox(
+                height: 40,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: ThemeConfig.primary,
-                      size: 16,
-                    ),
-                    if (!isMobile) ...[
-                      const SizedBox(width: 8),
-                      Text(
-                        "BACK",
+                    // Center-aligned Pinned Title
+                    Opacity(
+                      opacity: opacity,
+                      child: Text(
+                        "All Projects",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: ThemeConfig.textPrimary,
-                          fontFamily: "JetBrains Mono",
-                          fontSize: 12,
+                          fontSize: isMobile ? 15 : 18,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 1.0,
+                          color: ThemeConfig.textPrimary,
+                          letterSpacing: 0.5,
                         ),
                       ),
-                    ],
+                    ),
+                    // Left-aligned circular Back Button
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (Navigator.of(context).canPop()) {
+                              Get.back();
+                            } else {
+                              Get.offAllNamed(Routes.HOME);
+                            }
+                          },
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: ThemeConfig.background.withValues(alpha: 0.8 * (1 - opacity)),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: ThemeConfig.outlineVariant.withValues(
+                                  alpha: 0.3 * (1 - opacity) + 0.1 * opacity,
+                                ),
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.arrow_back_rounded,
+                              color: ThemeConfig.primary,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Right-aligned Theme Selector
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: const ThemeSelector(),
+                    ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(width: 24),
-            // Title
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "All Projects",
-                    style: TextStyle(
-                      color: ThemeConfig.textPrimary,
-                      fontSize: isMobile ? 20 : 28,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  Text(
-                    "EXPLORE THE FULL ARCHIVE",
-                    style: TextStyle(
-                      color: ThemeConfig.primary,
-                      fontFamily: "JetBrains Mono",
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.5,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
-      ),
+      );
+    });
+  }
+
+  Widget _buildPageHeader(BuildContext context, bool isMobile) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "All Projects",
+          style: TextStyle(
+            color: ThemeConfig.textPrimary,
+            fontSize: isMobile ? 32 : 48,
+            fontWeight: FontWeight.bold,
+            letterSpacing: -1.0,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          "EXPLORE THE FULL ARCHIVE",
+          style: TextStyle(
+            color: ThemeConfig.primary,
+            fontFamily: "JetBrains Mono",
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+          ),
+        ),
+      ],
     );
   }
 
@@ -198,6 +262,7 @@ class AllProjectsPage extends GetView<AllProjectsController> {
         Container(
           constraints: const BoxConstraints(maxWidth: 500),
           child: TextField(
+            controller: controller.searchController,
             onChanged: controller.setSearchQuery,
             style: TextStyle(color: ThemeConfig.textPrimary, fontSize: 14),
             decoration: InputDecoration(
@@ -221,47 +286,53 @@ class AllProjectsPage extends GetView<AllProjectsController> {
           ),
         ),
         const SizedBox(height: 20),
-        // Tags Filter List (Horizontal scrolling chips)
+        // Tags Filter List (Wrap Grid layout - Pinned / Not scrollable)
         Obx(() {
-          return SizedBox(
-            height: 40,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: controller.tagsList.length,
-              itemBuilder: (context, index) {
-                final tag = controller.tagsList[index];
-                final isSelected = controller.selectedTag.value == tag;
+          return Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: controller.tagsList.map((tag) {
+              final isSelected = controller.selectedTag.value == tag;
 
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ChoiceChip(
-                    label: Text(
+              return MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () => controller.selectTag(tag),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isSelected 
+                          ? ThemeConfig.primary 
+                          : ThemeConfig.surfaceContainerLow.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(
+                        color: isSelected
+                            ? ThemeConfig.primary
+                            : ThemeConfig.outlineVariant.withValues(alpha: 0.2),
+                      ),
+                      boxShadow: isSelected ? [
+                        BoxShadow(
+                          color: ThemeConfig.primary.withValues(alpha: 0.15),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        )
+                      ] : null,
+                    ),
+                    child: Text(
                       tag.toUpperCase(),
                       style: TextStyle(
                         fontFamily: "JetBrains Mono",
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: isSelected ? ThemeConfig.onPrimary : ThemeConfig.textSecondary,
+                        letterSpacing: 0.5,
                       ),
                     ),
-                    selected: isSelected,
-                    onSelected: (_) => controller.selectTag(tag),
-                    selectedColor: ThemeConfig.primary,
-                    backgroundColor: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      side: BorderSide(
-                        color: isSelected
-                            ? ThemeConfig.primary
-                            : ThemeConfig.outlineVariant.withValues(alpha: 0.2),
-                      ),
-                    ),
-                    showCheckmark: false,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            }).toList(),
           );
         }),
       ],

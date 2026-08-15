@@ -270,6 +270,71 @@ class PortfolioData {
         IntegrationItem(title: "Mixpanel & Clarity Analytics", icon: "analytics"),
       ],
     ),
+    ProjectData(
+      title: "The KG Method",
+      description: "A personalized fitness and training app designed to help users stay consistent, train effectively, and achieve their fitness goals with professional guidance.",
+      tags: ["Flutter", "GetX", "Fitness Tracking", "REST APIs", "Local Caching", "Active Timer"],
+      projectUrl: "",
+      githubUrl: "",
+      playStoreUrl: "https://play.google.com/store/apps/details?id=com.thekgmethod.thekgmethod_app&pcampaignid=web_share",
+      appStoreUrl: "",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-1.jpg",
+      backgroundStory: "The KG Method was created to bridge the gap between structured personal training and flexible workout accessibility. The cross-platform mobile application was engineered using Flutter and GetX state management, establishing a performant, offline-first ecosystem.\n\nSince fitness training frequently occurs in areas with spotty network access (such as gym basements), a major engineering challenge was developing a reliable offline-first workout logging engine. I designed a robust cache synchronization pipeline powered by Hive local storage that enqueues metrics offline and syncs backends asynchronously. Additionally, I implemented customized, high-performance video player caches to prevent loading lag during exercise form reviews and built a custom high-precision active rest timer utilizing Dart streams and background worker threads.",
+      keyFeatures: [
+        FeatureItem(
+          title: "Personalized Daily Workouts",
+          description: "Smart, adaptive workout programs customized to the user's fitness level, goals, and training environment.",
+        ),
+        FeatureItem(
+          title: "Glossary & Form Demos",
+          description: "An extensive library of exercises complete with detailed text descriptions and step-by-step video guides.",
+        ),
+        FeatureItem(
+          title: "Logging & PR Tracking",
+          description: "Seamless logging of sets, repetitions, weights, and personal-record tracking to enable progressive overload.",
+        ),
+        FeatureItem(
+          title: "Active Rest Timer",
+          description: "A highly precise active rest timer that handles audio cues and runs reliably across application lifecycles.",
+        ),
+        FeatureItem(
+          title: "Progress Charts & Photos",
+          description: "Visual analysis dashboards monitoring body measurements, strength history, and progress pictures over time.",
+        ),
+        FeatureItem(
+          title: "Workout Scheduling",
+          description: "Tailored training schedules built to accommodate home, gym, or minimal-equipment training styles.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Flutter", icon: "flutter"),
+        TechItem(name: "GetX", icon: "rebase_edit"),
+        TechItem(name: "Hive / SQLite", icon: "database"),
+        TechItem(name: "REST APIs", icon: "api"),
+        TechItem(name: "Custom Timer", icon: "timer"),
+        TechItem(name: "Video Players", icon: "movie"),
+      ],
+      codeSnippetPath: "lib/app/modules/workout/controllers/workout_timer_controller.dart",
+      codeSnippet: "class WorkoutTimerController extends GetxController {\n  final RxInt remainingRest = 0.obs;\n  Timer? _ticker;\n  final RxBool isTimerActive = false.obs;\n\n  void startRestTimer(int durationSeconds) {\n    _ticker?.cancel();\n    remainingRest.value = durationSeconds;\n    isTimerActive.value = true;\n\n    _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {\n      if (remainingRest.value > 0) {\n        remainingRest.value--;\n      } else {\n        completeRestTimer();\n      }\n    });\n  }\n\n  void completeRestTimer() {\n    _ticker?.cancel();\n    isTimerActive.value = false;\n    // Trigger audio notification and haptic feedback\n    HapticFeedback.vibrate();\n    AudioPlayerService.to.playBeepSound();\n  }\n\n  @override\n  void onClose() {\n    _ticker?.cancel();\n    super.onClose();\n  }\n}",
+      screenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-1.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-2.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-3.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-4.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-5.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-6.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-7.jpg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/kg-method/kg-method-8.jpg",
+      ],
+      integrations: [
+        IntegrationItem(title: "REST APIs & Sync Engine", icon: "sync"),
+        IntegrationItem(title: "Hive Local Cache Database", icon: "database"),
+        IntegrationItem(title: "Video Players & Custom Form Guides", icon: "movie"),
+        IntegrationItem(title: "Rest Timer & Audio Cue Integration", icon: "timer"),
+        IntegrationItem(title: "FL Charts Analytics Engine", icon: "analytics"),
+        IntegrationItem(title: "FCM Push Notifications System", icon: "notifications_active"),
+      ],
+    ),
   ];
 
   static const List<ExperienceData> experiences = [

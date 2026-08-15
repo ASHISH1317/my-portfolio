@@ -4,21 +4,38 @@ import '../data/portfolio_data.dart';
 
 class AllProjectsController extends GetxController {
   final ScrollController scrollController = ScrollController();
+  final TextEditingController searchController = TextEditingController();
   final RxList<ProjectData> projects = <ProjectData>[].obs;
   final RxString searchQuery = "".obs;
   final RxString selectedTag = "All".obs;
   final RxList<String> tagsList = <String>["All"].obs;
+  final RxDouble scrollOpacity = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
     loadProjects();
     extractTags();
+    scrollController.addListener(_scrollListener);
+  }
+
+  void _scrollListener() {
+    if (scrollController.hasClients) {
+      double offset = scrollController.offset;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        double opacity = ((offset - 100) / 150).clamp(0.0, 1.0);
+        if (opacity != scrollOpacity.value) {
+          scrollOpacity.value = opacity;
+        }
+      });
+    }
   }
 
   @override
   void onClose() {
+    scrollController.removeListener(_scrollListener);
     scrollController.dispose();
+    searchController.dispose();
     super.onClose();
   }
 
@@ -56,5 +73,11 @@ class AllProjectsController extends GetxController {
 
   void setSearchQuery(String query) {
     searchQuery.value = query;
+    if (searchController.text != query) {
+      searchController.value = searchController.value.copyWith(
+        text: query,
+        selection: TextSelection.collapsed(offset: query.length),
+      );
+    }
   }
 }
