@@ -335,6 +335,69 @@ class PortfolioData {
         IntegrationItem(title: "FCM Push Notifications System", icon: "notifications_active"),
       ],
     ),
+    ProjectData(
+      title: "Diamond Company",
+      description: "A B2B mobile marketplace designed to simplify and modernize the global diamond sourcing and procurement process. Connecting buyers with trusted suppliers, the platform offers advanced search, real-time RFQ management, secure transactions, and offline capabilities.",
+      tags: ["Flutter", "Dart", "GetX", "PowerSync", "Drift / SQLite", "Socket.IO", "Monorepo"],
+      projectUrl: "",
+      githubUrl: "",
+      playStoreUrl: "https://play.google.com/store/apps/details?id=com.diamondcompany.app&hl=en_IN",
+      appStoreUrl: "https://apps.apple.com/es/app/diamond-company/id6503249317",
+      imageUrl: "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image1.jpeg",
+      backgroundStory: "Diamond Company was built to solve the challenges of sourcing and procurement in the global B2B diamond industry. Leveraging Flutter and a powerful clean architecture monorepo, we designed a client-facing marketplace app and a supplier/admin app. The platform handles real-time messaging, RFQ negotiations, inventory syncing, and custom calculations.\n\nThe key technical challenge was managing offline-first data sync for massive, fast-updating global diamond inventories. We solved this by implementing PowerSync alongside Drift and SQLite databases for robust local caching, paired with localized currency and exchange-rate calculation engines. Dynamic interactions are synchronized via a unified state layer powered by GetX.",
+      keyFeatures: [
+        FeatureItem(
+          title: "Global Diamond Sourcing",
+          description: "Browse and discover diamonds and jewelry listings from trusted global suppliers.",
+        ),
+        FeatureItem(
+          title: "Advanced Search & Filter",
+          description: "High-performance semantic search filters to narrow down diamond shape, color, clarity, carat, and cut.",
+        ),
+        FeatureItem(
+          title: "RFQ & Negotiation Engine",
+          description: "In-app Request for Quote (RFQ) pipeline with custom counter-offers, negotiations, and bulk bidding.",
+        ),
+        FeatureItem(
+          title: "Offline-First Sync",
+          description: "Local Drift & SQLite databases with PowerSync to keep inventory searchable and updated even offline.",
+        ),
+        FeatureItem(
+          title: "Socket.IO Real-time Chat",
+          description: "Real-time communication and jewelry sharing between buyers and suppliers directly in the app.",
+        ),
+        FeatureItem(
+          title: "Fancy Color Calculator",
+          description: "Dynamic custom calculations for fancy-colored diamond values, exchange rates, and multi-currency conversions.",
+        ),
+      ],
+      techStack: [
+        TechItem(name: "Flutter", icon: "flutter"),
+        TechItem(name: "GetX", icon: "rebase_edit"),
+        TechItem(name: "PowerSync & Drift", icon: "database"),
+        TechItem(name: "Socket.IO Client", icon: "sync"),
+        TechItem(name: "Firebase Suite", icon: "local_fire_department"),
+        TechItem(name: "gRPC & Protobuf", icon: "api"),
+      ],
+      codeSnippetPath: "apps/marketplace/lib/app/modules/diamond/controllers/diamond_controller.dart",
+      codeSnippet: "class DiamondController extends GetxController {\n  late DiamondArgs args;\n  final Rx<DiamondEntity> _diamond = DiamondEntity().obs;\n  final Rx<SupplierEntity?> _supplier = Rx<SupplierEntity?>(null);\n  final SelectionService _selectionService = Get.find<SelectionService>();\n  RxBool isSelected = false.obs;\n\n  @override\n  void onInit() {\n    super.onInit();\n    if (Get.arguments is DiamondArgs) {\n      args = Get.arguments as DiamondArgs;\n      _updateLocalState(args.diamond ?? DiamondEntity());\n    }\n    _selectionWorker = ever(_selectionService.selectedDiamonds, (_) {\n      if (diamond().stockId != null) {\n        isSelected.value = _selectionService.isSelected(diamond().stockId!);\n      }\n    });\n  }\n\n  Future<void> toggleSelection() async {\n    if (diamond().stockId == null) return;\n    await _selectionService.toggleSelection(diamond());\n    isSelected.value = _selectionService.isSelected(diamond().stockId!);\n    vibrate();\n  }\n}",
+      screenshots: [
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image1.jpeg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image2.jpeg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image3.jpeg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image4.jpeg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image5.jpeg",
+        "https://cdn.jsdelivr.net/gh/ASHISH1317/my-portfolio@main/media/projects/diamond-company/Marketplace-image6.jpeg",
+      ],
+      integrations: [
+        IntegrationItem(title: "PowerSync Real-Time Sync", icon: "sync"),
+        IntegrationItem(title: "Drift & SQLite Local DB", icon: "dns"),
+        IntegrationItem(title: "Socket.IO In-App Chat", icon: "folder_shared"),
+        IntegrationItem(title: "gRPC & Protobuf APIs", icon: "api"),
+        IntegrationItem(title: "Firebase Push Messaging", icon: "notifications_active"),
+        IntegrationItem(title: "Fancy Color & Exchange Calculator", icon: "monetization_on"),
+      ],
+    ),
   ];
 
   static const List<ExperienceData> experiences = [
