@@ -101,7 +101,7 @@ print_success "Flutter Web built successfully in ${BUILD_DURATION}s."
 print_header "[3/3] Deploying to Firebase Hosting"
 DEPLOY_START=$(date +%s)
 
-npx -y firebase-tools@latest deploy --only hosting
+npx -y firebase-tools@latest deploy --only hosting --project ashish-vasava-portfolio
 
 DEPLOY_END=$(date +%s)
 DEPLOY_DURATION=$((DEPLOY_END - DEPLOY_START))
