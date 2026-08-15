@@ -66,7 +66,7 @@ class PortfolioData {
     ProjectData(
       title: "HOGR — The Food App",
       description: "A premier social dining and food discovery ecosystem. Hogr merges social networking with dining, featuring AI-powered dish discovery, real-time shared group carts, gamified loyalty coins, and interactive map exploration.",
-      tags: ["Flutter", "Supabase", "Firebase", "AI Search", "Google Maps", "REST APIs"],
+      tags: ["Flutter", "Supabase", "Firebase", "AI Search", "Google Maps", "REST APIs", "Payments"],
       projectUrl: "https://hogr.app",
       githubUrl: "",
       playStoreUrl: "https://play.google.com/store/apps/details?id=com.hogr.hogr&hl=enIN",
@@ -132,7 +132,7 @@ class PortfolioData {
     ProjectData(
       title: "Trainovate",
       description: "A modern e-learning ecosystem featuring secure video lectures, interactive quizzes, progress tracking, and custom certificate generation. Built with standard state management and integrated with Paymongo, Apple Pay, and In-App Purchases, featuring robust corporate group licensing.",
-      tags: ["Flutter", "Node.js", "GetX", "Next.js", "PostgreSQL", "Socket.IO"],
+      tags: ["Flutter", "Node.js", "GetX", "Next.js", "PostgreSQL", "Socket.IO", "Payments"],
       projectUrl: "https://new.trainovate.org/",
       githubUrl: "",
       playStoreUrl: "https://play.google.com/store/apps/details?id=com.trainovate.app&hl=en_IN",
@@ -401,7 +401,7 @@ class PortfolioData {
     ProjectData(
       title: "The D Wave",
       description: "A science-driven skincare and beauty platform built on Shopify Hydrogen, combining AI-powered skin analysis, personalized skincare recommendations, QGEN™ plant stem cell technology, and full e-commerce into one cohesive digital ecosystem.",
-      tags: ["Shopify", "Hydrogen", "React", "TypeScript", "Gemini AI", "GraphQL", "Storefront API"],
+      tags: ["Shopify", "Hydrogen", "React", "TypeScript", "Gemini AI", "GraphQL", "Storefront API", "Payments"],
       projectUrl: "https://dwaveskin.com/",
       githubUrl: "",
       playStoreUrl: "",

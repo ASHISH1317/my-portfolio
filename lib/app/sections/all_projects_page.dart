@@ -331,8 +331,15 @@ class AllProjectsPage extends GetView<AllProjectsController> {
             );
           }).toList();
 
-          if (isMobile) {
-            return SingleChildScrollView(
+          return ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+                PointerDeviceKind.trackpad,
+              },
+            ),
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               child: Row(
@@ -345,14 +352,8 @@ class AllProjectsPage extends GetView<AllProjectsController> {
                   );
                 }).toList(),
               ),
-            );
-          } else {
-            return Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              children: chips,
-            );
-          }
+            ),
+          );
         }),
       ],
     );

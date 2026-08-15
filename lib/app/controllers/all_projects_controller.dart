@@ -44,11 +44,16 @@ class AllProjectsController extends GetxController {
   }
 
   void extractTags() {
-    final Set<String> uniqueTags = {};
-    for (var project in PortfolioData.projects) {
-      uniqueTags.addAll(project.tags);
-    }
-    tagsList.assignAll(["All", ...uniqueTags]);
+    tagsList.assignAll([
+      "All",
+      "Flutter",
+      "React / Next.js",
+      "Supabase / DB",
+      "AI Integration",
+      "Shopify Headless",
+      "IoT & BLE",
+      "Payments",
+    ]);
   }
 
   List<ProjectData> get filteredProjects {
@@ -61,7 +66,54 @@ class AllProjectsController extends GetxController {
           project.description.toLowerCase().contains(query) ||
           project.tags.any((t) => t.toLowerCase().contains(query));
 
-      final matchesTag = tag == "All" || project.tags.contains(tag);
+      if (tag == "All") return matchesQuery;
+
+      bool matchesTag = false;
+      final lowercaseTags = project.tags.map((t) => t.toLowerCase()).toList();
+
+      if (tag == "Flutter") {
+        matchesTag = lowercaseTags.any((t) => t.contains("flutter") || t.contains("dart"));
+      } else if (tag == "React / Next.js") {
+        matchesTag = lowercaseTags.any((t) =>
+            t.contains("react") ||
+            t.contains("next.js") ||
+            t.contains("typescript"));
+      } else if (tag == "Supabase / DB") {
+        matchesTag = lowercaseTags.any((t) =>
+            t.contains("supabase") ||
+            t.contains("sqlite") ||
+            t.contains("hive") ||
+            t.contains("drift") ||
+            t.contains("database") ||
+            t.contains("powersync") ||
+            t.contains("postgresql"));
+      } else if (tag == "AI Integration") {
+        matchesTag = lowercaseTags.any((t) =>
+            t.contains("ai") ||
+            t.contains("openai") ||
+            t.contains("gemini"));
+      } else if (tag == "Shopify Headless") {
+        matchesTag = lowercaseTags.any((t) =>
+            t.contains("shopify") ||
+            t.contains("hydrogen") ||
+            t.contains("storefront"));
+      } else if (tag == "IoT & BLE") {
+        matchesTag = lowercaseTags.any((t) =>
+            t.contains("ble") ||
+            t.contains("bluetooth") ||
+            t.contains("wifi") ||
+            t.contains("iot"));
+      } else if (tag == "Payments") {
+        matchesTag = lowercaseTags.any((t) =>
+            t.contains("stripe") ||
+            t.contains("plaid") ||
+            t.contains("payment") ||
+            t.contains("apple pay") ||
+            t.contains("telr") ||
+            t.contains("revenuecat"));
+      } else {
+        matchesTag = project.tags.contains(tag);
+      }
 
       return matchesQuery && matchesTag;
     }).toList();
