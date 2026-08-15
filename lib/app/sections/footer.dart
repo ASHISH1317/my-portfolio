@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/theme_config.dart';
 import '../data/portfolio_data.dart';
 import '../widgets/theme_selector.dart';
+import '../widgets/story_dialog.dart';
 
 class Footer extends StatelessWidget {
   final Function(int)? onNavItemTap;
@@ -50,36 +51,43 @@ class Footer extends StatelessWidget {
         child: Container(
           constraints: const BoxConstraints(maxWidth: 1280),
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: isMobile
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildBrandInfo(isMobile: true),
-                    const SizedBox(height: 24),
-                    _buildLinks(),
-                    const SizedBox(height: 24),
-                    const ThemeSelector(),
-                    const SizedBox(height: 24),
-                    _buildSocials(),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _buildBrandInfo(isMobile: false),
-                    _buildLinks(),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              isMobile
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        _buildBrandInfo(isMobile: true),
+                        const SizedBox(height: 24),
+                        _buildLinks(),
+                        const SizedBox(height: 24),
                         const ThemeSelector(),
-                        const SizedBox(width: 24),
+                        const SizedBox(height: 24),
                         _buildSocials(),
                       ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        _buildBrandInfo(isMobile: false),
+                        _buildLinks(),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const ThemeSelector(),
+                            const SizedBox(width: 24),
+                            _buildSocials(),
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+              const SizedBox(height: 32),
+              _buildStoryButton(context),
+            ],
+          ),
         ),
       ),
     );
@@ -123,6 +131,53 @@ class Footer extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildStoryButton(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => FlutterStoryDialog.show(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          decoration: BoxDecoration(
+            color: ThemeConfig.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+              color: ThemeConfig.primary.withValues(alpha: 0.3),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: ThemeConfig.primary.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.auto_awesome_rounded,
+                size: 16,
+                color: ThemeConfig.primary,
+              ),
+              const SizedBox(width: 10),
+              Text(
+                "My Chaotic Flutter Story 😂",
+                style: TextStyle(
+                  color: ThemeConfig.textPrimary,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
