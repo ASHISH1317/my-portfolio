@@ -5,12 +5,14 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final String subtitle;
   final String index;
+  final Widget? trailing;
 
   const SectionHeader({
     super.key,
     required this.title,
     required this.subtitle,
     this.index = "00",
+    this.trailing,
   });
 
   @override
@@ -71,17 +73,29 @@ class SectionHeader extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         // Title text using ShaderMask for gradient effect
-        ShaderMask(
-          shaderCallback: (bounds) => ThemeConfig.primaryGradient.createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-          ),
-          child: Text(
-            title,
-            style: ThemeConfig.h2.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Flexible(
+              child: ShaderMask(
+                shaderCallback: (bounds) => ThemeConfig.primaryGradient.createShader(
+                  Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+                ),
+                child: Text(
+                  title,
+                  style: ThemeConfig.h2.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
             ),
-          ),
+            if (trailing != null) ...[
+              const SizedBox(width: 16),
+              trailing!,
+            ],
+          ],
         ),
         const SizedBox(height: 12),
         // Premium accent divider line
@@ -95,7 +109,7 @@ class SectionHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2),
                 boxShadow: [
                   BoxShadow(
-                    color: ThemeConfig.primary.withOpacity(0.3),
+                    color: ThemeConfig.primary.withValues(alpha: 0.3),
                     blurRadius: 4,
                     offset: const Offset(0, 1.5),
                   ),
@@ -119,8 +133,8 @@ class SectionHeader extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      ThemeConfig.primary.withOpacity(0.25),
-                      ThemeConfig.primary.withOpacity(0.0),
+                      ThemeConfig.primary.withValues(alpha: 0.25),
+                      ThemeConfig.primary.withValues(alpha: 0.0),
                     ],
                   ),
                 ),

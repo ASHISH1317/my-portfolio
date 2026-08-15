@@ -27,7 +27,7 @@ class ProjectsSection extends GetView<ProjectsController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildHeader(),
+            _buildHeader(hasMore),
             const SizedBox(height: 40),
             LayoutBuilder(
               builder: (context, constraints) {
@@ -52,49 +52,51 @@ class ProjectsSection extends GetView<ProjectsController> {
                 );
               },
             ),
-            if (hasMore) ...[
-              const SizedBox(height: 48),
-              Center(
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Get.toNamed(Routes.PROJECTS);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: ThemeConfig.primary.withValues(alpha: 0.5)),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  icon: Text(
-                    "Explore All Projects",
-                    style: TextStyle(
-                      color: ThemeConfig.primary,
-                      fontFamily: "JetBrains Mono",
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  label: Icon(
-                    Icons.arrow_forward_rounded,
-                    color: ThemeConfig.primary,
-                    size: 16,
-                  ),
-                ),
-              ),
-            ],
           ],
         ),
       );
     });
   }
 
-  Widget _buildHeader() {
-    return SectionHeader(title: "Projects", subtitle: "Portfolio", index: "05");
+  Widget _buildHeader(bool showExploreAll) {
+    return SectionHeader(
+      title: "Projects",
+      subtitle: "Portfolio",
+      index: "05",
+      trailing: showExploreAll
+          ? TextButton(
+              onPressed: () {
+                Get.toNamed(Routes.PROJECTS);
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: ThemeConfig.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Explore All",
+                    style: TextStyle(
+                      fontFamily: "JetBrains Mono",
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.arrow_forward_rounded,
+                    size: 16,
+                  ),
+                ],
+              ),
+            )
+          : null,
+    );
   }
 
   Widget _buildProjectCard(

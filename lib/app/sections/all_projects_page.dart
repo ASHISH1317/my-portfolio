@@ -73,7 +73,7 @@ class AllProjectsPage extends GetView<AllProjectsController> {
                           const SizedBox(height: 32),
 
                           // Search and Filter widgets
-                          _buildSearchAndFilters(context),
+                          _buildSearchAndFilters(context, isMobile),
                           const SizedBox(height: 40),
 
                           // Projects Grid
@@ -254,7 +254,7 @@ class AllProjectsPage extends GetView<AllProjectsController> {
     );
   }
 
-  Widget _buildSearchAndFilters(BuildContext context) {
+  Widget _buildSearchAndFilters(BuildContext context, bool isMobile) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -286,54 +286,73 @@ class AllProjectsPage extends GetView<AllProjectsController> {
           ),
         ),
         const SizedBox(height: 20),
-        // Tags Filter List (Wrap Grid layout - Pinned / Not scrollable)
+        // Tags Filter List (Wrap Grid layout - Scrollable Row on Mobile)
         Obx(() {
-          return Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: controller.tagsList.map((tag) {
-              final isSelected = controller.selectedTag.value == tag;
+          final chips = controller.tagsList.map((tag) {
+            final isSelected = controller.selectedTag.value == tag;
 
-              return MouseRegion(
-                cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () => controller.selectTag(tag),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: isSelected 
-                          ? ThemeConfig.primary 
-                          : ThemeConfig.surfaceContainerLow.withValues(alpha: 0.5),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isSelected
-                            ? ThemeConfig.primary
-                            : ThemeConfig.outlineVariant.withValues(alpha: 0.2),
-                      ),
-                      boxShadow: isSelected ? [
-                        BoxShadow(
-                          color: ThemeConfig.primary.withValues(alpha: 0.15),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        )
-                      ] : null,
+            return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => controller.selectTag(tag),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: isSelected 
+                        ? ThemeConfig.primary 
+                        : ThemeConfig.surfaceContainerLow.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: isSelected
+                          ? ThemeConfig.primary
+                          : ThemeConfig.outlineVariant.withValues(alpha: 0.2),
                     ),
-                    child: Text(
-                      tag.toUpperCase(),
-                      style: TextStyle(
-                        fontFamily: "JetBrains Mono",
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        color: isSelected ? ThemeConfig.onPrimary : ThemeConfig.textSecondary,
-                        letterSpacing: 0.5,
-                      ),
+                    boxShadow: isSelected ? [
+                      BoxShadow(
+                        color: ThemeConfig.primary.withValues(alpha: 0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      )
+                    ] : null,
+                  ),
+                  child: Text(
+                    tag.toUpperCase(),
+                    style: TextStyle(
+                      fontFamily: "JetBrains Mono",
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: isSelected ? ThemeConfig.onPrimary : ThemeConfig.textSecondary,
+                      letterSpacing: 0.5,
                     ),
                   ),
                 ),
-              );
-            }).toList(),
-          );
+              ),
+            );
+          }).toList();
+
+          if (isMobile) {
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                children: chips.asMap().entries.map((entry) {
+                  final idx = entry.key;
+                  final widget = entry.value;
+                  return Padding(
+                    padding: EdgeInsets.only(right: idx == chips.length - 1 ? 0 : 10),
+                    child: widget,
+                  );
+                }).toList(),
+              ),
+            );
+          } else {
+            return Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: chips,
+            );
+          }
         }),
       ],
     );
