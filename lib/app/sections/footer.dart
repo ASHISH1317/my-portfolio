@@ -100,12 +100,27 @@ class Footer extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          "© 2024 ${PortfolioData.fullName}. Made with Flutter",
-          style: TextStyle(
-            color: ThemeConfig.textMuted,
-            fontSize: 12,
-          ),
+        Row(
+          mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "© 2024 ${PortfolioData.fullName}. Made with ",
+              style: TextStyle(
+                color: ThemeConfig.textMuted,
+                fontSize: 12,
+              ),
+            ),
+            const PumpingHeart(),
+            Text(
+              " Flutter",
+              style: TextStyle(
+                color: ThemeConfig.textMuted,
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -248,6 +263,73 @@ class _FooterLinkState extends State<FooterLink> {
           ),
           child: Text(widget.title),
         ),
+      ),
+    );
+  }
+}
+
+// Stateful pumping heart micro-animation
+class PumpingHeart extends StatefulWidget {
+  const PumpingHeart({super.key});
+
+  @override
+  State<PumpingHeart> createState() => _PumpingHeartState();
+}
+
+class _PumpingHeartState extends State<PumpingHeart>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000), // Heartbeat period
+    );
+
+    // Heartbeat double-pump sequence
+    _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 1.25)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 15,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.25, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 15,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.0, end: 1.2)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 15,
+      ),
+      TweenSequenceItem(
+        tween: Tween<double>(begin: 1.2, end: 1.0)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 55, // Resting weight
+      ),
+    ]).animate(_controller);
+
+    _controller.repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(
+      scale: _scaleAnimation,
+      child: const Icon(
+        Icons.favorite,
+        color: Colors.red,
+        size: 13,
       ),
     );
   }
