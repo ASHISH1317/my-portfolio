@@ -9,6 +9,7 @@ class CustomCard extends StatefulWidget {
   final VoidCallback? onTap;
   final double? borderRadius;
   final bool enableHover;
+  final bool enableTilt;
   final Color? glowColor;
   final Color? backgroundColor;
   final bool highlightBorder;
@@ -20,6 +21,7 @@ class CustomCard extends StatefulWidget {
     this.onTap,
     this.borderRadius,
     this.enableHover = true,
+    this.enableTilt = true,
     this.glowColor,
     this.backgroundColor,
     this.highlightBorder = false,
@@ -101,7 +103,7 @@ class _CustomCardState extends State<CustomCard> {
       ),
     );
 
-    if (widget.enableHover) {
+    if (widget.enableHover && widget.enableTilt) {
       return TiltCard(
         borderRadius: BorderRadius.circular(radius),
         child: cardWidget,

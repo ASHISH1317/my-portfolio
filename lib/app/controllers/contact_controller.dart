@@ -21,6 +21,11 @@ class ContactController extends GetxController {
   final String location = PortfolioData.location;
 
   final RxBool isLoading = false.obs;
+  final RxnString selectedTechnology = RxnString();
+  final RxnString selectedBudget = RxnString();
+  final RxnString selectedTimeline = RxnString();
+  final RxBool scheduleCall = false.obs;
+  final Rxn<DateTime> selectedDateTime = Rxn<DateTime>();
 
   @override
   void onClose() {
@@ -33,6 +38,16 @@ class ContactController extends GetxController {
 
   Future<void> sendDirectMessage(BuildContext context) async {
     if (formKey.currentState!.validate()) {
+      if (scheduleCall.value && selectedDateTime.value == null) {
+        _showStatusDialog(
+          context: context,
+          title: "Selection Required",
+          message: "Please select a date and time for the meeting call.",
+          icon: Icons.calendar_today_rounded,
+          color: Colors.orangeAccent,
+        );
+        return;
+      }
       isLoading.value = true;
       try {
         final body = {
@@ -40,10 +55,16 @@ class ContactController extends GetxController {
           "email": emailController.text,
           "subject": subjectController.text,
           "message": messageController.text,
+          "technology": selectedTechnology.value ?? "N/A",
+          "budget": selectedBudget.value ?? "N/A",
+          "timeline": selectedTimeline.value ?? "N/A",
+          "meetingTime": (scheduleCall.value && selectedDateTime.value != null)
+              ? selectedDateTime.value!.toIso8601String()
+              : "",
         };
 
         final response = await http.post(
-          Uri.parse("https://script.google.com/macros/s/AKfycbw0T7V6Y1hdGGm7MshtOKz_j0AkRM_nJeEUeEZIOqc2JYnLzdRWJIOuLU_lecfyoNTwWw/exec"),
+          Uri.parse("https://script.google.com/macros/s/AKfycbwAPtuDrvpZmuIg_YzvGFS2iSAr5brLED9B30eQQSQvg44XYGv8qB_M1jETqAM26MBxZg/exec"),
           headers: {"Content-Type": "text/plain"},
           body: jsonEncode(body),
         );
@@ -54,10 +75,19 @@ class ContactController extends GetxController {
           final data = jsonDecode(response.body);
           if (data["status"] == "success") {
             _clearForm();
+
+            final String? meetLink = data["meetLink"];
+            final String? meetingTime = data["meetingTime"];
+
+            String successMsg = "Thank you for reaching out! Your message has been sent successfully. I will get back to you soon.";
+            if (meetLink != null && meetLink != "N/A" && meetingTime != null && meetingTime != "N/A") {
+              successMsg += "\n\n📅 Meeting Scheduled:\nTime: $meetingTime\n\nGoogle Meet Link: $meetLink\n\n(A calendar invite has also been sent to your email!)";
+            }
+
             _showStatusDialog(
               context: context,
               title: "Message Sent!",
-              message: "Thank you for reaching out! Your message has been sent successfully. I will get back to you soon.",
+              message: successMsg,
               icon: Icons.check_circle_outline_rounded,
               color: Colors.greenAccent,
             );
@@ -113,9 +143,14 @@ class ContactController extends GetxController {
 
   void submitViaWhatsApp(BuildContext context) {
     if (formKey.currentState!.validate()) {
-      final text = "Hello Ashish,\n\nName: ${nameController.text}\nEmail: ${emailController.text}\nSubject: ${subjectController.text}\n\nMessage: ${messageController.text}";
+      final techPrefix = selectedTechnology.value != null ? "Framework: ${selectedTechnology.value}\n" : "";
+      final budgetPrefix = selectedBudget.value != null ? "Budget: ${selectedBudget.value}\n" : "";
+      final timelinePrefix = selectedTimeline.value != null ? "Timeline: ${selectedTimeline.value}\n" : "";
+      final meetPrefix = (scheduleCall.value && selectedDateTime.value != null) ? "Meeting Request: ${selectedDateTime.value.toString()}\n" : "";
+
+      final text = "Hello Ashish,\n\nName: ${nameController.text}\nEmail: ${emailController.text}\n$techPrefix$budgetPrefix$timelinePrefix${meetPrefix}Subject: ${subjectController.text}\n\nMessage: ${messageController.text}";
       final url = "https://wa.me/919913629852?text=${Uri.encodeComponent(text)}";
-      
+
       launchURL(url);
       _clearForm();
     }
@@ -123,10 +158,15 @@ class ContactController extends GetxController {
 
   void submitViaEmail(BuildContext context) {
     if (formKey.currentState!.validate()) {
-      final subjectText = "Portfolio Query: ${subjectController.text}";
+      final techPrefix = selectedTechnology.value != null ? "[${selectedTechnology.value}] " : "";
+      final budgetPrefix = selectedBudget.value != null ? "[Budget: ${selectedBudget.value}] " : "";
+      final timelinePrefix = selectedTimeline.value != null ? "[Timeline: ${selectedTimeline.value}] " : "";
+      final meetPrefix = (scheduleCall.value && selectedDateTime.value != null) ? "[Meeting: ${selectedDateTime.value.toString()}] " : "";
+
+      final subjectText = "Portfolio Query: $techPrefix$budgetPrefix$timelinePrefix$meetPrefix${subjectController.text}";
       final body = "Name: ${nameController.text}\nEmail: ${emailController.text}\n\nMessage:\n${messageController.text}";
       final url = "mailto:$email?subject=${Uri.encodeComponent(subjectText)}&body=${Uri.encodeComponent(body)}";
-      
+
       launchURL(url);
       _clearForm();
     }
@@ -148,5 +188,10 @@ class ContactController extends GetxController {
     emailController.clear();
     subjectController.clear();
     messageController.clear();
+    selectedTechnology.value = null;
+    selectedBudget.value = null;
+    selectedTimeline.value = null;
+    scheduleCall.value = false;
+    selectedDateTime.value = null;
   }
 }

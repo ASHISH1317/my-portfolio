@@ -1,0 +1,71 @@
+Resolving dependencies...
+Downloading packages...
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.0 (1.19.0 available)
+  pointer_interceptor 0.9.3+7 (0.10.1+2 available)
+  qr 3.0.2 (4.0.0 available)
+  test_api 0.7.11 (0.7.13 available)
+  vector_math 2.2.0 (2.4.2 available)
+Got dependencies!
+7 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing ashish_portfolio...                                   
+
+   info • 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead. Try replacing the use of the deprecated member with the replacement • lib/app/controllers/contact_controller.dart:7:1 • deprecated_member_use
+   info • Don't use web-only libraries outside Flutter web plugins. Try finding a different library for your needs • lib/app/controllers/contact_controller.dart:7:1 • avoid_web_libraries_in_flutter
+warning • The value of the local variable 'meetPrefix' isn't used. Try removing the variable or using it • lib/app/controllers/contact_controller.dart:149:13 • unused_local_variable
+  error • Undefined name 'meetPrefixSubject'. Try correcting the name to one that is defined, or defining the name • lib/app/controllers/contact_controller.dart:151:140 • undefined_identifier
+   info • 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead. Try replacing the use of the deprecated member with the replacement • lib/app/controllers/hero_controller.dart:4:1 • deprecated_member_use
+   info • Don't use web-only libraries outside Flutter web plugins. Try finding a different library for your needs • lib/app/controllers/hero_controller.dart:4:1 • avoid_web_libraries_in_flutter
+   info • 'translate' is deprecated and shouldn't be used. Use translateByVector3, translateByVector4, or translateByDouble instead. Try replacing the use of the deprecated member with the replacement • lib/app/portfolio_home.dart:315:36 • deprecated_member_use
+   info • The constant name 'INITIAL' isn't a lowerCamelCase identifier. Try changing the name to follow the lowerCamelCase style • lib/app/routes/app_pages.dart:9:16 • constant_identifier_names
+   info • The constant name 'HOME' isn't a lowerCamelCase identifier. Try changing the name to follow the lowerCamelCase style • lib/app/routes/app_routes.dart:2:16 • constant_identifier_names
+   info • The constant name 'PROJECTS' isn't a lowerCamelCase identifier. Try changing the name to follow the lowerCamelCase style • lib/app/routes/app_routes.dart:3:16 • constant_identifier_names
+   info • 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead. Try replacing the use of the deprecated member with the replacement • lib/app/sections/contact_section.dart:2:1 • deprecated_member_use
+   info • Don't use web-only libraries outside Flutter web plugins. Try finding a different library for your needs • lib/app/sections/contact_section.dart:2:1 • avoid_web_libraries_in_flutter
+   info • 'dialogBackgroundColor' is deprecated and shouldn't be used. Use DialogThemeData.backgroundColor instead. This feature was deprecated after v3.27.0-0.1.pre. Try replacing the use of the deprecated member with the replacement • lib/app/sections/contact_section.dart:575:13 • deprecated_member_use
+   info • 'dialogBackgroundColor' is deprecated and shouldn't be used. Use DialogThemeData.backgroundColor instead. This feature was deprecated after v3.27.0-0.1.pre. Try replacing the use of the deprecated member with the replacement • lib/app/sections/contact_section.dart:597:13 • deprecated_member_use
+   info • Unnecessary use of 'toList' in a spread. Try removing the invocation of 'toList' • lib/app/sections/education_section.dart:38:14 • unnecessary_to_list_in_spreads
+   info • 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead. Try replacing the use of the deprecated member with the replacement • lib/app/sections/footer.dart:2:1 • deprecated_member_use
+   info • Don't use web-only libraries outside Flutter web plugins. Try finding a different library for your needs • lib/app/sections/footer.dart:2:1 • avoid_web_libraries_in_flutter
+warning • Unused import: '../data/portfolio_data.dart'. Try removing the import directive • lib/app/sections/hero_section.dart:9:8 • unused_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/sections/navbar.dart:115:73 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/sections/packages_section.dart:157:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/sections/packages_section.dart:278:51 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/sections/packages_section.dart:281:82 • deprecated_member_use
+   info • 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead. Try replacing the use of the deprecated member with the replacement • lib/app/sections/packages_section.dart:285:54 • deprecated_member_use
+   info • 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead. Try replacing the use of the deprecated member with the replacement • lib/app/sections/project_details_page.dart:1357:38 • deprecated_member_use
+   info • Type could be non-nullable. Try changing the type to be non-nullable • lib/app/sections/project_details_page.dart:1717:32 • unnecessary_nullable_for_final_variable_declarations
+   info • 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead. Try replacing the use of the deprecated member with the replacement • lib/app/utils/resume_pdf_generator.dart:6:1 • deprecated_member_use
+   info • Don't use web-only libraries outside Flutter web plugins. Try finding a different library for your needs • lib/app/utils/resume_pdf_generator.dart:6:1 • avoid_web_libraries_in_flutter
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:52:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:78:21 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:81:21 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:110:17 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:111:17 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:112:17 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:126:23 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:136:17 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/animated_section_divider.dart:137:17 • deprecated_member_use
+   info • Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter • lib/app/widgets/cool_dialog.dart:15:3 • use_super_parameters
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:39:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:42:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:47:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:52:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:73:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:87:46 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:90:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:95:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:127:60 • deprecated_member_use
+   info • Parameter 'key' could be a super parameter. Trying converting 'key' to a super parameter • lib/app/widgets/cool_dialog.dart:175:9 • use_super_parameters
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:208:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:209:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:217:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:223:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/cool_dialog.dart:229:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/glowing_button.dart:56:50 • deprecated_member_use
+   info • 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/glowing_button.dart:63:38 • deprecated_member_use
+   info • 'scale' is deprecated and shouldn't be used. Use scaleByVector3, scaleByVector4, or scaleByDouble instead. Try replacing the use of the deprecated member with the replacement • lib/app/widgets/glowing_button.dart:65:42 • deprecated_member_use
+   info • 'background' is deprecated and shouldn't be used. Use surface instead. This feature was deprecated after v3.18.0-0.1.pre. Try replacing the use of the deprecated member with the replacement • lib/main.dart:29:11 • deprecated_member_use
+

@@ -82,12 +82,12 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                           onPressed: () => ResumePreviewDialog.show(context),
                         ),
                         const SizedBox(width: 8),
+                        const ThemeSelector(),
+                        const SizedBox(width: 8),
                         IconButton(
                           icon: Icon(Icons.menu_rounded, color: ThemeConfig.textPrimary),
                           onPressed: onMenuOpen,
                         ),
-                        const SizedBox(width: 8),
-                        const ThemeSelector(),
                       ],
                     )
                   else

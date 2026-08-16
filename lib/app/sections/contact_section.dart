@@ -11,6 +11,7 @@ import '../widgets/custom_card.dart';
 import '../widgets/cool_dialog.dart';
 import '../widgets/section_header.dart';
 import '../controllers/contact_controller.dart';
+import '../controllers/home_controller.dart';
 
 class ContactSection extends StatefulWidget {
   const ContactSection({super.key});
@@ -21,11 +22,13 @@ class ContactSection extends StatefulWidget {
 
 class _ContactSectionState extends State<ContactSection> {
   ContactController get controller => Get.find<ContactController>();
+  final GlobalKey _contactRowKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final bool isMobile = width < 900;
+    final homeController = Get.find<HomeController>();
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -54,6 +57,7 @@ class _ContactSectionState extends State<ContactSection> {
                   ],
                 )
               : Row(
+                  key: _contactRowKey,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
@@ -61,7 +65,11 @@ class _ContactSectionState extends State<ContactSection> {
                       child: ScrollReveal(
                         direction: RevealDirection.left,
                         delay: Duration.zero,
-                        child: _buildContactInfo(isMobile: false),
+                        child: StickyContainer(
+                          parentKey: _contactRowKey,
+                          scrollController: homeController.scrollController,
+                          child: _buildContactInfo(isMobile: false),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 60),
@@ -224,6 +232,8 @@ class _ContactSectionState extends State<ContactSection> {
 
   Widget _buildFormCard({required bool isMobile}) {
     return CustomCard(
+      enableHover: true,
+      enableTilt: false,
       padding: isMobile
           ? const EdgeInsets.symmetric(horizontal: 20, vertical: 24)
           : const EdgeInsets.symmetric(horizontal: 32, vertical: 36),
@@ -247,29 +257,118 @@ class _ContactSectionState extends State<ContactSection> {
               ],
             ),
             const SizedBox(height: 24),
-            _buildTextField(
-              controller: controller.nameController,
-              label: "YOUR NAME",
-              validator: (val) => val == null || val.isEmpty ? "Please enter your name" : null,
-            ),
-            const SizedBox(height: 20),
-            _buildTextField(
-              controller: controller.emailController,
-              label: "EMAIL ADDRESS",
-              keyboardType: TextInputType.emailAddress,
-              validator: (val) => val == null || !val.contains("@") ? "Please enter a valid email" : null,
-            ),
-            const SizedBox(height: 20),
-            _buildTextField(
-              controller: controller.subjectController,
-              label: "SUBJECT",
-              validator: (val) => val == null || val.isEmpty ? "Please enter a subject" : null,
-            ),
-            const SizedBox(height: 20),
+            if (isMobile) ...[
+              _buildTextField(
+                controller: controller.nameController,
+                label: "YOUR NAME",
+                validator: (val) => val == null || val.isEmpty ? "Please enter your name" : null,
+              ),
+              const SizedBox(height: 24),
+              _buildTextField(
+                controller: controller.emailController,
+                label: "EMAIL ADDRESS",
+                keyboardType: TextInputType.emailAddress,
+                validator: (val) => val == null || !val.contains("@") ? "Please enter a valid email" : null,
+              ),
+              const SizedBox(height: 24),
+              Obx(() => _buildDropdownField(
+                    label: "PREFERRED FRAMEWORK / TECHNOLOGY",
+                    value: controller.selectedTechnology.value,
+                    items: const ["Flutter", "Shopify", "Framer AI", "React Native", "Other"],
+                    onChanged: (val) => controller.selectedTechnology.value = val,
+                  )),
+              const SizedBox(height: 24),
+              Obx(() => _buildDropdownField(
+                    label: "PROJECT BUDGET",
+                    value: controller.selectedBudget.value,
+                    items: const ["< \$1K", "\$1K - \$3K", "\$3K - \$5K", "\$5K+", "Not Decided"],
+                    onChanged: (val) => controller.selectedBudget.value = val,
+                  )),
+              const SizedBox(height: 24),
+              Obx(() => _buildDropdownField(
+                    label: "EXPECTED TIMELINE",
+                    value: controller.selectedTimeline.value,
+                    items: const ["Immediate (< 1 mo)", "1 - 3 Months", "Flexible", "Just Exploring"],
+                    onChanged: (val) => controller.selectedTimeline.value = val,
+                  )),
+              const SizedBox(height: 24),
+              _buildTextField(
+                controller: controller.subjectController,
+                label: "SUBJECT",
+                validator: (val) => val == null || val.isEmpty ? "Please enter a subject" : null,
+              ),
+            ] else ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildTextField(
+                      controller: controller.nameController,
+                      label: "YOUR NAME",
+                      validator: (val) => val == null || val.isEmpty ? "Please enter your name" : null,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildTextField(
+                      controller: controller.emailController,
+                      label: "EMAIL ADDRESS",
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (val) => val == null || !val.contains("@") ? "Please enter a valid email" : null,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => _buildDropdownField(
+                          label: "PREFERRED TECHNOLOGY",
+                          value: controller.selectedTechnology.value,
+                          items: const ["Flutter", "Shopify", "Framer AI", "React Native", "Other"],
+                          onChanged: (val) => controller.selectedTechnology.value = val,
+                        )),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Obx(() => _buildDropdownField(
+                          label: "PROJECT BUDGET",
+                          value: controller.selectedBudget.value,
+                          items: const ["< \$1K", "\$1K - \$3K", "\$3K - \$5K", "\$5K+", "Not Decided"],
+                          onChanged: (val) => controller.selectedBudget.value = val,
+                        )),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: Obx(() => _buildDropdownField(
+                          label: "EXPECTED TIMELINE",
+                          value: controller.selectedTimeline.value,
+                          items: const ["Immediate (< 1 mo)", "1 - 3 Months", "Flexible", "Just Exploring"],
+                          onChanged: (val) => controller.selectedTimeline.value = val,
+                        )),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildTextField(
+                      controller: controller.subjectController,
+                      label: "SUBJECT",
+                      validator: (val) => val == null || val.isEmpty ? "Please enter a subject" : null,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            const SizedBox(height: 24),
+            Obx(() => _buildMeetingToggle(context)),
+            const SizedBox(height: 24),
             _buildTextField(
               controller: controller.messageController,
               label: "MESSAGE",
-              maxLines: 4,
+              maxLines: 3,
               validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
             ),
             const SizedBox(height: 32),
@@ -325,6 +424,7 @@ class _ContactSectionState extends State<ContactSection> {
         floatingLabelStyle: TextStyle(color: ThemeConfig.primary),
         fillColor: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
         filled: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: ThemeConfig.outline.withValues(alpha: 0.12)),
@@ -347,6 +447,236 @@ class _ContactSectionState extends State<ContactSection> {
         ),
       ),
     );
+  }
+
+  Widget _buildDropdownField({
+    required String label,
+    required String? value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      initialValue: value,
+      items: items.map((String item) {
+        return DropdownMenuItem<String>(
+          value: item,
+          child: Text(
+            item,
+            style: TextStyle(color: ThemeConfig.textPrimary, fontSize: 14),
+          ),
+        );
+      }).toList(),
+      onChanged: onChanged,
+      dropdownColor: ThemeConfig.surfaceContainerLow,
+      iconEnabledColor: ThemeConfig.primary,
+      style: TextStyle(color: ThemeConfig.textPrimary),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          color: ThemeConfig.textSecondary.withValues(alpha: 0.7),
+          fontSize: 11,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1,
+        ),
+        floatingLabelStyle: TextStyle(color: ThemeConfig.primary),
+        fillColor: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
+        filled: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: ThemeConfig.outline.withValues(alpha: 0.12)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: ThemeConfig.outline.withValues(alpha: 0.12)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: ThemeConfig.primary, width: 1.5),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMeetingToggle(BuildContext context) {
+    final bool isChecked = controller.scheduleCall.value;
+    final DateTime? dateTime = controller.selectedDateTime.value;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          decoration: BoxDecoration(
+            color: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isChecked ? ThemeConfig.primary : ThemeConfig.outline.withValues(alpha: 0.12),
+              width: isChecked ? 1.5 : 1.0,
+            ),
+          ),
+          child: Theme(
+            data: Theme.of(context).copyWith(
+              unselectedWidgetColor: ThemeConfig.textSecondary.withValues(alpha: 0.6),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              clipBehavior: Clip.antiAlias,
+              child: CheckboxListTile(
+                dense: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                title: Text(
+                  "Schedule a quick project discussion?",
+                  style: TextStyle(
+                    color: ThemeConfig.textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                subtitle: Text(
+                  "Book a 30-minute virtual meeting via Google Meet",
+                  style: TextStyle(
+                    color: ThemeConfig.textSecondary.withValues(alpha: 0.6),
+                    fontSize: 10,
+                  ),
+                ),
+                value: isChecked,
+                activeColor: ThemeConfig.primary,
+                checkColor: Colors.black,
+                onChanged: (bool? val) {
+                  controller.scheduleCall.value = val ?? false;
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+              ),
+            ),
+          ),
+        ),
+        if (isChecked) ...[
+          const SizedBox(height: 12),
+          _buildDateTimePickerButton(context, dateTime),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildDateTimePickerButton(BuildContext context, DateTime? dateTime) {
+    final String label = dateTime == null
+        ? "SELECT DATE & TIME"
+        : "MEETING TIME: ${_formatDateTime(dateTime)}";
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () => _pickDateTime(context),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          decoration: BoxDecoration(
+            color: ThemeConfig.surfaceContainerLow.withValues(alpha: 0.4),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: dateTime == null ? ThemeConfig.outline.withValues(alpha: 0.12) : ThemeConfig.primary,
+              width: 1.2,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Icon(
+                Icons.calendar_today_rounded,
+                color: dateTime == null ? ThemeConfig.textSecondary : ThemeConfig.primary,
+                size: 16,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: dateTime == null ? ThemeConfig.textSecondary : ThemeConfig.textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+              Icon(
+                Icons.arrow_drop_down_rounded,
+                color: ThemeConfig.textSecondary,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _formatDateTime(DateTime dt) {
+    final months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    final month = months[dt.month - 1];
+    final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
+    final period = dt.hour >= 12 ? "PM" : "AM";
+    final minute = dt.minute.toString().padLeft(2, '0');
+    return "$month ${dt.day}, ${dt.year} at $hour:$minute $period";
+  }
+
+  Future<void> _pickDateTime(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().add(const Duration(days: 1)),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: ThemeConfig.primary,
+              onPrimary: Colors.black,
+              surface: ThemeConfig.surfaceContainerLow,
+              onSurface: ThemeConfig.textPrimary,
+            ),
+            dialogBackgroundColor: ThemeConfig.surface,
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate == null) return;
+    if (!context.mounted) return;
+
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 10, minute: 0),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: ThemeConfig.primary,
+              onPrimary: Colors.black,
+              surface: ThemeConfig.surfaceContainerLow,
+              onSurface: ThemeConfig.textPrimary,
+            ),
+            dialogBackgroundColor: ThemeConfig.surface,
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedTime == null) return;
+
+    final DateTime finalDateTime = DateTime(
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
+      pickedTime.hour,
+      pickedTime.minute,
+    );
+
+    controller.selectedDateTime.value = finalDateTime;
   }
 
   void _showContactConfirm(String title, String message, String actionUrl) {
@@ -469,6 +799,103 @@ class _SubmitButtonState extends State<_SubmitButton> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class StickyContainer extends StatefulWidget {
+  final Widget child;
+  final ScrollController scrollController;
+  final GlobalKey parentKey;
+
+  const StickyContainer({
+    super.key,
+    required this.child,
+    required this.scrollController,
+    required this.parentKey,
+  });
+
+  @override
+  State<StickyContainer> createState() => _StickyContainerState();
+}
+
+class _StickyContainerState extends State<StickyContainer> {
+  final GlobalKey _childKey = GlobalKey();
+  double _offsetTop = 0.0;
+  double? _rowAbsoluteTop;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.scrollController.addListener(_updateOffset);
+  }
+
+  @override
+  void dispose() {
+    widget.scrollController.removeListener(_updateOffset);
+    super.dispose();
+  }
+
+  void _updateOffset() {
+    if (!mounted) return;
+
+    final RenderBox? rowRenderBox = widget.parentKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? childRenderBox = _childKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (rowRenderBox != null && childRenderBox != null) {
+      if (_rowAbsoluteTop == null) {
+        final ScrollableState? scrollable = Scrollable.of(context);
+        final RenderBox? scrollRenderBox = scrollable?.context.findRenderObject() as RenderBox?;
+        if (scrollRenderBox != null) {
+          _rowAbsoluteTop = rowRenderBox.localToGlobal(Offset.zero, ancestor: scrollRenderBox).dy + widget.scrollController.offset;
+        }
+      }
+
+      if (_rowAbsoluteTop != null) {
+        final double rowHeight = rowRenderBox.size.height;
+        final double childHeight = childRenderBox.size.height;
+        final double currentScroll = widget.scrollController.offset;
+
+        // Sticky offset starting 100 pixels from top of screen
+        final double targetTopOffset = 100.0;
+        double newOffset = currentScroll - _rowAbsoluteTop! + targetTopOffset;
+
+        final double maxOffset = rowHeight - childHeight;
+        if (newOffset > maxOffset) {
+          newOffset = maxOffset;
+        }
+        if (newOffset < 0) {
+          newOffset = 0;
+        }
+
+        if (_offsetTop != newOffset) {
+          setState(() {
+            _offsetTop = newOffset;
+          });
+        }
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Opacity(
+          opacity: 0,
+          child: Container(
+            key: _childKey,
+            child: widget.child,
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          top: _offsetTop,
+          child: widget.child,
+        ),
+      ],
     );
   }
 }
