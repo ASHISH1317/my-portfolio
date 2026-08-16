@@ -22,24 +22,76 @@ import 'widgets/scroll_progress_indicator.dart';
 import 'widgets/quick_actions_chip.dart';
 
 
-class PortfolioHome extends GetView<HomeController> {
+class PortfolioHome extends StatefulWidget {
   const PortfolioHome({super.key});
+
+  @override
+  State<PortfolioHome> createState() => _PortfolioHomeState();
+}
+
+class _PortfolioHomeState extends State<PortfolioHome> {
+  HomeController get controller => Get.find<HomeController>();
+  bool _isInputFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    FocusManager.instance.addListener(_handleFocusChange);
+  }
+
+  @override
+  void dispose() {
+    FocusManager.instance.removeListener(_handleFocusChange);
+    super.dispose();
+  }
+
+  void _handleFocusChange() {
+    final primaryFocus = FocusManager.instance.primaryFocus;
+    if (primaryFocus == null) {
+      if (_isInputFocused) {
+        setState(() => _isInputFocused = false);
+      }
+      return;
+    }
+    
+    final context = primaryFocus.context;
+    if (context == null) {
+      if (_isInputFocused) {
+        setState(() => _isInputFocused = false);
+      }
+      return;
+    }
+
+    final bool isInput = context.widget is EditableText ||
+        context.findAncestorWidgetOfExactType<EditableText>() != null ||
+        context.findAncestorStateOfType<EditableTextState>() != null;
+
+    if (isInput != _isInputFocused) {
+      setState(() {
+        _isInputFocused = isInput;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();
 
+    final bindings = _isInputFocused
+        ? <ShortcutActivator, VoidCallback>{}
+        : <ShortcutActivator, VoidCallback>{
+            const SingleActivator(LogicalKeyboardKey.keyT): () => themeController.cycleTheme(),
+            const SingleActivator(LogicalKeyboardKey.digit1): () => controller.scrollToSection(1),
+            const SingleActivator(LogicalKeyboardKey.digit2): () => controller.scrollToSection(2),
+            const SingleActivator(LogicalKeyboardKey.digit3): () => controller.scrollToSection(3),
+            const SingleActivator(LogicalKeyboardKey.digit4): () => controller.scrollToSection(4),
+            const SingleActivator(LogicalKeyboardKey.digit5): () => controller.scrollToSection(5),
+            const SingleActivator(LogicalKeyboardKey.digit6): () => controller.scrollToSection(6),
+            const SingleActivator(LogicalKeyboardKey.digit7): () => controller.scrollToSection(7),
+          };
+
     return CallbackShortcuts(
-      bindings: <ShortcutActivator, VoidCallback>{
-        const SingleActivator(LogicalKeyboardKey.keyT): () => themeController.cycleTheme(),
-        const SingleActivator(LogicalKeyboardKey.digit1): () => controller.scrollToSection(1),
-        const SingleActivator(LogicalKeyboardKey.digit2): () => controller.scrollToSection(2),
-        const SingleActivator(LogicalKeyboardKey.digit3): () => controller.scrollToSection(3),
-        const SingleActivator(LogicalKeyboardKey.digit4): () => controller.scrollToSection(4),
-        const SingleActivator(LogicalKeyboardKey.digit5): () => controller.scrollToSection(5),
-        const SingleActivator(LogicalKeyboardKey.digit6): () => controller.scrollToSection(6),
-        const SingleActivator(LogicalKeyboardKey.digit7): () => controller.scrollToSection(7),
-      },
+      bindings: bindings,
       child: Focus(
         autofocus: true,
         child: Obx(() => Scaffold(

@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
 import '../data/portfolio_data.dart';
+import '../widgets/cool_dialog.dart';
 
 class ContactController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -17,6 +20,8 @@ class ContactController extends GetxController {
   final String phone = PortfolioData.phone;
   final String location = PortfolioData.location;
 
+  final RxBool isLoading = false.obs;
+
   @override
   void onClose() {
     nameController.dispose();
@@ -24,6 +29,86 @@ class ContactController extends GetxController {
     subjectController.dispose();
     messageController.dispose();
     super.onClose();
+  }
+
+  Future<void> sendDirectMessage(BuildContext context) async {
+    if (formKey.currentState!.validate()) {
+      isLoading.value = true;
+      try {
+        final body = {
+          "name": nameController.text,
+          "email": emailController.text,
+          "subject": subjectController.text,
+          "message": messageController.text,
+        };
+
+        final response = await http.post(
+          Uri.parse("https://script.google.com/macros/s/AKfycbw0T7V6Y1hdGGm7MshtOKz_j0AkRM_nJeEUeEZIOqc2JYnLzdRWJIOuLU_lecfyoNTwWw/exec"),
+          headers: {"Content-Type": "text/plain"},
+          body: jsonEncode(body),
+        );
+
+        if (!context.mounted) return;
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+          if (data["status"] == "success") {
+            _clearForm();
+            _showStatusDialog(
+              context: context,
+              title: "Message Sent!",
+              message: "Thank you for reaching out! Your message has been sent successfully. I will get back to you soon.",
+              icon: Icons.check_circle_outline_rounded,
+              color: Colors.greenAccent,
+            );
+          } else {
+            _showStatusDialog(
+              context: context,
+              title: "Submission Error",
+              message: data["message"] ?? "Something went wrong. Please try again.",
+              icon: Icons.error_outline_rounded,
+              color: Colors.redAccent,
+            );
+          }
+        } else {
+          _showStatusDialog(
+            context: context,
+            title: "Network Error",
+            message: "Failed to connect to server (Status Code: ${response.statusCode}). Please check your internet connection.",
+            icon: Icons.signal_wifi_connected_no_internet_4_rounded,
+            color: Colors.orangeAccent,
+          );
+        }
+      } catch (e) {
+        _showStatusDialog(
+          context: context,
+          title: "An Error Occurred",
+          message: "An unexpected error occurred while sending your message: $e\n\nPlease try again later.",
+          icon: Icons.warning_amber_rounded,
+          color: Colors.redAccent,
+        );
+      } finally {
+        isLoading.value = false;
+      }
+    }
+  }
+
+  void _showStatusDialog({
+    required BuildContext context,
+    required String title,
+    required String message,
+    required IconData icon,
+    required Color color,
+  }) {
+    showCoolDialog(
+      context: context,
+      title: title,
+      message: message,
+      icon: icon,
+      accentColor: color,
+      primaryButtonText: "OK",
+      onPrimaryPressed: () => Navigator.of(context).pop(),
+    );
   }
 
   void submitViaWhatsApp(BuildContext context) {

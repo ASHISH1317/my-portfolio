@@ -273,49 +273,28 @@ class _ContactSectionState extends State<ContactSection> {
               validator: (val) => val == null || val.isEmpty ? "Please write your message" : null,
             ),
             const SizedBox(height: 32),
-            isMobile
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _SubmitButton(
-                        onTap: () => controller.submitViaWhatsApp(context),
-                        baseColor: const Color(0xFF25D366),
-                        icon: FontAwesomeIcons.whatsapp,
-                        text: "Send via WhatsApp",
-                        isFullWidth: true,
-                      ),
-                      const SizedBox(height: 16),
-                      _SubmitButton(
-                        onTap: () => controller.submitViaEmail(context),
-                        baseColor: ThemeConfig.primary,
-                        icon: Icons.mail_outline_rounded,
-                        text: "Send via Email",
-                        isFullWidth: true,
-                        isPrimaryTextDark: true,
-                      ),
-                    ],
-                  )
-                : Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    children: [
-                      _SubmitButton(
-                        onTap: () => controller.submitViaWhatsApp(context),
-                        baseColor: const Color(0xFF25D366),
-                        icon: FontAwesomeIcons.whatsapp,
-                        text: "Send via WhatsApp",
-                        isFullWidth: false,
-                      ),
-                      _SubmitButton(
-                        onTap: () => controller.submitViaEmail(context),
-                        baseColor: ThemeConfig.primary,
-                        icon: Icons.mail_outline_rounded,
-                        text: "Send via Email",
-                        isFullWidth: false,
-                        isPrimaryTextDark: true,
-                      ),
-                    ],
-                  ),
+            Obx(() {
+              final bool isLoading = controller.isLoading.value;
+              return isMobile
+                  ? _SubmitButton(
+                      onTap: isLoading ? null : () => controller.sendDirectMessage(context),
+                      baseColor: ThemeConfig.primary,
+                      icon: Icons.send_rounded,
+                      text: "Send Message",
+                      isFullWidth: true,
+                      isPrimaryTextDark: true,
+                      isLoading: isLoading,
+                    )
+                  : _SubmitButton(
+                      onTap: isLoading ? null : () => controller.sendDirectMessage(context),
+                      baseColor: ThemeConfig.primary,
+                      icon: Icons.send_rounded,
+                      text: "Send Message",
+                      isFullWidth: false,
+                      isPrimaryTextDark: true,
+                      isLoading: isLoading,
+                    );
+            }),
           ],
         ),
       ),
@@ -389,12 +368,13 @@ class _ContactSectionState extends State<ContactSection> {
 }
 
 class _SubmitButton extends StatefulWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final Color baseColor;
   final dynamic icon;
   final String text;
   final bool isFullWidth;
   final bool isPrimaryTextDark;
+  final bool isLoading;
 
   const _SubmitButton({
     required this.onTap,
@@ -403,6 +383,7 @@ class _SubmitButton extends StatefulWidget {
     required this.text,
     required this.isFullWidth,
     this.isPrimaryTextDark = false,
+    this.isLoading = false,
   });
 
   @override
@@ -414,22 +395,25 @@ class _SubmitButtonState extends State<_SubmitButton> {
 
   @override
   Widget build(BuildContext context) {
-    final Color contentColor = _isHovered
+    final bool isEnabled = widget.onTap != null && !widget.isLoading;
+    final bool showHover = _isHovered && isEnabled;
+
+    final Color contentColor = showHover
         ? (widget.isPrimaryTextDark ? Colors.black : Colors.white)
         : widget.baseColor;
 
-    final Color bgColor = _isHovered
+    final Color bgColor = showHover
         ? widget.baseColor
-        : widget.baseColor.withValues(alpha: 0.05);
+        : widget.baseColor.withValues(alpha: isEnabled ? 0.05 : 0.02);
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      cursor: SystemMouseCursors.click,
+      onEnter: (_) => isEnabled ? setState(() => _isHovered = true) : null,
+      onExit: (_) => isEnabled ? setState(() => _isHovered = false) : null,
+      cursor: isEnabled ? SystemMouseCursors.click : SystemMouseCursors.basic,
       child: GestureDetector(
-        onTap: widget.onTap,
+        onTap: isEnabled ? widget.onTap : null,
         child: AnimatedScale(
-          scale: _isHovered ? 1.025 : 1.0,
+          scale: showHover ? 1.025 : 1.0,
           duration: const Duration(milliseconds: 150),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
@@ -438,10 +422,10 @@ class _SubmitButtonState extends State<_SubmitButton> {
               color: bgColor,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _isHovered ? widget.baseColor : widget.baseColor.withValues(alpha: 0.3),
+                color: showHover ? widget.baseColor : widget.baseColor.withValues(alpha: isEnabled ? 0.3 : 0.1),
                 width: 1.5,
               ),
-              boxShadow: _isHovered
+              boxShadow: showHover
                   ? [
                       BoxShadow(
                         color: widget.baseColor.withValues(alpha: 0.25),
@@ -452,23 +436,35 @@ class _SubmitButtonState extends State<_SubmitButton> {
                     ]
                   : null,
             ),
-            child: Row(
-              mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                widget.icon is IconData
-                    ? Icon(widget.icon, color: contentColor, size: 20)
-                    : FaIcon(widget.icon, color: contentColor, size: 20),
-                const SizedBox(width: 10),
-                Text(
-                  widget.text,
-                  style: TextStyle(
-                    color: contentColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+            child: Opacity(
+              opacity: isEnabled ? 1.0 : 0.6,
+              child: Row(
+                mainAxisSize: widget.isFullWidth ? MainAxisSize.max : MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  widget.isLoading
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(contentColor),
+                          ),
+                        )
+                      : (widget.icon is IconData
+                          ? Icon(widget.icon, color: contentColor, size: 20)
+                          : FaIcon(widget.icon, color: contentColor, size: 20)),
+                  const SizedBox(width: 10),
+                  Text(
+                    widget.isLoading ? "Sending..." : widget.text,
+                    style: TextStyle(
+                      color: contentColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
