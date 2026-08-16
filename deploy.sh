@@ -38,7 +38,7 @@ print_info() {
 START_TIME=$(date +%s)
 
 # Clear screen for dynamic build view
-clear
+clear || true
 
 echo -e "${BOLD}${YELLOW}"
 echo "    ____             __              ____             __               "
