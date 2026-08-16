@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../data/portfolio_data.dart';
 import '../data/theme_config.dart';
 
 class QuickActionsChip extends StatefulWidget {
@@ -155,28 +156,28 @@ class _QuickActionsChipState extends State<QuickActionsChip> {
             icon: Icons.chat_bubble_outline_rounded,
             tooltip: "WhatsApp",
             brandColor: const Color(0xFF25D366),
-            onTap: () => _launch("https://wa.me/919998887766"),
+            onTap: () => _launch(PortfolioData.whatsapp),
           ),
           const SizedBox(height: 6),
           _SocialLinkButton(
             icon: Icons.mail_outline_rounded,
             tooltip: "Email",
             brandColor: const Color(0xFFEA4335),
-            onTap: () => _launch("mailto:ashishvasava1317@gmail.com"),
+            onTap: () => _launch(PortfolioData.emailUrl),
           ),
           const SizedBox(height: 6),
           _SocialLinkButton(
             icon: Icons.code_rounded,
             tooltip: "GitHub",
             brandColor: ThemeConfig.textPrimary,
-            onTap: () => _launch("https://github.com/AshishVasava1317"),
+            onTap: () => _launch(PortfolioData.github1),
           ),
           const SizedBox(height: 6),
           _SocialLinkButton(
             icon: Icons.work_outline_rounded,
             tooltip: "LinkedIn",
             brandColor: const Color(0xFF0A66C2),
-            onTap: () => _launch("https://linkedin.com/in/ashish-vasava"),
+            onTap: () => _launch(PortfolioData.linkedin),
           ),
           const SizedBox(height: 8),
           // Close button
