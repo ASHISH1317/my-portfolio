@@ -1126,7 +1126,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                "© 2024 Flutter Architect. Built with precision.",
+                "© 2026 Flutter Architect. Built with precision.",
                 style: TextStyle(
                   color: ThemeConfig.textMuted,
                   fontSize: 14,
@@ -1154,7 +1154,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "© 2024 Flutter Architect. Built with precision.",
+                    "© 2026 Flutter Architect. Built with precision.",
                     style: TextStyle(
                       color: ThemeConfig.textMuted,
                       fontSize: 14,

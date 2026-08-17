@@ -114,7 +114,7 @@ class Footer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "© 2024 ${PortfolioData.fullName}. Made with ",
+              "© 2026 ${PortfolioData.fullName}. Made with ",
               style: TextStyle(
                 color: ThemeConfig.textMuted,
                 fontSize: 12,
